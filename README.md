@@ -8,23 +8,23 @@
 
 # Summary
 
-### Features:
+#### Features:
 user can signup -> login -> see Course list -> enroll -> read lessons when enrolled -> check dashboard(current status) -> logout.
 
-### frontend:
+#### frontend:
 react, bootstrap, CSS, react-router-dom
 
-### backend:
+#### backend:
 mongo db, mongoose models, express js, routes
 
-### shared:
+#### shared:
 it uses jwt for sessions
 
 # Technical Details
 
 ## Backend
 
-### mongodb:
+#### mongodb:
 db stores user, courses, lesson, and user progress
 
 in courses, each course have data + lessons reference array
@@ -34,7 +34,7 @@ user progress store progress, like this user is enrolled in this course and read
 e.g user:id, course:id, lessons:[id array]
 user id will repeat in document for other courses
 
-### express:
+#### express:
 
 it has four main routes: /courses, /auth, /user, /lesson
 
@@ -56,19 +56,25 @@ it has four main routes: /courses, /auth, /user, /lesson
 
 ## Frontend
 
-### react:
+#### react:
 
 AuthProvider : provides login, logout, signup, current user with help of server. It also saves user locally during login. It gets user, checks expiry and logout user respectively. It also provides setLocal (sets User data locally)
 
 CourseProvider : uses useAuth, useFetch hook and provide courses, enroll function, findCourse function.
 
 LessonProvider : provides fetchlesson, markRead, parseLessonString function. parseLessonString convert lesson content to following:
+
 \# -> \<h1>
+
 \#\# -> \<h2>
-\#\#\# -> \<h3> 
+
+\#\#\# -> \<h3> ...
 so on
+
 \*a\* -> \<b\>a\<b\>
+
 \```lang code\``` -> \<div styles\>\<h5 styles\> lang \<h5/>\<pre>\<code>code\<code/>\<pre/>\<div/>
+
 every remaining line to \<p>
 
 All above contexts are exported and used as custom hooks.
@@ -80,7 +86,7 @@ i made sidebar appear only if logged in using outlet. if goes to pages other tha
 
 i added header on all pages and displayed content using outlet
 
-### Other Info:
+#### Other Info:
 
 course and lesson provider are conditionally wrapped around components.
 If user is null (when app starts) -> then dont wrap course and lesson provider around Routes (it causes error that user is null) and vice versa.
