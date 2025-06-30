@@ -1,30 +1,30 @@
-How to start app
+# How to start app
 
-Download provided files
-backend and frontend dont have node modules, just type 'npm i' in cmd in both folders (backend and frontend)
-type 'node server.js' to run backend
-use 'npm run dev' to run frontend (vite)
-to reset backend run 'npm run seed' in backend
+- Download provided files
+- backend and frontend dont have node modules, just type 'npm i' in cmd in both folders (backend and frontend)
+- type 'node server.js' to run backend
+- use 'npm run dev' to run frontend (vite)
+- to reset backend run 'npm run seed' in backend
 
-Summary
+# Summary
 
-Features:
+### Features:
 user can signup -> login -> see Course list -> enroll -> read lessons when enrolled -> check dashboard(current status) -> logout.
 
-frontend:
+### frontend:
 react, bootstrap, CSS, react-router-dom
 
-backend:
+### backend:
 mongo db, mongoose models, express js, routes
 
-shared:
+### shared:
 it uses jwt for sessions
 
-Technical Details
+# Technical Details
 
-Backend
+## Backend
 
-mongodb:
+### mongodb:
 db stores user, courses, lesson, and user progress
 
 in courses, each course have data + lessons reference array
@@ -34,7 +34,7 @@ user progress store progress, like this user is enrolled in this course and read
 e.g user:id, course:id, lessons:[id array]
 user id will repeat in document for other courses
 
-express:
+### express:
 
 it has four main routes: /courses, /auth, /user, /lesson
 
@@ -54,22 +54,22 @@ it has four main routes: /courses, /auth, /user, /lesson
 /user have -> /dashboard
 /dashboard returns total enrolled count and each course title with course progress(read/total lesson)
 
-Frontend
+## Frontend
 
-react:
+### react:
 
 AuthProvider : provides login, logout, signup, current user with help of server. It also saves user locally during login. It gets user, checks expiry and logout user respectively. It also provides setLocal (sets User data locally)
 
 CourseProvider : uses useAuth, useFetch hook and provide courses, enroll function, findCourse function.
 
 LessonProvider : provides fetchlesson, markRead, parseLessonString function. parseLessonString convert lesson content to following:
-# -> <h1>
-## -> <h2>
-### -> <h3> 
+\# -> \<h1>
+\#\# -> \<h2>
+\#\#\# -> \<h3> 
 so on
-*a* -> <b>a<b>
-```lang code``` -> <div styles><h5 styles> lang <h5/><pre><code>code<code/><pre/><div/>
-every remaining line to <p>
+\*a\* -> \<b\>a\<b\>
+\```lang code\``` -> \<div styles\>\<h5 styles\> lang \<h5/>\<pre>\<code>code\<code/>\<pre/>\<div/>
+every remaining line to \<p>
 
 All above contexts are exported and used as custom hooks.
 All these custom hooks are used to get data and functions. React, bootstrap and CSS are used to display this provided data. If somehow custom hook dont work, then fetch is used in that component.
@@ -80,7 +80,7 @@ i made sidebar appear only if logged in using outlet. if goes to pages other tha
 
 i added header on all pages and displayed content using outlet
 
-Other Info:
+### Other Info:
 
 course and lesson provider are conditionally wrapped around components.
 If user is null (when app starts) -> then dont wrap course and lesson provider around Routes (it causes error that user is null) and vice versa.
