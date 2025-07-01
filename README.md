@@ -6,6 +6,8 @@
 - use 'npm run dev' to run frontend (vite)
 - to reset backend run 'npm run seed' in backend
 
+**When using project dont add any sensitive information on it.**
+
 # Summary
 
 #### Features:
@@ -93,4 +95,9 @@ If user is null (when app starts) -> then dont wrap course and lesson provider a
 To easily implement above if condition, RouteWrapper component is used to wrap all routes and condition is implemented on RouteWrapper component.
 
 
-### When using project dont add any sensitive information on it.
+## 📄 License
+
+This project is licensed under a **proprietary license**.  
+It is available for **educational and demonstration purposes only**.  
+Use, redistribution, or modification is **not permitted without written consent**.
+
