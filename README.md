@@ -93,4 +93,4 @@ If user is null (when app starts) -> then dont wrap course and lesson provider a
 To easily implement above if condition, RouteWrapper component is used to wrap all routes and condition is implemented on RouteWrapper component.
 
 
-### This project is for portfolio/showcase purposes only. Not licensed for reuse or redistribution.
+### When using project dont add any sensitive information on it.
