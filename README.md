@@ -91,3 +91,6 @@ i added header on all pages and displayed content using outlet
 course and lesson provider are conditionally wrapped around components.
 If user is null (when app starts) -> then dont wrap course and lesson provider around Routes (it causes error that user is null) and vice versa.
 To easily implement above if condition, RouteWrapper component is used to wrap all routes and condition is implemented on RouteWrapper component.
+
+
+### This project is for portfolio/showcase purposes only. Not licensed for reuse or redistribution.
