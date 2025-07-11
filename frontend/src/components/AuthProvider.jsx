@@ -76,8 +76,7 @@ const AuthProvider = ({ children }) => {
         const errorData = await response.json();
         throw new Error(errorData.error || "Signup failed");
       }
-      alert("Account created. Please log in.");
-      navigate("/login");
+      login(email, password, navigate);
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
