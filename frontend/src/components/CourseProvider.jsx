@@ -1,22 +1,48 @@
+import { useEffect, useState } from "react";
 import { CourseContext } from "../context/allContext";
 import useAuth from "../hooks/useAuth";
-import useFetch from "../hooks/useFetch";
 
 const CourseProvider = ({ children }) => {
   const { user } = useAuth();
-  const {
-    data: courses,
-    error,
-    loading,
-  } = useFetch(`http://localhost:5000/api/courses/${user.userId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${user.token}`,
-    },
-  });
+  const [error, setError] = useState(null);
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/api/courses/${user.userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        if (!res.ok) {
+          throw new Error(`Error ${res.status}: ${res.statusText}`);
+        }
+        const result = await res.json();
+        if (!isCancelled) {
+          setCourses(result);
+          setError(null);
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setError(err.message || "Something went wrong");
+        }
+      }
+    };
+    fetchData();
+    return () => {
+      isCancelled = true;
+    };
+  }, [user.userId, user.token]);
+
   const enroll = async (course, setEnrolled) => {
     const courseId = course.id;
+
     const userId = user.userId;
     try {
       const response = await fetch("http://localhost:5000/api/courses/enroll", {
@@ -30,24 +56,24 @@ const CourseProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Enrollment failed");
+        throw new Error(errorData.error || "Enrollment failed");
       }
-      console.log(`User enrolled in course ${courseId}`);
       course.enrolled = true;
       setEnrolled(true);
+      setCourses((prevCourses) =>
+        prevCourses.map((c) =>
+          c.id === courseId ? { ...c, enrolled: true } : c
+        )
+      );
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
   };
-  function findCourse(courses, id) {
-    return (
-      courses.find((course) => course._id === id || course.id === id) || null
-    );
+  function findCourse(id) {
+    return courses.find((course) => course.id === id) || null;
   }
   return (
-    <CourseContext.Provider
-      value={{ findCourse, loading, error, courses, enroll }}
-    >
+    <CourseContext.Provider value={{ findCourse, error, courses, enroll }}>
       {children}
     </CourseContext.Provider>
   );
