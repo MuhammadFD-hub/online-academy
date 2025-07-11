@@ -9,34 +9,23 @@ const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) {
-      const user = JSON.parse(stored);
+    const scheduleLogout = (exp) => {
       const now = Date.now();
-      const expiry = user.exp * 1000;
-
-      if (expiry > now) {
-        setUser(user);
-        scheduleLogout(user.exp);
-      } else {
-        logout();
-      }
+      const expirationTime = exp - now;
+      if (expirationTime > 0) {
+        setTimeout(() => {
+          logout();
+          alert("Session expired. Please log in again.");
+        }, expirationTime);
+      } else logout();
+    };
+    if (user) {
+      const now = Date.now(); // in milliseconds
+      const expiry = user.exp * 1000; // converted seconds to milliseconds
+      if (expiry > now) scheduleLogout(expiry);
+      else logout();
     }
-  }, []);
-
-  const scheduleLogout = (exp) => {
-    const now = Date.now();
-    const expirationTime = exp * 1000 - now;
-
-    if (expirationTime > 0) {
-      setTimeout(() => {
-        logout();
-        alert("Session expired. Please log in again.");
-      }, expirationTime);
-    } else {
-      logout(); // Already expired
-    }
-  };
+  }, [user]);
 
   const login = async (email, password, navigate) => {
     try {
@@ -61,8 +50,9 @@ const AuthProvider = ({ children }) => {
         token: data.token,
         userId: decoded.userId,
         exp: decoded.exp,
-        name: data.name,
-        picture: data.picture,
+        // will be used for future features
+        // name: data.name,
+        // picture: data.picture,
       };
 
       setLocal(userData);
