@@ -6,14 +6,23 @@ import { motion } from "framer-motion";
 
 export default function Login() {
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [fields, setFields] = useState({ email: "", password: "" });
+  const [focused, setFocused] = useState(null);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFields({ ...fields, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password, navigate);
+    login(fields.email, fields.password, navigate);
   };
+
+  const inputAnim = (key) =>
+    focused === key
+      ? { scale: 1.02, boxShadow: "0px 0px 6px rgba(0,123,255,0.5)" }
+      : { scale: 1, boxShadow: "none" };
 
   return (
     <Container className="mt-5 d-flex justify-content-center align-items-center">
@@ -40,38 +49,46 @@ export default function Login() {
               <Form.Label>Email</Form.Label>
               <motion.input
                 type="email"
+                name="email"
                 className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={fields.email}
+                onChange={handleChange}
                 required
-                whileFocus={{
-                  scale: 1.02,
-                  boxShadow: "0px 0px 6px rgba(0, 123, 255, 0.5)",
-                }}
+                onFocus={() => setFocused("email")}
+                onBlur={() => setFocused(null)}
+                animate={inputAnim("email")}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               />
             </Form.Group>
             <Form.Group className="mt-3">
               <Form.Label>Password</Form.Label>
               <motion.input
                 type="password"
+                name="password"
                 className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={fields.password}
+                onChange={handleChange}
                 required
-                whileFocus={{
-                  scale: 1.02,
-                  boxShadow: "0px 0px 6px rgba(0, 123, 255, 0.5)",
-                }}
+                onFocus={() => setFocused("password")}
+                onBlur={() => setFocused(null)}
+                animate={inputAnim("password")}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               />
             </Form.Group>
-
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              tabIndex={-1}
+            >
               <Button className="mt-4 w-100" type="submit" variant="primary">
                 Login
               </Button>
             </motion.div>
-
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              tabIndex={-1}
+            >
               <Button
                 className="mt-3 w-100"
                 variant="outline-primary"
