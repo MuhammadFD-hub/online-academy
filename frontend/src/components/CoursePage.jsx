@@ -16,11 +16,10 @@ export default function CoursePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { enroll } = useCourse();
-
-  const [course, setCourse] = useState(null);
+  const { enroll, findCourse } = useCourse();
+  const course = findCourse(id);
+  const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
-  const [enrolled, setEnrolled] = useState(null);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -30,16 +29,14 @@ export default function CoursePage() {
         );
         if (!res.ok) throw new Error("Failed to fetch course");
         const data = await res.json();
-        setCourse(data);
-        setEnrolled(data.enrolled);
-        console.log("Course data fetched:", data);
+        setLessons(data);
       } catch (err) {
         setError(err.message);
       }
     };
 
     fetchCourse();
-  }, [id, user.userId]);
+  }, [id, user.userId, course]);
 
   if (error) {
     return (
@@ -52,7 +49,7 @@ export default function CoursePage() {
     );
   }
 
-  if (!course) {
+  if (!course || !lessons) {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"
@@ -63,7 +60,7 @@ export default function CoursePage() {
     );
   }
 
-  if (!enrolled) {
+  if (!course.enrolled) {
     return (
       <Container className="mt-5">
         <motion.div
@@ -76,7 +73,7 @@ export default function CoursePage() {
           <Button
             className="mt-3"
             variant="success"
-            onClick={() => enroll(course, setEnrolled)}
+            onClick={() => enroll(course.id)}
           >
             Enroll to Start Learning
           </Button>
@@ -85,8 +82,8 @@ export default function CoursePage() {
     );
   }
 
-  const completedCount = course.lessons.filter((l) => Number(l.read)).length;
-  const progress = (completedCount / course.lessons.length) * 100;
+  const completedCount = lessons.filter((l) => Number(l.read)).length;
+  const progress = (completedCount / lessons.length) * 100;
 
   return (
     <Container className="mt-5">
@@ -107,7 +104,7 @@ export default function CoursePage() {
       </motion.div>
 
       <div className="d-grid gap-4">
-        {course.lessons.map((lesson) => (
+        {lessons.map((lesson) => (
           <motion.div
             key={lesson.id}
             initial={{ opacity: 0, y: 10 }}

@@ -86,7 +86,6 @@ router.get("/:courseId/lessons", async (req, res) => {
     if (!course) return res.status(404).json({ error: "Course not found" });
 
     let readLessonIds = [];
-    let enrolled = false;
 
     if (userId) {
       const progress = await UserProgress.findOne({
@@ -94,7 +93,6 @@ router.get("/:courseId/lessons", async (req, res) => {
         course: courseId,
       });
       if (progress) {
-        enrolled = true;
         readLessonIds = progress.readLessons.map((id) => id.toString());
       }
     }
@@ -105,13 +103,7 @@ router.get("/:courseId/lessons", async (req, res) => {
       read: readLessonIds.includes(lesson._id.toString()),
     }));
 
-    res.json({
-      id: course._id,
-      title: course.title,
-      description: course.description,
-      enrolled,
-      lessons,
-    });
+    res.json(lessons);
   } catch (err) {
     console.error("Error fetching course detail:", err);
     res.status(500).json({ error: "Server error" });

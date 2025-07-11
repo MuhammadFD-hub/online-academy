@@ -40,9 +40,7 @@ const CourseProvider = ({ children }) => {
     };
   }, [user.userId, user.token]);
 
-  const enroll = async (course, setEnrolled) => {
-    const courseId = course.id;
-
+  async function enroll(courseId) {
     const userId = user.userId;
     try {
       const response = await fetch("http://localhost:5000/api/courses/enroll", {
@@ -58,8 +56,6 @@ const CourseProvider = ({ children }) => {
         const errorData = await response.json();
         throw new Error(errorData.error || "Enrollment failed");
       }
-      course.enrolled = true;
-      setEnrolled(true);
       setCourses((prevCourses) =>
         prevCourses.map((c) =>
           c.id === courseId ? { ...c, enrolled: true } : c
@@ -68,7 +64,7 @@ const CourseProvider = ({ children }) => {
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
-  };
+  }
   function findCourse(id) {
     return courses.find((course) => course.id === id) || null;
   }
