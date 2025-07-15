@@ -7,7 +7,7 @@ import {
   ProgressBar,
   Spinner,
 } from "react-bootstrap";
-import useCourse from "../hooks/useCourse";
+import useCourses from "../hooks/useCourses";
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { motion } from "framer-motion";
@@ -16,7 +16,7 @@ export default function CoursePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { enroll, findCourse } = useCourse();
+  const { enroll, findCourse } = useCourses();
   const course = findCourse(id);
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);

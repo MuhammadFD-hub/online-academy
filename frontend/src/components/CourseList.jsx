@@ -1,10 +1,10 @@
 import { Alert, Container, Spinner } from "react-bootstrap";
 import CoursePreview from "./CoursePreview";
-import useCourse from "../hooks/useCourse";
+import useCourses from "../hooks/useCourses";
 import { motion } from "framer-motion";
 
 export default function CourseList() {
-  const { courses, error } = useCourse();
+  const { courses, error } = useCourses();
 
   if (error) {
     return (

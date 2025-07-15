@@ -1,8 +1,7 @@
-import CourseProvider from "./components/CourseProvider";
+import CoursesProvider from "./components/CoursesProvider";
 import LessonProvider from "./components/LessonProvider";
 import RouteWrapper from "./components/RouteWrapper";
 import useAuth from "./hooks/useAuth";
-import Header from "./components/Header";
 
 export default function App() {
   const { user } = useAuth();
@@ -16,10 +15,10 @@ export default function App() {
   }
 
   return (
-    <CourseProvider>
+    <CoursesProvider>
       <LessonProvider>
         <RouteWrapper />
       </LessonProvider>
-    </CourseProvider>
+    </CoursesProvider>
   );
 }
