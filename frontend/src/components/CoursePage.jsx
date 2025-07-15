@@ -11,32 +11,37 @@ import useCourses from "../hooks/useCourses";
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { motion } from "framer-motion";
+import useCache from "../hooks/useCache";
 
 export default function CoursePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { enroll, findCourse } = useCourses();
-  const course = findCourse(id);
+  const { cacheLessons, getLessons } = useCache();
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
+  let course = findCourse(id);
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchLessons = async () => {
       try {
         const res = await fetch(
           `http://localhost:5000/api/courses/${id}/lessons?userId=${user.userId}`
         );
         if (!res.ok) throw new Error("Failed to fetch course");
         const data = await res.json();
+        cacheLessons(id, data);
         setLessons(data);
       } catch (err) {
         setError(err.message);
       }
     };
-
-    fetchCourse();
-  }, [id, user.userId, course]);
+    if (!getLessons(id)) fetchLessons();
+    else {
+      setLessons(getLessons(id));
+    }
+  }, [id, user.userId, course, getLessons, cacheLessons]);
 
   if (error) {
     return (
