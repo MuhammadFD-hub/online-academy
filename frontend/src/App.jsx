@@ -1,3 +1,4 @@
+import CacheProvider from "./components/CacheProvider";
 import CoursesProvider from "./components/CoursesProvider";
 import LessonProvider from "./components/LessonProvider";
 import RouteWrapper from "./components/RouteWrapper";
@@ -15,10 +16,12 @@ export default function App() {
   }
 
   return (
-    <CoursesProvider>
-      <LessonProvider>
-        <RouteWrapper />
-      </LessonProvider>
-    </CoursesProvider>
+    <CacheProvider>
+      <CoursesProvider>
+        <LessonProvider>
+          <RouteWrapper />
+        </LessonProvider>
+      </CoursesProvider>
+    </CacheProvider>
   );
 }

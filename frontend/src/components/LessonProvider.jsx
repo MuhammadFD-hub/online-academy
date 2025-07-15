@@ -1,10 +1,10 @@
 import { LessonContext } from "../context/allContext";
-
-import React from "react";
 import useAuth from "../hooks/useAuth";
+import useCache from "../hooks/useCache";
 
 const LessonProvider = ({ children }) => {
   const { user } = useAuth();
+  const { cacheLessonContent, markCacheLessonRead } = useCache();
   const fetchLesson = async (lessonId, setLesson) => {
     try {
       const response = await fetch(
@@ -23,6 +23,7 @@ const LessonProvider = ({ children }) => {
       }
 
       const data = await response.json();
+      cacheLessonContent(lessonId, data);
       setLesson(data);
     } catch (error) {
       throw new Error("Failed loading lesson", error);
@@ -30,7 +31,7 @@ const LessonProvider = ({ children }) => {
   };
   const markRead = async (courseId, lessonId) => {
     try {
-      const userId = user.userId; // localStorage user
+      const userId = user.userId;
       const response = await fetch(
         "http://localhost:5000/api/lesson/mark-read",
         {
@@ -44,8 +45,9 @@ const LessonProvider = ({ children }) => {
         const errorData = await response.json();
         throw new Error(errorData.message || "mark as read failed");
       }
+      markCacheLessonRead(courseId, lessonId);
     } catch (error) {
-      alert(`Login error: ${error.message}`);
+      console.error(`markRead error: ${error.message}`);
     }
   };
 
