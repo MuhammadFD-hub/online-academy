@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { CourseContext } from "../context/allContext";
+import { CoursesContext } from "../context/allContext";
 import useAuth from "../hooks/useAuth";
 
-const CourseProvider = ({ children }) => {
+const CoursesProvider = ({ children }) => {
   const { user } = useAuth();
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -69,10 +69,10 @@ const CourseProvider = ({ children }) => {
     return courses.find((course) => course.id === id) || null;
   }
   return (
-    <CourseContext.Provider value={{ findCourse, error, courses, enroll }}>
+    <CoursesContext.Provider value={{ findCourse, error, courses, enroll }}>
       {children}
-    </CourseContext.Provider>
+    </CoursesContext.Provider>
   );
 };
 
-export default CourseProvider;
+export default CoursesProvider;
