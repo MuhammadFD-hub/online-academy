@@ -2,11 +2,13 @@ const express = require("express");
 const Course = require("../models/Course");
 const UserProgress = require("../models/UserProgress");
 const User = require("../models/User");
+const authenticateToken = require("../middleware/authToken");
 
 const router = express.Router();
-router.get("/:userId", async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user.userId;
+    console.log("User ID from token:", userId);
     const courses = await Course.find().populate("lessons");
     const userProgressList = await UserProgress.find({ user: userId }).lean();
 
@@ -38,8 +40,9 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-router.post("/enroll", async (req, res) => {
-  const { userId, courseId } = req.body;
+router.post("/enroll", authenticateToken, async (req, res) => {
+  const { courseId } = req.body;
+  const userId = req.user.userId;
 
   if (!userId || !courseId) {
     return res.status(400).json({ error: "Missing userId or courseId" });
@@ -77,10 +80,10 @@ router.post("/enroll", async (req, res) => {
   }
 });
 
-router.get("/:courseId/lessons", async (req, res) => {
+router.get("/:courseId/lessons", authenticateToken, async (req, res) => {
   try {
     const { courseId } = req.params;
-    const { userId } = req.query;
+    const userId = req.user.userId;
 
     const course = await Course.findById(courseId).populate("lessons");
     if (!course) return res.status(404).json({ error: "Course not found" });

@@ -27,9 +27,9 @@ const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = async (email, password, navigate) => {
+  async function loginOrSignup(method, email, password, navigate) {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("http://localhost:5000/api/auth/" + method, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,59 +38,57 @@ const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          alert("session expired. Please log in again.", errorData.message);
+          logout();
+          return;
+        }
+
+        const Method = capitalizeFirst(method);
         const errorData = await response.json();
-        throw new Error(errorData.error || "Login failed");
+        throw new Error(
+          `${Method} error: ${errorData.error || `${Method} failed`}`
+        );
       }
-
       const data = await response.json();
-      const decoded = jwtDecode(data.token);
-
-      const userData = {
-        email,
-        token: data.token,
-        userId: decoded.userId,
-        exp: decoded.exp,
-        // will be used for future features
-        // name: data.name,
-        // picture: data.picture,
-      };
-
-      setLocal(userData);
+      setLocal(data.token, email);
       navigate("/courses");
     } catch (error) {
-      alert(`Login error: ${error.message}`);
+      alert(error.message);
     }
-  };
+  }
 
-  const signup = async (email, password, navigate) => {
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Signup failed");
-      }
-      login(email, password, navigate);
-    } catch (error) {
-      alert(`Error: ${error.message}`);
-    }
-  };
-  const logout = () => {
+  async function login(email, password, navigate) {
+    loginOrSignup("login", email, password, navigate);
+  }
+  async function signup(email, password, navigate) {
+    loginOrSignup("signup", email, password, navigate);
+  }
+  function logout() {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("currLesson");
-  };
-  function setLocal(user) {
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
+    localStorage.removeItem("token");
   }
 
+  function setLocal(token, email) {
+    const decoded = jwtDecode(token);
+    const user = {
+      email,
+      userId: decoded.userId,
+      exp: decoded.exp,
+      // will be used for future features
+      // name: data.name,
+      // picture: data.picture,
+    };
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+    setUser(user);
+  }
+  function capitalizeFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   return (
     <AuthContext.Provider value={{ setLocal, user, login, logout, signup }}>
       {children}

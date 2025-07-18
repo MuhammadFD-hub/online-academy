@@ -14,9 +14,13 @@ router.post("/signup", async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = new User({ email, passwordHash });
     await user.save();
-    res.status(201).json({ message: "User created" });
+
+    const payload = { userId: user._id };
+    const token = jwt.sign(payload, "secretKey", { expiresIn: "1d" });
+
+    res.json({ token });
   } catch (err) {
-    res.status(500).json({ error: "Signup failed" });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -32,12 +36,8 @@ router.post("/login", async (req, res) => {
     const payload = { userId: user._id };
     const token = jwt.sign(payload, "secretKey", { expiresIn: "1d" });
 
-    const decoded = jwt.decode(token); // To extract `exp`
-
     res.json({
       token,
-      userId: user._id,
-      exp: decoded.exp,
     });
   } catch (err) {
     res.status(500).json({ error: "Login failed" });

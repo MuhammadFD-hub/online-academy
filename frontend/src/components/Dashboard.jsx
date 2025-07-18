@@ -5,41 +5,51 @@ import useAuth from "../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dashboard() {
-  const { user: authUser } = useAuth();
-  const [user, setUser] = useState(() => {
+  const { logout } = useAuth();
+  const user = getUserFromLocalStorage();
+
+  function getUserFromLocalStorage() {
     const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : authUser || null;
-  });
+    return stored ? JSON.parse(stored) : null;
+  }
 
   const [enrollments, setEnrollments] = useState([]);
   const [error, setError] = useState(null);
   const [showProgressDetails, setShowProgressDetails] = useState(false);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
   let currLesson = localStorage.getItem("currLesson");
   if (currLesson) currLesson = JSON.parse(currLesson);
-
   useEffect(() => {
-    if (!user?.userId) return;
-
     const fetchProgress = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/user/dashboard/${user.userId}`
+          `http://localhost:5000/api/user/dashboard/`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        if (!response.ok) throw new Error("Failed to fetch user progress");
+        if (!response.ok) {
+          if (response.status === 401) {
+            const errorData = await response.json();
+            alert("session expired. Please log in again.", errorData.message);
+            logout();
+            return;
+          }
+          throw new Error("Failed to fetch user progress");
+        }
 
         const data = await response.json();
         setEnrollments(data.enrollments || []);
-        if (!authUser) setUser(data.user);
       } catch (err) {
         console.error(err);
         setError(err.message);
       }
     };
-
-    fetchProgress();
-  }, [user?.userId]);
+    if (user) fetchProgress();
+    else {
+      setError("Please log in to view your dashboard.");
+    }
+  }, [token, logout]);
 
   const totalProgress =
     enrollments.length > 0

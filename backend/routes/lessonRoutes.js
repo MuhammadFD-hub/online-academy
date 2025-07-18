@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Lesson = require("../models/Lesson");
 const UserProgress = require("../models/UserProgress");
+const authenticateToken = require("../middleware/authToken");
 
-router.get("/:lessonId", async (req, res) => {
+router.get("/:lessonId", authenticateToken, async (req, res) => {
   try {
     const { lessonId } = req.params;
-    const userId = req.query.userId;
+    const userId = req.user.userId;
 
     const lesson = await Lesson.findById(lessonId).populate("course");
     if (!lesson) return res.status(404).json({ error: "Lesson not found" });
@@ -38,9 +39,10 @@ router.get("/:lessonId", async (req, res) => {
   }
 });
 
-router.post("/mark-read", async (req, res) => {
+router.post("/mark-read", authenticateToken, async (req, res) => {
   try {
-    const { userId, courseId, lessonId } = req.body;
+    const { courseId, lessonId } = req.body;
+    const userId = req.user.userId;
 
     if (!userId || !courseId || !lessonId) {
       return res.status(400).json({ error: "Missing required fields" });
