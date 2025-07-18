@@ -3,24 +3,26 @@ import { CoursesContext } from "../context/allContext";
 import useAuth from "../hooks/useAuth";
 
 const CoursesProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { logout } = useAuth();
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
+  const token = localStorage.getItem("token");
   useEffect(() => {
     let isCancelled = false;
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/courses/${user.userId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res = await fetch(`http://localhost:5000/api/courses/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
+          if (res.status === 401) {
+            const errorData = await res.json();
+            alert("session expired. Please log in again.", errorData.message);
+            logout();
+            return;
+          }
           throw new Error(`Error ${res.status}: ${res.statusText}`);
         }
         const result = await res.json();
@@ -38,21 +40,26 @@ const CoursesProvider = ({ children }) => {
     return () => {
       isCancelled = true;
     };
-  }, [user.userId, user.token]);
+  }, [token, logout]);
 
   async function enroll(courseId) {
-    const userId = user.userId;
     try {
       const response = await fetch("http://localhost:5000/api/courses/enroll", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`, // if using auth
+          Authorization: `Bearer ${token}`, // if using auth
         },
-        body: JSON.stringify({ userId, courseId }),
+        body: JSON.stringify({ courseId }),
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          alert("session expired. Please log in again.", errorData.message);
+          logout();
+          return;
+        }
         const errorData = await response.json();
         throw new Error(errorData.error || "Enrollment failed");
       }

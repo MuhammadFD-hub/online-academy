@@ -16,7 +16,8 @@ import useCache from "../hooks/useCache";
 export default function CoursePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { logout } = useAuth();
+  const token = localStorage.getItem("token");
   const { enroll, findCourse } = useCourses();
   const { cacheLessons, getLessons } = useCache();
   const [lessons, setLessons] = useState(null);
@@ -27,9 +28,18 @@ export default function CoursePage() {
     const fetchLessons = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/courses/${id}/lessons?userId=${user.userId}`
+          `http://localhost:5000/api/courses/${id}/lessons`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        if (!res.ok) throw new Error("Failed to fetch course");
+        if (!res.ok) {
+          if (res.status === 401) {
+            const errorData = await res.json();
+            alert("session expired. Please log in again.", errorData.message);
+            logout();
+            return;
+          }
+          throw new Error("Failed to fetch course");
+        }
         const data = await res.json();
         cacheLessons(id, data);
         setLessons(data);
@@ -41,7 +51,7 @@ export default function CoursePage() {
     else {
       setLessons(getLessons(id));
     }
-  }, [id, user.userId, course, getLessons, cacheLessons]);
+  }, [id, course, getLessons, cacheLessons, token, logout]);
 
   if (error) {
     return (

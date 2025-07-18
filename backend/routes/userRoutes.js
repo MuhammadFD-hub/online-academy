@@ -1,11 +1,12 @@
 const express = require("express");
 const User = require("../models/User.js");
 const UserProgress = require("../models/UserProgress.js");
+const authenticateToken = require("../middleware/authToken.js");
 const router = express.Router();
 
-router.get("/dashboard/:userId", async (req, res) => {
+router.get("/dashboard/", authenticateToken, async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.user.userId;
 
     const user = await User.findById(userId).select("name");
     if (!user) return res.status(404).json({ error: "User not found" });

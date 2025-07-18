@@ -3,8 +3,9 @@ import useAuth from "../hooks/useAuth";
 import useCache from "../hooks/useCache";
 
 const LessonProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { cacheLessonContent, markCacheLessonRead } = useCache();
+  const token = localStorage.getItem("token");
   const fetchLesson = async (lessonId, setLesson) => {
     try {
       const response = await fetch(
@@ -13,12 +14,18 @@ const LessonProvider = ({ children }) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          alert("session expired. Please log in again.", errorData.message);
+          logout();
+          return;
+        }
         throw new Error("Failed to fetch lesson");
       }
 
@@ -36,12 +43,21 @@ const LessonProvider = ({ children }) => {
         "http://localhost:5000/api/lesson/mark-read",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ userId, courseId, lessonId }),
         }
       );
 
       if (!response.ok) {
+        if (response.status === 401) {
+          const errorData = await response.json();
+          alert("session expired. Please log in again.", errorData.message);
+          logout();
+          return;
+        }
         const errorData = await response.json();
         throw new Error(errorData.message || "mark as read failed");
       }
