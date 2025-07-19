@@ -15,42 +15,40 @@ import Home from "./Home";
 import Layout from "./Layout";
 import Dashboard from "./Dashboard";
 import Header from "./Header";
-
+import ProtectedRoute from "./ProtectedRoute";
 export default function RouteWrapper() {
   const { user } = useAuth();
 
   return (
-    <Router>
-      <Routes>
-        <Route element={<Header />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+    <Routes>
+      <Route element={<Header />}>
+        <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
-          <Route element={<Layout />}>
-            <Route
-              path="/"
-              element={user ? <Navigate to="/dashboard" /> : <Home />}
-            />
-            <Route
-              path="/dashboard"
-              element={user ? <Dashboard /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/courses"
-              element={user ? <CourseList /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/course/:id"
-              element={user ? <CoursePage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/course/:id/lesson/:lessonId"
-              element={user ? <LessonPage /> : <Navigate to="/" />}
-            />
-          </Route>
+        <Route element={<Layout />}>
+          <Route
+            path="/"
+            element={user ? <Navigate to="/dashboard" /> : <Home />}
+          />
+          <Route
+            path="/dashboard"
+            element={user ? <Dashboard /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/courses"
+            element={user ? <CourseList /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/course/:id"
+            element={user ? <CoursePage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/course/:id/lesson/:lessonId"
+            element={user ? <LessonPage /> : <Navigate to="/" />}
+          />
         </Route>
-      </Routes>
-    </Router>
+      </Route>
+    </Routes>
   );
 }

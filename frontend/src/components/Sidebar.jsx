@@ -10,11 +10,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
   return (
     <>
       <motion.div
@@ -58,11 +53,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         </Nav>
 
         <div className="mt-auto mb-3 w-100 text-center">
-          <Button
-            variant="outline-danger"
-            className="w-75"
-            onClick={handleLogout}
-          >
+          <Button variant="outline-danger" className="w-75" onClick={logout}>
             <FaSignOutAlt />
             {!collapsed && <span className="ms-2">Logout</span>}
           </Button>

@@ -16,7 +16,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login(fields.email, fields.password, navigate);
+    login(fields.email, fields.password);
   };
 
   const inputAnim = (key) =>
