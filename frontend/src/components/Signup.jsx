@@ -24,7 +24,7 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    await signup(fields.email, fields.password, navigate);
+    await signup(fields.email, fields.password);
   };
 
   const inputAnim = (key) =>

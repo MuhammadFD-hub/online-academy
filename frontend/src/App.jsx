@@ -1,3 +1,4 @@
+import AuthProvider from "./components/AuthProvider";
 import CacheProvider from "./components/CacheProvider";
 import CoursesProvider from "./components/CoursesProvider";
 import LessonProvider from "./components/LessonProvider";
@@ -6,22 +7,19 @@ import useAuth from "./hooks/useAuth";
 
 export default function App() {
   const { user } = useAuth();
-
-  if (user === null) {
-    return (
-      <>
-        <RouteWrapper />
-      </>
-    );
-  }
-
   return (
-    <CacheProvider>
-      <CoursesProvider>
-        <LessonProvider>
-          <RouteWrapper />
-        </LessonProvider>
-      </CoursesProvider>
-    </CacheProvider>
+    <>
+      {!user ? (
+        <RouteWrapper />
+      ) : (
+        <CacheProvider>
+          <CoursesProvider>
+            <LessonProvider>
+              <RouteWrapper />
+            </LessonProvider>
+          </CoursesProvider>
+        </CacheProvider>
+      )}
+    </>
   );
 }

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "../context/allContext";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const scheduleLogout = (exp) => {
@@ -27,7 +29,7 @@ const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  async function loginOrSignup(method, email, password, navigate) {
+  async function loginOrSignup(method, email, password) {
     try {
       const response = await fetch("http://localhost:5000/api/auth/" + method, {
         method: "POST",
@@ -59,17 +61,18 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  async function login(email, password, navigate) {
-    loginOrSignup("login", email, password, navigate);
+  async function login(email, password) {
+    loginOrSignup("login", email, password);
   }
-  async function signup(email, password, navigate) {
-    loginOrSignup("signup", email, password, navigate);
+  async function signup(email, password) {
+    loginOrSignup("signup", email, password);
   }
   function logout() {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("currLesson");
     localStorage.removeItem("token");
+    navigate("/");
   }
 
   function setLocal(token, email) {
