@@ -17,7 +17,7 @@ export default function CourseList() {
     );
   }
 
-  if (!courses) {
+  if (courses.length === 0) {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"

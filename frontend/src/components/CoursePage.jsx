@@ -18,7 +18,7 @@ export default function CoursePage() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const token = localStorage.getItem("token");
-  const { enroll, findCourse } = useCourses();
+  const { findCourse } = useCourses();
   const { cacheLessons, getLessons } = useCache();
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
@@ -85,13 +85,7 @@ export default function CoursePage() {
         >
           <h2 className="text-primary mb-3">{course.title}</h2>
           <p className="text-muted">{course.description}</p>
-          <Button
-            className="mt-3"
-            variant="success"
-            onClick={() => enroll(course.id)}
-          >
-            Enroll to Start Learning
-          </Button>
+          <EnrollButton courseId={course.id} />
         </motion.div>
       </Container>
     );
@@ -154,3 +148,49 @@ export default function CoursePage() {
     </Container>
   );
 }
+
+const EnrollButton = ({ courseId }) => {
+  const { enroll } = useCourses();
+  const [enrollLoading, setEnrollLoading] = useState(false);
+  const [hover, setHover] = useState(false);
+  const spinColor = hover ? "white" : "initial";
+  return (
+    <Button
+      className="mt-3"
+      variant="outline-success"
+      onClick={async () => {
+        setEnrollLoading(true);
+        await enroll(courseId);
+        setEnrollLoading(false);
+      }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {!enrollLoading ? (
+        "Enroll to Start Learning"
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "161.333px",
+            height: "24px",
+          }}
+        >
+          <Spinner
+            style={{
+              maxHeight: "20px",
+              maxWidth: "20px",
+              borderTopColor: spinColor,
+              borderLeftColor: spinColor,
+              borderBottomColor: spinColor,
+            }}
+            variant="success"
+            animation="border"
+          />
+        </div>
+      )}
+    </Button>
+  );
+};
