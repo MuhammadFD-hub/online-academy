@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, ProgressBar, Button, Alert } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  ProgressBar,
+  Button,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -13,7 +21,7 @@ export default function Dashboard() {
     return stored ? JSON.parse(stored) : null;
   }
 
-  const [enrollments, setEnrollments] = useState([]);
+  const [enrollments, setEnrollments] = useState(null);
   const [error, setError] = useState(null);
   const [showProgressDetails, setShowProgressDetails] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +47,7 @@ export default function Dashboard() {
         }
 
         const data = await response.json();
-        setEnrollments(data.enrollments || []);
+        setEnrollments(data.enrollments);
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -50,14 +58,9 @@ export default function Dashboard() {
       setError("Please log in to view your dashboard.");
     }
   }, [token, logout]);
-
-  const totalProgress =
-    enrollments.length > 0
-      ? Math.round(
-          enrollments.reduce((sum, e) => sum + e.progress, 0) /
-            enrollments.length
-        )
-      : 0;
+  const totalProgress = Math.round(
+    enrollments?.reduce((sum, e) => sum + e.progress, 0) / enrollments?.length
+  );
 
   if (!user)
     return (
@@ -106,10 +109,16 @@ export default function Dashboard() {
             <Card className="shadow-sm rounded-4">
               <Card.Body>
                 <Card.Title>📘 Enrolled Courses</Card.Title>
-                <Card.Text className="text-muted">
-                  You're enrolled in <strong>{enrollments.length}</strong>{" "}
-                  course{enrollments.length !== 1 && "s"}.
-                </Card.Text>
+                {enrollments ? (
+                  <Card.Text className="text-muted">
+                    You're enrolled in <strong>{enrollments?.length}</strong>{" "}
+                    course{enrollments?.length !== 1 && "s"}.
+                  </Card.Text>
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Spinner variant="primary" animation="border" />
+                  </div>
+                )}
               </Card.Body>
             </Card>
           </motion.div>
@@ -120,42 +129,51 @@ export default function Dashboard() {
             <Card className="shadow-sm rounded-4">
               <Card.Body>
                 <Card.Title>📊 Overall Progress</Card.Title>
-                <Card.Text className="text-muted">
-                  You’ve completed <strong>{totalProgress}%</strong> of your
-                  lessons.
-                </Card.Text>
+                {enrollments ? (
+                  <>
+                    <Card.Text className="text-muted">
+                      You’ve completed{" "}
+                      <strong>{totalProgress ? totalProgress : "0"}%</strong> of
+                      your lessons.
+                    </Card.Text>
 
-                <Button
-                  className="mt-2"
-                  variant="outline-primary"
-                  onClick={() => setShowProgressDetails((prev) => !prev)}
-                >
-                  {showProgressDetails ? "Hide Details" : "Show Progress"}
-                </Button>
-
-                <AnimatePresence>
-                  {showProgressDetails && (
-                    <motion.div
-                      className="mt-3"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
+                    <Button
+                      className="mt-2"
+                      variant="outline-primary"
+                      onClick={() => setShowProgressDetails((prev) => !prev)}
                     >
-                      {enrollments.map((e, index) => (
-                        <div key={index} className="mb-3">
-                          <strong>{e.course}</strong>
-                          <ProgressBar
-                            now={e.progress}
-                            label={`${e.progress}%`}
-                            striped
-                            variant={e.progress > 75 ? "success" : "info"}
-                          />
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      {showProgressDetails ? "Hide Details" : "Show Progress"}
+                    </Button>
+
+                    <AnimatePresence>
+                      {showProgressDetails && (
+                        <motion.div
+                          className="mt-3"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {enrollments.map((e, index) => (
+                            <div key={index} className="mb-3">
+                              <strong>{e.course}</strong>
+                              <ProgressBar
+                                now={e.progress}
+                                label={`${e.progress}%`}
+                                striped
+                                variant={e.progress > 75 ? "success" : "info"}
+                              />
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </>
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Spinner variant="primary" animation="border" />
+                  </div>
+                )}
               </Card.Body>
             </Card>
           </motion.div>
