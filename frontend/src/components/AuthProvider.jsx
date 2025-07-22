@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
       if (expiry > now) scheduleLogout(expiry);
       else logout();
     }
-  }, [user]);
+  }, []);
 
   async function loginOrSignup(method, email, password) {
     try {
