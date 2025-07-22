@@ -40,7 +40,7 @@ const CoursesProvider = ({ children }) => {
     return () => {
       isCancelled = true;
     };
-  }, [token, logout]);
+  }, [token]);
 
   async function enroll(courseId) {
     try {

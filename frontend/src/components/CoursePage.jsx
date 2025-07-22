@@ -64,7 +64,7 @@ export default function CoursePage() {
     );
   }
 
-  if (!course || !lessons) {
+  if (course.enrolled && !lessons) {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"
