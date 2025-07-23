@@ -9,23 +9,18 @@ router.get("/:lessonId", authenticateToken, async (req, res) => {
     const { lessonId } = req.params;
     const userId = req.user.userId;
 
-    const lesson = await Lesson.findById(lessonId).populate("course");
+    const lesson = await Lesson.findById(lessonId).select(
+      "title content course"
+    );
     if (!lesson) return res.status(404).json({ error: "Lesson not found" });
 
-    let isRead = false;
+    const progress = await UserProgress.findOne(
+      { user: userId, course: lesson.course },
+      { readLessons: 1 }
+    ).lean();
 
-    if (userId) {
-      const progress = await UserProgress.findOne({
-        user: userId,
-        course: lesson.course._id,
-      });
-
-      if (progress) {
-        isRead = progress.readLessons.some(
-          (readId) => readId.toString() === lessonId.toString()
-        );
-      }
-    }
+    const isRead =
+      progress?.readLessons?.some((id) => id.toString() === lessonId) ?? false;
 
     res.json({
       id: lesson._id,
@@ -48,22 +43,13 @@ router.post("/mark-read", authenticateToken, async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const progress = await UserProgress.findOne({
-      user: userId,
-      course: courseId,
-    });
-
-    if (!progress) {
-      return res.status(404).json({ error: "Progress record not found" });
-    }
-
-    const alreadyRead = progress.readLessons.some(
-      (id) => id.toString() === lessonId.toString()
+    const result = await UserProgress.updateOne(
+      { user: userId, course: courseId },
+      { $addToSet: { readLessons: lessonId } }
     );
 
-    if (!alreadyRead) {
-      progress.readLessons.push(lessonId);
-      await progress.save();
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "Progress record not found" });
     }
 
     res.json({ message: "Lesson marked as read" });
