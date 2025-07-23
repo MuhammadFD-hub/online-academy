@@ -8,30 +8,23 @@ const router = express.Router();
 router.get("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    console.log("User ID from token:", userId);
-    const courses = await Course.find().populate("lessons");
-    const userProgressList = await UserProgress.find({ user: userId }).lean();
 
-    const progressMap = new Map();
-    for (const progress of userProgressList) {
-      const courseId = progress.course.toString();
-      const readLessonIds = new Set(
-        progress.readLessons.map((id) => id.toString())
-      );
-      progressMap.set(courseId, readLessonIds);
-    }
+    const userProgressList = await UserProgress.find({ user: userId }).select(
+      "course"
+    );
 
-    const result = courses.map((course) => {
-      const courseIdStr = course._id.toString();
-      const enrolled = progressMap.has(courseIdStr);
+    const enrolledCourseIds = new Set(
+      userProgressList.map((entry) => entry.course.toString())
+    );
 
-      return {
-        id: course._id,
-        title: course.title,
-        description: course.description,
-        enrolled,
-      };
-    });
+    const courses = await Course.find();
+
+    const result = courses.map((course) => ({
+      id: course._id,
+      title: course.title,
+      description: course.description,
+      enrolled: enrolledCourseIds.has(course._id.toString()),
+    }));
 
     res.json(result);
   } catch (err) {
@@ -42,19 +35,13 @@ router.get("/", authenticateToken, async (req, res) => {
 
 router.post("/enroll", authenticateToken, async (req, res) => {
   const { courseId } = req.body;
-  const userId = req.user.userId;
+  const userId = req.user?.userId;
 
   if (!userId || !courseId) {
     return res.status(400).json({ error: "Missing userId or courseId" });
   }
 
   try {
-    const user = await User.findById(userId);
-    const course = await Course.findById(courseId);
-    if (!user || !course) {
-      return res.status(404).json({ error: "User or Course not found" });
-    }
-
     const existingProgress = await UserProgress.findOne({
       user: userId,
       course: courseId,
@@ -65,51 +52,49 @@ router.post("/enroll", authenticateToken, async (req, res) => {
         .json({ message: "Already enrolled in this course" });
     }
 
-    const newProgress = new UserProgress({
+    await UserProgress.create({
       user: userId,
       course: courseId,
       readLessons: [],
     });
 
-    await newProgress.save();
-
     res.status(201).json({ message: "Enrolled successfully" });
   } catch (err) {
-    console.error("Enrollment error:", err.message);
+    console.error("Enrollment error:", err);
     res.status(500).json({ error: "Failed to enroll in course" });
   }
 });
 
 router.get("/:courseId/lessons", authenticateToken, async (req, res) => {
+  const { courseId } = req.params;
+  const userId = req.user?.userId;
+
   try {
-    const { courseId } = req.params;
-    const userId = req.user.userId;
-
     const course = await Course.findById(courseId).populate("lessons");
-    if (!course) return res.status(404).json({ error: "Course not found" });
 
-    let readLessonIds = [];
-
-    if (userId) {
-      const progress = await UserProgress.findOne({
-        user: userId,
-        course: courseId,
-      });
-      if (progress) {
-        readLessonIds = progress.readLessons.map((id) => id.toString());
-      }
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
     }
+
+    const progress = await UserProgress.findOne({
+      user: userId,
+      course: courseId,
+    }).lean();
+    const readLessonIds = new Set(
+      (progress?.readLessons || []).map((id) => id.toString())
+    );
 
     const lessons = course.lessons.map((lesson) => ({
       id: lesson._id,
       title: lesson.title,
-      read: readLessonIds.includes(lesson._id.toString()),
+      read: readLessonIds.has(lesson._id.toString()),
     }));
 
     res.json(lessons);
   } catch (err) {
-    console.error("Error fetching course detail:", err);
+    console.error("Error fetching lessons:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 module.exports = router;

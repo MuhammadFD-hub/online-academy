@@ -35,7 +35,7 @@ console.log("Connecting to MongoDB URI:", URL);
 
 async function startServer() {
   try {
-    await mongoose.connect(URL);
+    await mongoose.connect(URL, { autoIndex: true });
     console.log("MongoDB connected");
 
     const PORT = process.env.PORT || 5000;
