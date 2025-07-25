@@ -152,7 +152,7 @@ Side note: All routes (except authRoutes) receives Json Web Token (jwt) with req
 
   - `/userId` returns courses with enrolled status
   - `/enroll` enrolls user in given courseId
-  - `/`_courseId_`/lessons` returns lesson (without content) for that course id
+  - `/`_courseId_`/lessons` returns lesson in order (without content) for that course id
 
 - <u>lessonRoutes</u>
 
