@@ -5,5 +5,5 @@ const lessonSchema = new mongoose.Schema({
   course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
   order: { type: Number, required: true },
 });
-
+lessonSchema.index({ course: 1, order: 1 });
 module.exports = mongoose.model("Lesson", lessonSchema);

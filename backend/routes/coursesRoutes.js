@@ -70,7 +70,10 @@ router.get("/:courseId/lessons", authenticateToken, async (req, res) => {
   const userId = req.user?.userId;
 
   try {
-    const course = await Course.findById(courseId).populate("lessons");
+    const course = await Course.findById(courseId).populate({
+      path: "lessons",
+      options: { sort: { order: 1 } },
+    });
 
     if (!course) {
       return res.status(404).json({ error: "Course not found" });
