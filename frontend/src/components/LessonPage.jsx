@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useLesson from "../hooks/useLesson";
 import { useParams } from "react-router-dom";
-import { Button, Card, Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import useCache from "../hooks/useCache";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 const LessonPage = () => {
   const { id: courseId, lessonId } = useParams();
-  const { fetchLesson, parseLessonString } = useLesson();
+  const { fetchLesson } = useLesson();
   const { getLessonContent } = useCache();
   const [lesson, setLesson] = useState(null);
   useEffect(() => {
@@ -15,6 +19,7 @@ const LessonPage = () => {
       setLesson(lessonContent);
     }
   }, [lessonId, fetchLesson, getLessonContent]);
+
   if (!lesson)
     return (
       <div
@@ -28,22 +33,48 @@ const LessonPage = () => {
         <Spinner variant="primary" animation="border" />
       </div>
     );
+
   return (
-    <div className="container mt-4">
+    <>
+      <div className="container mt-4">
       <h2 className="mb-3">{lesson.title}</h2>
-      <div
+        <div
         className="bg-light p-3 rounded"
         style={{ whiteSpace: "pre-wrap" }}
-        dangerouslySetInnerHTML={{ __html: parseLessonString(lesson.content) }}
-      />
-      {!lesson.read && (
-        <MarkButton
-          courseId={courseId}
-          lessonId={lessonId}
-          setLesson={setLesson}
-        />
-      )}
-    </div>
+          //
+        >
+          <ReactMarkdown
+            components={{
+              code({ inline, className, children }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    style={oneLight}
+                    language={match[1]}
+                    PreTag="div"
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
+                ) : (
+                  <div>
+                    <code className={className}>{children}</code>
+                  </div>
+                );
+              },
+            }}
+          >
+            {lesson.content}
+          </ReactMarkdown>
+        </div>
+        {!lesson.read && (
+          <MarkButton
+            courseId={courseId}
+            lessonId={lessonId}
+            setLesson={setLesson}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
