@@ -48,7 +48,7 @@ const CoursesProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // if using auth
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ courseId }),
       });

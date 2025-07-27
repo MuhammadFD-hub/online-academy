@@ -1,17 +1,38 @@
 import { useEffect, useState } from "react";
-import useLesson from "../hooks/useLesson";
+
 import { useParams } from "react-router-dom";
 import { Button, Spinner } from "react-bootstrap";
-import useCache from "../hooks/useCache";
+
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import rehypeSlug from "rehype-slug";
+
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+import useLesson from "../hooks/useLesson";
+import useCache from "../hooks/useCache";
+
+const schema = {
+  ...defaultSchema,
+  tagNames: [...defaultSchema.tagNames, "u", "mark", "sub", "sup"],
+  attributes: {
+    ...defaultSchema.attributes,
+    u: [],
+    mark: [],
+    sub: [],
+    sup: [],
+  },
+};
 
 const LessonPage = () => {
   const { id: courseId, lessonId } = useParams();
   const { fetchLesson } = useLesson();
   const { getLessonContent } = useCache();
   const [lesson, setLesson] = useState(null);
+
   useEffect(() => {
     if (!getLessonContent(lessonId)) fetchLesson(lessonId, setLesson);
     else {
@@ -53,12 +74,17 @@ const LessonPage = () => {
               border: "solid .5px #6ea8ffff",
               boxShadow: "0 0 100px #a8cbffff",
               backgroundColor: "#ffffffff",
-              whiteSpace: "pre-wrap",
-              width: "100%", // responsive base
-              maxWidth: "800px", // limits width on large screens
+              width: "100%",
+              maxWidth: "800px",
             }}
           >
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[
+                rehypeSlug,
+                rehypeRaw,
+                [rehypeSanitize, { ...schema, prefix: false }],
+              ]}
               components={{
                 code({ inline, className, children }) {
                   const match = /language-(\w+)/.exec(className || "");

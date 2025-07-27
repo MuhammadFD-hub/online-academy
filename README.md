@@ -19,7 +19,8 @@ This is a learning project I built to explore and practice React.js. It’s an o
     - [Express.js](#expressjs)
   - [Frontend](#frontend)
     - [React.js](#reactjs)
-      - [Summary of Context Providers](#summary-of-context-providers)
+      - [Data handling and functionality behind scenes](#data-handling-and-functionality-behind-scenes)
+      - [Components](#components)
       - [React Router DOM](#react-router-dom)
   - [📄 License](#-license)
 
@@ -169,69 +170,84 @@ Side note: All routes (except authRoutes) receives Json Web Token (jwt) with req
 
 ## Frontend
 
-react, bootstrap, react-router-dom
+**framework:** React.js
+
+**libraries:**
+
+- bootstrap
+- react-router-dom
+- jsonwebtoken
+- react-markdown
+- react-syntax-highlighter
+
+**plugins:**
+
+- remark-gfm
+- rehype-raw
+- rehype-sanitize
+- rehype-slug
 
 ### React.js
 
-- <u>AuthProvider</u>
+#### Data handling and functionality behind scenes
 
-  On mount it schedules logout according to received expiry (on login). It provides login, logout, signup, setLocal.
+- AuthProvider
 
-  - **login**
+  On mount schedules logout according to received expiry, if logged in. It provides `login`, `logout`, `signup`, `setLocal` to other components.
+
+  - **`login`**
 
     Sends post request with email, and password. Receives jwt in response, decode and extract user from it. Saves token and user locally. Then it navigates to courses page
 
-  - **signup**
+  - **`signup`**
 
     same as login just creates account at server.
 
-  - **logout**
+  - **`logout`**
 
     Removes user, jwt and other data locally, and navigates to '/', which automatically redirects to login page.
 
-- <u>CourseProvider</u>
+  - **`setLocal`**
 
-  On mount, fetches courses and store it in a context state. It provides courses, enroll function, findCourse function.
+    receives token and email. Decodes token into user. Sets user in a state with email. Store user and token in local storage
 
-  - **enroll**
+- CourseProvider
+
+  On mount, fetches courses and store it in a context state. It provides `courses` array, `enroll` function, `findCourse` function.
+
+  - **`enroll`**
 
     Send post request along with courseId to enroll, and also changes courses local state accordingly.
 
-- <u>LessonProvider</u>
+- LessonProvider
 
-  provides fetchLesson, markRead, parseLessonString function. It doesn't store lesson in the context state
+  provides `fetchLesson`, `markRead` function. It doesn't store lesson in the context state
 
-  - **fetchLesson**
+  - **`fetchLesson`**
 
     This fetch the lesson with full content, only if it is not cached
 
-  - **parseLessonString**
-
-    converts lesson's content to following:
-
-    \# -> \<h1>
-    \#\# -> \<h2>
-    \#\#\# -> \<h3> ...
-    so on
-    \*a\* -> \<b\>a\<b\>
-    \```lang code\``` -> \<div styles\>\<h5 styles\> lang \<h5/>\<pre>\<code>code\<code/>\<pre/>\<div/>
-    every remaining line to \<p>
-
-- <u>CacheProvider</u>
+- CacheProvider
 
   The `CacheProvider` caches lesson data using two `Map` objects, **lesson** with `courseId` and **lessonContent** with `lessonId` as the key:
 
-  - **Lessons Map:** Used in `CoursePage.jsx` to show a preview list of lessons (if cached).
-  - **Lesson Content Map:** Used in `LessonPage.jsx` to display the full content of a lesson (if it’s already cached).
+  - **`Lessons` Map:** Used in `CoursePage.jsx` to show a preview list of lessons (if cached).
+  - **`Lesson Content` Map:** Used in `LessonPage.jsx` to display the full content of a lesson (if it’s already cached).
 
-#### <u>Summary of Context Providers</u>
+- Summary of Context Providers
 
-- All providers are implemented using **React Context**.
-- Each context is exported and accessed via custom hooks.
-- These custom hooks are used to fetch shared state and functions across components.
-- The UI is built using **React**, **Bootstrap**, and custom **CSS**, which render data provided by these contexts.
+  - All providers are implemented using **React Context**.
+  - Each context is exported and accessed via custom hooks.
+  - These custom hooks are used to fetch shared state and functions across components.
+  - The UI is built using **React**, **Bootstrap**, and custom **CSS**, which render data provided by these contexts.
 
-#### <u>React Router DOM</u>
+#### Components
+
+- LessonPage
+
+  Receives markdown from `fetchLessons` (defined in `LessonProvider.jsx`), and convert it into markup using **react-markdown**. The code block in markdown is styled using **react-syntax-highlighter**. Other plugins like **remark-gfm**, **rehype-raw**, **rehype-sanitize**, **rehype-slug** is used to allow tables, check boxes, safe HTML, link to headings, and more secure markdown handling.
+
+#### React Router DOM
 
 - The **sidebar** appears only when the user is logged in, using `<Outlet />`.
 - For routes like `/`, `/login`, and `/signup`, the sidebar is hidden. For all other routes, the sidebar and header are displayed using `Outlet`.
