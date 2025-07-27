@@ -5,7 +5,7 @@ import { Button, Spinner } from "react-bootstrap";
 import useCache from "../hooks/useCache";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const LessonPage = () => {
   const { id: courseId, lessonId } = useParams();
@@ -37,35 +37,55 @@ const LessonPage = () => {
   return (
     <>
       <div className="container mt-4">
-      <h2 className="mb-3">{lesson.title}</h2>
+        <h1 className="mb-3" style={{ color: "#0D6EFD" }}>
+          {lesson.title}
+        </h1>
         <div
-        className="bg-light p-3 rounded"
-        style={{ whiteSpace: "pre-wrap" }}
-          //
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "1rem",
+          }}
         >
-          <ReactMarkdown
-            components={{
-              code({ inline, className, children }) {
-                const match = /language-(\w+)/.exec(className || "");
-                return !inline && match ? (
-                  <SyntaxHighlighter
-                    style={oneLight}
-                    language={match[1]}
-                    PreTag="div"
-                  >
-                    {String(children).replace(/\n$/, "")}
-                  </SyntaxHighlighter>
-                ) : (
-                  <div>
-                    <code className={className}>{children}</code>
-                  </div>
-                );
-              },
+          <div
+            className="p-3 rounded"
+            style={{
+              border: "solid .5px #6ea8ffff",
+              boxShadow: "0 0 100px #a8cbffff",
+              backgroundColor: "#ffffffff",
+              whiteSpace: "pre-wrap",
+              width: "100%", // responsive base
+              maxWidth: "800px", // limits width on large screens
             }}
           >
-            {lesson.content}
-          </ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                code({ inline, className, children }) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      style={coy}
+                      language={match[1]}
+                      PreTag="div"
+                      customStyle={{
+                        borderRadius: "10px",
+                        border: "solid 2px #6ea8ffff",
+                        padding: "20px 0 0 0",
+                      }}
+                    >
+                      {String(children).concat("\n")}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className={className}>{children}</code>
+                  );
+                },
+              }}
+            >
+              {lesson.content}
+            </ReactMarkdown>
+          </div>
         </div>
+
         {!lesson.read && (
           <MarkButton
             courseId={courseId}
