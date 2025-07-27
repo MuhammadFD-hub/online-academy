@@ -9,7 +9,7 @@ const LessonProvider = ({ children }) => {
   const fetchLesson = async (lessonId, setLesson) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/lesson/${lessonId}?userId=${user.userId}`, // Pass userId as query param
+        `http://localhost:5000/api/lesson/${lessonId}?userId=${user.userId}`,
         {
           method: "GET",
           headers: {
