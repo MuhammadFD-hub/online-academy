@@ -1,21 +1,28 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import useAuth from "../hooks/useAuth";
+import Header from "./Header";
 
-export default function Layout() {
-  const [collapsed, setCollapsed] = useState(true);
-
+export default function Layout({ user }) {
   return (
     <>
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <header>
+        <Header />
+      </header>
 
-      <div
+      {user && (
+        <aside>
+          <Sidebar />
+        </aside>
+      )}
+
+      <main
         style={{
-          marginLeft: 60,
+          marginLeft: user ? 60 : 0,
         }}
       >
         <Outlet />
-      </div>
+      </main>
     </>
   );
 }
