@@ -74,7 +74,6 @@ export default function Header() {
           </Container>
         </Navbar>
       </motion.div>
-      <Outlet />
     </>
   );
 }

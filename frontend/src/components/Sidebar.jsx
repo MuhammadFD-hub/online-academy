@@ -4,8 +4,10 @@ import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
 import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { useState } from "react";
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(true);
   const sidebarWidth = collapsed ? 60 : 220;
   const navigate = useNavigate();
   const { logout } = useAuth();
