@@ -9,8 +9,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import rehypeSlug from "rehype-slug";
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Highlight, themes } from "prism-react-renderer";
 
 import useLesson from "../hooks/useLesson";
 import useCache from "../hooks/useCache";
@@ -86,23 +85,41 @@ const LessonPage = () => {
                 [rehypeSanitize, { ...schema, prefix: false }],
               ]}
               components={{
-                code({ inline, className, children }) {
+                code({ inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || "");
                   return !inline && match ? (
-                    <SyntaxHighlighter
-                      style={coy}
+                    <Highlight
+                      theme={themes.oneLight}
+                      code={String(children).trim()}
                       language={match[1]}
-                      PreTag="div"
-                      customStyle={{
-                        borderRadius: "10px",
-                        border: "solid 2px #6ea8ffff",
-                        padding: "20px 0 0 0",
-                      }}
                     >
-                      {String(children).concat("\n")}
-                    </SyntaxHighlighter>
+                      {({ style, tokens, getLineProps, getTokenProps }) => (
+                        <pre
+                          className={className}
+                          style={{
+                            ...style,
+                            borderRadius: "10px",
+                            padding: "16px",
+                            overflowX: "auto",
+                            border: "solid 2px #6ea8ffff",
+                            fontSize: "0.85rem",
+                            backgroundColor: "#e9f1ffff",
+                          }}
+                        >
+                          {tokens.map((line, i) => (
+                            <div key={i} {...getLineProps({ line })}>
+                              {line.map((token, key) => (
+                                <span key={key} {...getTokenProps({ token })} />
+                              ))}
+                            </div>
+                          ))}
+                        </pre>
+                      )}
+                    </Highlight>
                   ) : (
-                    <code className={className}>{children}</code>
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
                   );
                 },
               }}
