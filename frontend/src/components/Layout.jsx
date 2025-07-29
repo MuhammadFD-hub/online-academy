@@ -4,7 +4,6 @@ import Sidebar from "./Sidebar";
 
 export default function Layout() {
   const [collapsed, setCollapsed] = useState(true);
-  const sidebarWidth = collapsed ? 60 : 220;
 
   return (
     <>
@@ -12,9 +11,7 @@ export default function Layout() {
 
       <div
         style={{
-          marginLeft: sidebarWidth,
-          padding: "1rem",
-          transition: "margin-left 0.3s ease",
+          marginLeft: 60,
         }}
       >
         <Outlet />
