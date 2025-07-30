@@ -1,7 +1,9 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import useAuth from "../hooks/useAuth";
-import Header from "./Header";
+
+import Sidebar from "../Sidebar/Sidebar";
+import Header from "../Header";
+
+import styles from "./Layout.module.css";
 
 export default function Layout({ user }) {
   return (
@@ -10,17 +12,15 @@ export default function Layout({ user }) {
         <Header />
       </header>
 
+      <div className={`${styles.dummyHeader}`}></div>
+
       {user && (
         <aside>
           <Sidebar />
         </aside>
       )}
 
-      <main
-        style={{
-          marginLeft: user ? 60 : 0,
-        }}
-      >
+      <main className={`${user ? styles.adjustSidebar : ""}`}>
         <Outlet />
       </main>
     </>

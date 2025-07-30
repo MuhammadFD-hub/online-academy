@@ -12,7 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import LessonPage from "./LessonPage";
 import Signup from "./Signup";
 import Home from "./Home";
-import Layout from "./Layout";
+import Layout from "./Layout/Layout";
 import Dashboard from "./Dashboard";
 import Header from "./Header";
 import ProtectedRoute from "./ProtectedRoute";
