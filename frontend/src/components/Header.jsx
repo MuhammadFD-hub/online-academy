@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Navbar, Container, Nav, NavDropdown, Image } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import { motion } from "framer-motion";
@@ -13,7 +13,19 @@ export default function Header() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, type: "spring" }}
       >
-        <Navbar bg="light" expand="lg" className="shadow-sm px-3 py-2 mb-4">
+        <Navbar
+          expand="lg"
+          style={{
+            backdropFilter: "blur(10px)",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            zIndex: 1002,
+            position: "fixed",
+            top: "0",
+            right: "0",
+            left: "0",
+          }}
+          className="shadow-sm px-3 py-2 mb-4"
+        >
           <Container>
             <Navbar.Brand
               as={Link}

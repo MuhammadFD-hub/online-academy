@@ -1,0 +1,50 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 58.7px;
+  z-index: 1001;
+  background-color: #f1f3f5;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+.overlay {
+  position: fixed;
+  top: 58.7px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 1000;
+  transition: ease 0.3s;
+}
+.overlayHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logoutBtn {
+  white-space: nowrap;
+}
+.logoutLabel {
+  max-width: 50px;
+  overflow: hidden;
+  transition: ease 0.3s;
+}
+.logoutLabelHidden {
+  opacity: 0;
+  max-width: 0;
+  pointer-events: none;
+}
+@media screen and (min-width: 992px) {
+  .sidebar {
+    top: 88.3px;
+  }
+  .overlay {
+    top: 88.3px;
+  }
+}

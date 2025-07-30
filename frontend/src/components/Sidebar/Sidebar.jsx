@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
 import SidebarItem from "./SidebarItem";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
+import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
@@ -16,19 +17,7 @@ export default function Sidebar() {
       <motion.div
         animate={{ width: sidebarWidth }}
         transition={{ duration: 0.3 }}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          bottom: 0,
-          backgroundColor: "#f1f3f5",
-          paddingTop: "1rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)",
-          zIndex: 1001,
-        }}
+        className={`${styles.sidebar}`}
       >
         <Button
           variant="light"
@@ -55,23 +44,15 @@ export default function Sidebar() {
 
         <div className="mt-auto mb-3 w-100 text-center">
           <Button
-            style={{
-              whiteSpace: "nowrap",
-            }}
             variant="outline-danger"
-            className="w-75"
+            className={`w-75 ${styles.logoutBtn}`}
             onClick={logout}
           >
             <FaSignOutAlt />
             {
               <span
-                style={{
-                  opacity: collapsed ? 0 : 1,
-                  maxWidth: collapsed ? 0 : "50px",
-                  overflow: "hidden",
-                  transition: "ease 0.3s",
-                }}
-                className="ms-2"
+                className={`ms-2 ${collapsed ? styles.logoutLabelHidden : ""} 
+                ${styles.logoutLabel}`}
               >
                 Logout
               </span>
@@ -81,18 +62,7 @@ export default function Sidebar() {
       </motion.div>
       <div
         onClick={() => setCollapsed(true)}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          backgroundColor: "black",
-          opacity: collapsed ? "0" : "0.5",
-          zIndex: "1000",
-          transition: "ease 0.3s",
-          pointerEvents: "none",
-        }}
+        className={`${collapsed ? styles.overlayHidden : ""} ${styles.overlay}`}
       />
     </>
   );
