@@ -1,6 +1,6 @@
 import { Alert, Container, Spinner } from "react-bootstrap";
 import CoursePreview from "./CoursePreview";
-import useCourses from "../hooks/useCourses";
+import useCourses from "../../../hooks/useCourses";
 import { motion } from "framer-motion";
 
 export default function CourseList() {
@@ -21,7 +21,7 @@ export default function CourseList() {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
+        style={{ height: "90vh" }}
       >
         <Spinner animation="border" variant="primary" />
       </Container>

@@ -1,6 +1,6 @@
-import { LessonContext } from "../context/allContext";
-import useAuth from "../hooks/useAuth";
-import useCache from "../hooks/useCache";
+import { LessonContext } from "../allContext";
+import useAuth from "../../hooks/useAuth";
+import useCache from "../../hooks/useCache";
 
 const LessonProvider = ({ children }) => {
   const { user, logout } = useAuth();

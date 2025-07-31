@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -11,8 +11,8 @@ import rehypeSlug from "rehype-slug";
 
 import { Highlight, themes } from "prism-react-renderer";
 
-import useLesson from "../hooks/useLesson";
-import useCache from "../hooks/useCache";
+import useLesson from "../../../hooks/useLesson";
+import useCache from "../../../hooks/useCache";
 
 const schema = {
   ...defaultSchema,
@@ -138,53 +138,6 @@ const LessonPage = () => {
         )}
       </div>
     </>
-  );
-};
-
-const MarkButton = ({ courseId, lessonId, setLesson }) => {
-  const [markLoading, setMarkLoading] = useState(false);
-  const { markRead } = useLesson();
-  const [hover, setHover] = useState(false);
-  const spinColor = hover ? "white" : "initial";
-  return (
-    <Button
-      className="mt-3"
-      variant="outline-success"
-      onClick={async () => {
-        setMarkLoading(true);
-        await markRead(courseId, lessonId);
-        setLesson((prev) => ({ ...prev, read: true }));
-        setMarkLoading(false);
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      {!markLoading ? (
-        "Mark as Read"
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "94.7px",
-            height: "24px",
-          }}
-        >
-          <Spinner
-            style={{
-              maxHeight: "20px",
-              maxWidth: "20px",
-              borderTopColor: spinColor,
-              borderLeftColor: spinColor,
-              borderBottomColor: spinColor,
-            }}
-            variant="success"
-            animation="border"
-          />
-        </div>
-      )}
-    </Button>
   );
 };
 

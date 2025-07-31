@@ -9,7 +9,7 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dashboard() {

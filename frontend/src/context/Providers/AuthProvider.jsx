@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AuthContext } from "../context/allContext";
+import { AuthContext } from "../allContext";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
