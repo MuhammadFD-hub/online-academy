@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { CoursesContext } from "../context/allContext";
-import useAuth from "../hooks/useAuth";
+import { CoursesContext } from "../allContext";
+import useAuth from "../../hooks/useAuth";
 
 const CoursesProvider = ({ children }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
   const token = localStorage.getItem("token");
@@ -36,11 +36,13 @@ const CoursesProvider = ({ children }) => {
         }
       }
     };
-    fetchData();
+    if (user) {
+      fetchData();
+    }
     return () => {
       isCancelled = true;
     };
-  }, [token]);
+  }, [token, user]);
 
   async function enroll(courseId) {
     try {

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav, NavDropdown, Image } from "react-bootstrap";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
 
 export default function Header() {

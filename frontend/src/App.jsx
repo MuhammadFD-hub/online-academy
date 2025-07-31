@@ -1,25 +1,44 @@
-import AuthProvider from "./components/AuthProvider";
-import CacheProvider from "./components/CacheProvider";
-import CoursesProvider from "./components/CoursesProvider";
-import LessonProvider from "./components/LessonProvider";
-import RouteWrapper from "./components/RouteWrapper";
+import { Routes, Route, Navigate } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
-
+import Login from "./components/pages/Login/Login";
+import CourseList from "./components/pages/CourseList/CourseList";
+import CoursePage from "./components/pages/CoursePage/CoursePage";
+import "bootstrap/dist/css/bootstrap.min.css";
+import LessonPage from "./components/pages/LessonPage/LessonPage";
+import Signup from "./components/pages/Signup/Signup";
+import Home from "./components/pages/Home/Home";
+import Layout from "./components/Layout/Layout";
+import Dashboard from "./components/pages/Dashboard/Dashboard";
 export default function App() {
   const { user } = useAuth();
   return (
-    <>
-      {!user ? (
-        <RouteWrapper />
-      ) : (
-        <CacheProvider>
-          <CoursesProvider>
-            <LessonProvider>
-              <RouteWrapper />
-            </LessonProvider>
-          </CoursesProvider>
-        </CacheProvider>
-      )}
-    </>
+    <Routes>
+      <Route element={<Layout user={user} />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        <Route
+          path="/"
+          element={user ? <Navigate to="/dashboard" /> : <Home />}
+        />
+        <Route
+          path="/dashboard"
+          element={user ? <Dashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/courses"
+          element={user ? <CourseList /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/course/:id"
+          element={user ? <CoursePage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/course/:id/lesson/:lessonId"
+          element={user ? <LessonPage /> : <Navigate to="/" />}
+        />
+      </Route>
+    </Routes>
   );
 }

@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { CacheContext } from "../context/allContext";
+import { useRef } from "react";
+import { CacheContext } from "../allContext";
 
 const CacheProvider = ({ children }) => {
   const lessons = useRef(new Map());

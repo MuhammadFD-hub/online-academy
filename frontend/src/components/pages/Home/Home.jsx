@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -9,10 +8,10 @@ export default function Home() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "88vh",
         display: "flex",
         alignItems: "center",
-        background: "linear-gradient(135deg, #dbeafe, #ffffff)",
+        background: "linear-gradient( #dbeafe, #ffffff)",
         padding: "2rem 0",
       }}
     >
