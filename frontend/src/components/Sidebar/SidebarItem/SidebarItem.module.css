@@ -1,0 +1,12 @@
+.label {
+  opacity: 1;
+  max-width: 100px;
+  overflow: hidden;
+  transition: ease 0.3s;
+}
+
+.labelHidden {
+  opacity: 0;
+  max-width: 0;
+  transition: ease 0.3s;
+}

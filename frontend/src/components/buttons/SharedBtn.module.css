@@ -1,0 +1,15 @@
+.btnLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+}
+.btnLoading:hover .btnSpinner {
+  border-top-color: white;
+  border-left-color: white;
+  border-bottom-color: white;
+}
+.btnSpinner {
+  max-height: 20px;
+  max-width: 20px;
+}

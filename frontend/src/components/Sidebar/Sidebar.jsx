@@ -1,7 +1,7 @@
 import { Button, Nav } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
-import SidebarItem from "./SidebarItem";
+import SidebarItem from "./SidebarItem/SidebarItem";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { useState } from "react";

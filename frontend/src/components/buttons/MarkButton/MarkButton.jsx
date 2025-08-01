@@ -1,11 +1,12 @@
 import { useState } from "react";
-import useLesson from "../../hooks/useLesson";
+import useLesson from "../../../hooks/useLesson";
+import { Button, Spinner } from "react-bootstrap";
+import sharedStyles from "../SharedBtn.module.css";
+import styles from "./MarkButton.module.css";
 
 const MarkButton = ({ courseId, lessonId, setLesson }) => {
   const [markLoading, setMarkLoading] = useState(false);
   const { markRead } = useLesson();
-  const [hover, setHover] = useState(false);
-  const spinColor = hover ? "white" : "initial";
   return (
     <Button
       className="mt-3"
@@ -16,29 +17,13 @@ const MarkButton = ({ courseId, lessonId, setLesson }) => {
         setLesson((prev) => ({ ...prev, read: true }));
         setMarkLoading(false);
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
     >
       {!markLoading ? (
         "Mark as Read"
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "94.7px",
-            height: "24px",
-          }}
-        >
+        <div className={`${sharedStyles.btnLoading} ${styles.btnWidth}`}>
           <Spinner
-            style={{
-              maxHeight: "20px",
-              maxWidth: "20px",
-              borderTopColor: spinColor,
-              borderLeftColor: spinColor,
-              borderBottomColor: spinColor,
-            }}
+            className={`${sharedStyles.btnSpinner}`}
             variant="success"
             animation="border"
           />
