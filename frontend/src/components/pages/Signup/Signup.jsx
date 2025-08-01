@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
+import styles from "./Signup.module.css";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -40,10 +41,7 @@ export default function Signup() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-100 d-flex justify-content-center"
       >
-        <Card
-          className="p-4 shadow-lg"
-          style={{ width: "100%", maxWidth: "500px" }}
-        >
+        <Card className={`p-4 shadow-lg ${styles.cardWidth}`}>
           <motion.h3
             className="mb-4 text-center text-success"
             initial={{ opacity: 0 }}

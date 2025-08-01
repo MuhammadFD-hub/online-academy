@@ -1,23 +1,15 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import style from "./Home.module.css";
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        minHeight: "88vh",
-        display: "flex",
-        alignItems: "center",
-        background: "linear-gradient( #dbeafe, #ffffff)",
-        padding: "2rem 0",
-      }}
-    >
+    <div className={`${style.homeBg} `}>
       <Container>
         <Row className="align-items-center">
-          {/* Text Section */}
           <Col md={6} className="text-center text-md-start">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -42,7 +34,7 @@ export default function Home() {
                     variant="primary"
                     size="lg"
                     onClick={() => navigate("/login")}
-                    style={{ boxShadow: "0 4px 20px rgba(59,130,246,0.4)" }}
+                    className={`${style.shadow}`}
                   >
                     Login
                   </Button>
@@ -57,7 +49,7 @@ export default function Home() {
                     variant="outline-primary"
                     size="lg"
                     onClick={() => navigate("/signup")}
-                    style={{ boxShadow: "0 4px 20px rgba(59,130,246,0.1)" }}
+                    className={`${style.shadow}`}
                   >
                     Sign Up
                   </Button>

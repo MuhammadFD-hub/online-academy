@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { useParams } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -13,6 +11,9 @@ import { Highlight, themes } from "prism-react-renderer";
 
 import useLesson from "../../../hooks/useLesson";
 import useCache from "../../../hooks/useCache";
+import MarkButton from "../../buttons/MarkButton/MarkButton";
+import PageSpinner from "../../Spinner/PageSpinner/PageSpinner";
+import styles from "./LessonPage.module.css";
 
 const schema = {
   ...defaultSchema,
@@ -38,45 +39,16 @@ const LessonPage = () => {
       const lessonContent = getLessonContent(lessonId);
       setLesson(lessonContent);
     }
-  }, [lessonId, fetchLesson, getLessonContent]);
+  }, [lessonId]);
 
-  if (!lesson)
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "50vh",
-        }}
-      >
-        <Spinner variant="primary" animation="border" />
-      </div>
-    );
+  if (!lesson) return <PageSpinner />;
 
   return (
     <>
       <div className="container mt-4">
-        <h1 className="mb-3" style={{ color: "#0D6EFD" }}>
-          {lesson.title}
-        </h1>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            padding: "1rem",
-          }}
-        >
-          <div
-            className="p-3 rounded"
-            style={{
-              border: "solid .5px #6ea8ffff",
-              boxShadow: "0 0 100px #a8cbffff",
-              backgroundColor: "#ffffffff",
-              width: "100%",
-              maxWidth: "800px",
-            }}
-          >
+        <h1 className={`mb-3 ${styles.heading}`}>{lesson.title}</h1>
+        <div className={`${styles.contentAlignment}`}>
+          <div className={`p-3 rounded ${styles.contentWidth}`}>
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[
@@ -95,15 +67,9 @@ const LessonPage = () => {
                     >
                       {({ style, tokens, getLineProps, getTokenProps }) => (
                         <pre
-                          className={className}
+                          className={`${className} ${styles.codeBlock}`}
                           style={{
                             ...style,
-                            borderRadius: "10px",
-                            padding: "16px",
-                            overflowX: "auto",
-                            border: "solid 2px #6ea8ffff",
-                            fontSize: "0.85rem",
-                            backgroundColor: "#e9f1ffff",
                           }}
                         >
                           {tokens.map((line, i) => (

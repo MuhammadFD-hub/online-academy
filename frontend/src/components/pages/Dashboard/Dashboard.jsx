@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Row,
-  Col,
-  Card,
-  ProgressBar,
-  Button,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
+import { Row, Col, Card, ProgressBar, Button, Alert } from "react-bootstrap";
 import useAuth from "../../../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
+import ItemSpinner from "../../Spinner/ItemSpinner/ItemSpinner";
 
 export default function Dashboard() {
   const { logout } = useAuth();
@@ -115,9 +108,7 @@ export default function Dashboard() {
                     course{enrollments?.length !== 1 && "s"}.
                   </Card.Text>
                 ) : (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Spinner variant="primary" animation="border" />
-                  </div>
+                  <ItemSpinner />
                 )}
               </Card.Body>
             </Card>
@@ -170,9 +161,7 @@ export default function Dashboard() {
                     </AnimatePresence>
                   </>
                 ) : (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Spinner variant="primary" animation="border" />
-                  </div>
+                  <ItemSpinner />
                 )}
               </Card.Body>
             </Card>

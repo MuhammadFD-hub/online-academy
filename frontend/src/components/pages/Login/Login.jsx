@@ -3,6 +3,7 @@ import useAuth from "../../../hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
+import styles from "./Login.module.css";
 
 export default function Login() {
   const { login } = useAuth();
@@ -32,10 +33,7 @@ export default function Login() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="w-100 d-flex justify-content-center"
       >
-        <Card
-          className="p-4 shadow-lg"
-          style={{ width: "100%", maxWidth: "500px" }}
-        >
+        <Card className={`p-4 shadow-lg ${styles.cardWidth}`}>
           <motion.h3
             className="mb-4 text-center text-primary"
             initial={{ opacity: 0 }}

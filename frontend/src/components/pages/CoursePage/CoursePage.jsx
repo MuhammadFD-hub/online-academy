@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { motion } from "framer-motion";
 import useCache from "../../../hooks/useCache";
-import EnrollButton from "../../buttons/EnrollButton";
+import EnrollButton from "../../buttons/EnrollButton/EnrollButton";
 
 export default function CoursePage() {
   const { id } = useParams();
@@ -62,7 +62,7 @@ export default function CoursePage() {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
+        style={{ height: "90vh" }}
       >
         <Spinner animation="border" variant="primary" />
       </Container>

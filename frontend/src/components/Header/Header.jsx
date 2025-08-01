@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Navbar, Container, Nav, NavDropdown, Image } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -15,29 +16,21 @@ export default function Header() {
       >
         <Navbar
           expand="lg"
-          style={{
-            backdropFilter: "blur(10px)",
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-            zIndex: 1002,
-            position: "fixed",
-            top: "0",
-            right: "0",
-            left: "0",
-          }}
-          className="shadow-sm px-3 py-2 mb-4"
+          className={`shadow-sm px-3 py-2 mb-4 ${styles.header}`}
         >
           <Container>
             <Navbar.Brand
               as={Link}
               to="/"
-              className="fw-bold text-primary fs-4 d-flex align-items-center"
-              style={{ letterSpacing: "0.5px" }}
+              className={`fw-bold text-primary fs-4 d-flex align-items-center ${styles.Brand}`}
             >
               Online Academy
             </Navbar.Brand>
-
-            <Navbar.Toggle aria-controls="main-navbar" />
-            <Navbar.Collapse id="main-navbar">
+            <Navbar.Toggle
+              aria-controls="main-navbar"
+              className={`${styles.fluid}`}
+            />
+            <Navbar.Collapse id="main-navbar" className={`${styles.fluid}`}>
               <Nav className="me-auto">{/* Future links */}</Nav>
 
               <Nav className="align-items-center">
