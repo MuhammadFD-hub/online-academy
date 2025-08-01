@@ -12,10 +12,9 @@
   border: solid 0.5px #6ea8ffff;
   box-shadow: 0 0 100px #a8cbffff;
 }
-.codeBlock {
+pre code {
   border-radius: 10px;
   padding: 16px;
-  overflow-x: auto;
   border: solid 2px #6ea8ffff;
   font-size: 0.85rem;
 }
