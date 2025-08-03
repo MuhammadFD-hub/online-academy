@@ -8,7 +8,6 @@
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 .overlay {
@@ -18,20 +17,26 @@
   width: 100vw;
   height: 100vh;
   background-color: black;
-  opacity: 0.5;
   z-index: 1000;
   transition: ease 0.3s;
+}
+.overlayShown {
+  opacity: 0.5;
 }
 .overlayHidden {
   opacity: 0;
   pointer-events: none;
 }
-
+.hamburger {
+  width: 80%;
+}
 .logoutBtn {
   white-space: nowrap;
+  width: 80%;
+  padding-left: 9px;
+  transition: 0.3s ease;
 }
 .logoutLabel {
-  max-width: 50px;
   overflow: hidden;
   transition: ease 0.3s;
 }
@@ -40,6 +45,17 @@
   max-width: 0;
   pointer-events: none;
 }
+.smallIcon {
+  transition: 0.3s ease;
+  width: 15px;
+}
+
+@media screen and (min-width: 562px) {
+  .logoutBtn {
+    padding-left: 0.75rem;
+  }
+}
+
 @media screen and (min-width: 992px) {
   .sidebar {
     top: 88.3px;

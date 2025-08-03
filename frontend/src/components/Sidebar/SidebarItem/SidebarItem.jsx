@@ -5,7 +5,7 @@ export default function SidebarItem({ icon, label, collapsed, onClick }) {
   return (
     <Nav.Link
       onClick={onClick}
-      className="w-100 px-3 py-2 d-flex align-items-center justify-content-start sidebar-item"
+      className={`${styles.link} d-flex align-items-center justify-content-start sidebar-item`}
     >
       <span className="me-2 fs-5">{icon}</span>
 

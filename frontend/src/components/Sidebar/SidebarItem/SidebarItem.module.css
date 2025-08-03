@@ -10,3 +10,12 @@
   max-width: 0;
   transition: ease 0.3s;
 }
+.link {
+  transition: 0.3s ease;
+  padding-left: 20px;
+}
+@media screen and (max-width: 562px) {
+  .link {
+    padding-left: 13px;
+  }
+}
