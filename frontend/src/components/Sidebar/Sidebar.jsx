@@ -1,54 +1,73 @@
 import { Button, Nav } from "react-bootstrap";
-import { motion } from "framer-motion";
 import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
 import SidebarItem from "./SidebarItem/SidebarItem";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  let smallSidebar;
+  if (windowWidth < 562) {
+    smallSidebar = true;
+  } else smallSidebar = false;
+
   const [collapsed, setCollapsed] = useState(true);
-  const sidebarWidth = collapsed ? 60 : 220;
   const navigate = useNavigate();
   const { logout } = useAuth();
   return (
     <>
       <motion.div
-        animate={{ width: sidebarWidth }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        animate={{ x: 0, width: collapsed ? (smallSidebar ? 40 : 60) : 220 }}
+        initial={{ x: -300 }}
         className={`${styles.sidebar}`}
       >
         <Button
           variant="light"
-          className="mb-4 rounded-circle"
+          className={` ${styles.hamburgers}`}
           onClick={() => setCollapsed(!collapsed)}
         >
           <FaBars />
         </Button>
-
-        <Nav className="flex-column w-100 align-items-center">
+        <Nav className="py-3 flex-column">
           <SidebarItem
-            icon={<FaBook />}
+            icon={
+              <FaBook className={`${smallSidebar ? styles.smallIcon : ""}`} />
+            }
             label="Courses"
             collapsed={collapsed}
             onClick={() => navigate("/courses")}
           />
           <SidebarItem
-            icon={<FaUser />}
+            icon={
+              <FaUser className={`${smallSidebar ? styles.smallIcon : ""}`} />
+            }
             label="Dashboard"
             collapsed={collapsed}
             onClick={() => navigate("/dashboard")}
           />
         </Nav>
-
-        <div className="mt-auto mb-3 w-100 text-center">
+        <div className="mt-auto mb-3  text-center">
           <Button
             variant="outline-danger"
-            className={`w-75 ${styles.logoutBtn}`}
+            className={`${styles.logoutBtn}`}
             onClick={logout}
           >
-            <FaSignOutAlt />
+            <FaSignOutAlt
+              className={`${smallSidebar ? styles.smallIcon : ""}`}
+            />
             {
               <span
                 className={`ms-2 ${collapsed ? styles.logoutLabelHidden : ""} 
@@ -62,7 +81,9 @@ export default function Sidebar() {
       </motion.div>
       <div
         onClick={() => setCollapsed(true)}
-        className={`${collapsed ? styles.overlayHidden : ""} ${styles.overlay}`}
+        className={`${styles.overlay} ${
+          collapsed ? styles.overlayHidden : styles.overlayShown
+        }`}
       />
     </>
   );
