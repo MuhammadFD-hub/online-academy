@@ -1,16 +1,11 @@
 .dummyHeader {
-  min-height: 88.3px;
+  min-height: 58.5px;
   max-width: 90vw;
 }
 .adjustSidebar {
   margin-left: 60px;
 }
 
-@media screen and (max-width: 992px) {
-  .dummyHeader {
-    min-height: 58.5px;
-  }
-}
 @media screen and (max-width: 562px) {
   .adjustSidebar {
     margin-left: 40px;

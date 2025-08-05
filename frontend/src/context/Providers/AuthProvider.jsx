@@ -72,7 +72,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("currLesson");
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/login");
   }
 
   function setLocal(token, email) {

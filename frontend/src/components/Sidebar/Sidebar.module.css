@@ -55,12 +55,3 @@
     padding-left: 0.75rem;
   }
 }
-
-@media screen and (min-width: 992px) {
-  .sidebar {
-    top: 88.3px;
-  }
-  .overlay {
-    top: 88.3px;
-  }
-}

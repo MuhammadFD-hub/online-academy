@@ -14,3 +14,24 @@
 .Brand {
   letter-spacing: 0.5px;
 }
+.dropdownItem:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+.menuButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  transition: 0.3s ease;
+}
+.dropdownTitle:hover {
+  background-color: transparent;
+  cursor: auto;
+}
+.dropdownMenu {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}

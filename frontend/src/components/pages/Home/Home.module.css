@@ -1,8 +1,8 @@
 .homeBg {
-  min-height: 88vh;
+  min-height: 92vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(#dbeafe, #ffffff);
+  background: linear-gradient(120deg, #c3ddff, #ffffff);
   padding: 2rem 0;
 }
 .shadow {
