@@ -9,6 +9,7 @@ import Signup from "./components/pages/Signup/Signup";
 import Home from "./components/pages/Home/Home";
 import Layout from "./components/Layout/Layout";
 import Dashboard from "./components/pages/Dashboard/Dashboard";
+import Profile from "./components/pages/Profile/Profile";
 export default function App() {
   const { user } = useAuth();
   return (
@@ -25,6 +26,10 @@ export default function App() {
         <Route
           path="/dashboard"
           element={user ? <Dashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/profile"
+          element={user ? <Profile /> : <Navigate to="/" />}
         />
         <Route
           path="/courses"

@@ -1,0 +1,12 @@
+.editIcon {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: auto;
+  right: 0;
+}
+.iconOnEdit {
+  right: -30px !important;
+}

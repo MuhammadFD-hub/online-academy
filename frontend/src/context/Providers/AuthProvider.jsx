@@ -93,7 +93,9 @@ const AuthProvider = ({ children }) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   return (
-    <AuthContext.Provider value={{ setLocal, user, login, logout, signup }}>
+    <AuthContext.Provider
+      value={{ setUser, setLocal, user, login, logout, signup }}
+    >
       {children}
     </AuthContext.Provider>
   );

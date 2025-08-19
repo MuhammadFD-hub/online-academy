@@ -1,0 +1,62 @@
+.form {
+  position: relative;
+}
+.label {
+  font-weight: bold;
+  color: rgb(69, 69, 251);
+  margin: 0;
+}
+.inputFlex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+.adjustInput {
+  min-width: 0;
+  width: 80%;
+  max-width: 250px;
+  margin: initial;
+}
+.btn {
+  font-size: initial;
+  width: clamp(60px, 10vw, 150px);
+  min-height: 27.5px;
+}
+
+.btnShow {
+  margin: 0 2%;
+}
+.btnHidden {
+  margin: 0;
+  margin-left: calc(0px - clamp(60px, 10vw, 150px));
+  opacity: 0;
+  pointer-events: none;
+}
+.btnWrap {
+  display: flex;
+  margin: 0 2%;
+}
+.editIcon {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: auto;
+  right: 0;
+}
+.noPointer {
+  pointer-events: none;
+}
+@media screen and (max-width: 767.5px) {
+  .hideOnSmallView {
+    display: none;
+    pointer-events: none;
+  }
+  .showOnSmallView {
+    display: inherit !important;
+    pointer-events: initial !important;
+  }
+}

@@ -1,0 +1,42 @@
+.defaultBtn {
+  opacity: 1;
+  border: none;
+  width: clamp(60px, 20vw, 150px);
+  border-radius: 7px;
+  transition: opacity 0.5s, background-color 0.3s, margin 0.5s, padding 0.5s;
+}
+.primaryBtn {
+  background-color: rgb(0, 76, 255);
+  color: white;
+}
+.primaryBtn:hover {
+  background-color: rgb(0, 76, 197);
+}
+.secondaryBtn {
+  background-color: rgb(227, 227, 227);
+  color: black;
+  border: solid 1.5px transparent;
+}
+.secondaryBtn:hover {
+  background-color: rgb(200, 200, 200);
+}
+.hiddenBtn {
+  opacity: 0;
+  pointer-events: none;
+  margin: -10px 0;
+  padding: 0;
+}
+.showBtn {
+  margin-right: 2%;
+  margin-bottom: 2%;
+  margin-top: 3%;
+}
+.editBtn {
+  background-color: white;
+  color: rgb(0, 76, 255);
+  border: solid 1.5px rgb(0, 76, 255);
+}
+.editBtn:hover {
+  background-color: rgb(0, 76, 255);
+  color: white;
+}

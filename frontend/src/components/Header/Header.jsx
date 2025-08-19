@@ -16,10 +16,7 @@ export default function Header() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, type: "spring" }}
     >
-      <Navbar
-        expand="lg"
-        className={`shadow-sm px-3 py-2 mb-4 ${styles.header}`}
-      >
+      <Navbar className={`shadow-sm px-3 py-2   ${styles.header}`}>
         <Container>
           <Navbar.Brand
             as={Link}

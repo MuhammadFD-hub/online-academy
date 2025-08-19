@@ -3,7 +3,7 @@
   left: 0;
   bottom: 0;
   top: 58.7px;
-  z-index: 1001;
+  z-index: 3;
   background-color: #f1f3f5;
   padding-top: 1rem;
   display: flex;
@@ -17,7 +17,7 @@
   width: 100vw;
   height: 100vh;
   background-color: black;
-  z-index: 1000;
+  z-index: 2;
   transition: ease 0.3s;
 }
 .overlayShown {
