@@ -1,0 +1,46 @@
+.inputDefault {
+  transition: margin 0.5s ease, opacity 0.5s ease;
+  border-radius: 7px;
+  border: solid 1px lightgray;
+  background-color: transparent;
+  min-width: 100px;
+  max-width: 450px;
+}
+
+.paraToInput {
+  margin-top: 3.8%;
+  margin-bottom: 3.8%;
+  pointer-events: initial;
+}
+.inputToPara {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  border: none !important;
+  resize: none;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.inputToPara[type="number"]::-webkit-inner-spin-button,
+.inputToPara[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.inputToPara[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.inputToPara[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.inputToPara::-ms-expand {
+  display: none;
+}
+.inputToPara {
+  background-image: none;
+}

@@ -1,0 +1,40 @@
+.containerStyles {
+  pointer-events: inherit;
+  background: #11111168;
+  z-index: 5;
+  transition: opacity 0.5s;
+  height: 90vh;
+  width: 100vw;
+}
+.hideItem {
+  pointer-events: none;
+  opacity: 0;
+}
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 5%;
+  position: fixed;
+  z-index: 6;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 10vh;
+  background-color: white;
+}
+.adjustBtn {
+  height: 80%;
+}
+.adjustCropper {
+  background-color: blue;
+}
+
+.cropArea {
+  border: 2px solid white !important;
+}
+
+.cropImage {
+  object-fit: cover;
+}

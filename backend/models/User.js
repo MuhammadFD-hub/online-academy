@@ -13,6 +13,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    pfpCloudData: {
+      public_id: { type: String, default: null },
+      format: { type: String, default: null },
+    },
+    bgCloudData: {
+      public_id: { type: String, default: null },
+      format: { type: String, default: null },
+    },
+    username: {
+      type: String,
+      default: null,
+    },
+    dateOfBirth: {
+      type: String,
+      default: null,
+    },
+    gender: {
+      type: Boolean,
+      default: null,
+    },
   },
   { timestamps: true }
 );

@@ -1,0 +1,13 @@
+.errorLog {
+  opacity: 0;
+  font-size: 13px;
+  color: red;
+  margin: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, margin 0.3s ease;
+  min-width: 0;
+}
+.showError {
+  opacity: 1;
+  margin-bottom: 13px;
+}

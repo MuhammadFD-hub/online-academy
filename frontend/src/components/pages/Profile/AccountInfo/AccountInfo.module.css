@@ -1,0 +1,35 @@
+.editIcon {
+  justify-self: end;
+}
+
+.accountInfoGrid {
+  padding: 5%;
+  border: 1px solid rgba(172, 172, 255, 1);
+  box-shadow: 0 0 10px rgba(172, 172, 255, 0.5);
+  border-radius: 10px;
+  margin-bottom: 5px;
+
+  font-size: clamp(14px, 1vw + 0.5rem, 1.25rem);
+}
+
+.label {
+  font-weight: bold;
+  color: rgb(69, 69, 251);
+  margin: 0;
+  /* transition: 0.3s ease; */
+}
+.moveUp {
+  padding-top: 2px;
+  align-self: start;
+}
+
+@media screen and (max-width: 767px) {
+  /* .accountInfoGrid {
+    grid-template-columns: 1fr 1.5fr;
+  }
+  .email,
+  .password {
+    display: none;
+    margin: 0;
+  } */
+}

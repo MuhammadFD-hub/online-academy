@@ -1,0 +1,10 @@
+.label {
+  font-weight: bold;
+  color: rgb(69, 69, 251);
+  margin: 0;
+}
+.paraToInput {
+  margin-top: 3.8%;
+  margin-bottom: 3.8%;
+  pointer-events: initial;
+}

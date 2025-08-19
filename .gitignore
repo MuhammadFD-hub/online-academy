@@ -5,4 +5,4 @@ build/
 .DS_Store
 Thumbs.db
 .vscode/
-Test.jsx
+Test*.jsx
