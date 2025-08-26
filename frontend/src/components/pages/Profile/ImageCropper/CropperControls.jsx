@@ -1,0 +1,101 @@
+import UseProfileStore from "../UseProfileStore";
+import styles from "./ImageCropper.module.css";
+import btnStyles from "../Button.module.css";
+import LoadingBtn from "../LoadingBtn/LoadingBtn";
+import getCroppedImg from "./getCroppedImg";
+import useCloudUpload from "../../../../hooks/useCloudUpload";
+
+const CropperControls = () => {
+  const croppedAreaPixels = UseProfileStore((state) => state.croppedAreaPixels);
+  const setCropperImage = UseProfileStore((state) => state.setCropperImage);
+  const cropperImage = UseProfileStore((state) => state.cropperImage);
+  const isPfpChanging = UseProfileStore((state) => state.isPfpChanging);
+  const setSelectFocus = UseProfileStore((state) => state.setSelectFocus);
+  const setCropBgFocus = UseProfileStore((state) => state.setCropBgFocus);
+  const cropBgFocus = UseProfileStore((state) => state.cropBgFocus);
+  let setCloudData = null,
+    folder = null,
+    link = null;
+  if (isPfpChanging) {
+    setCloudData = UseProfileStore((state) => state.setPfpCloudData);
+    folder = "profilePic";
+    link = "http://localhost:5000/api/user/uploadPfp";
+  } else {
+    setCloudData = UseProfileStore((state) => state.setBgCloudData);
+    folder = "backgroundPic";
+    link = "http://localhost:5000/api/user/uploadBg";
+  }
+
+  const token = localStorage.getItem("token");
+  const { uploadImg } = useCloudUpload();
+
+  function unlockScroll() {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    window.scrollTo(0, 0);
+  }
+  function cancelCropper() {
+    setCropperImage(null);
+    unlockScroll();
+  }
+  async function handleUpload() {
+    try {
+      const croppedBlob = await getCroppedImg(cropperImage, croppedAreaPixels);
+      const cloudData = await uploadImg(croppedBlob, folder);
+      await fetch(link, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(cloudData),
+      });
+      setCloudData(cloudData);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    } finally {
+      unlockScroll();
+      setSelectFocus(cropBgFocus);
+      cancelCropper();
+    }
+  }
+  return (
+    <div
+      className={`${cropperImage ? "" : styles.hideItem} ${
+        styles.btnContainer
+      } `}
+    >
+      <LoadingBtn
+        onClick={handleUpload}
+        className={`${styles.adjustBtn}`}
+        label={"upload"}
+      />
+      <button
+        onClick={cancelCropper}
+        className={`${styles.adjustBtn} ${btnStyles.defaultBtn} ${btnStyles.secondaryBtn}`}
+      >
+        cancel
+      </button>
+      {!isPfpChanging && (
+        <select
+          className={`${styles.select}`}
+          name="focus"
+          id="focus"
+          onChange={(e) => {
+            const { name, value } = e.target;
+            setCropBgFocus({ [name]: value });
+          }}
+          value={cropBgFocus.focus}
+        >
+          <option value="focusTop">focus top</option>
+          <option value="focusMid" selected>
+            focus mid
+          </option>
+          <option value="focusBot">focus bot</option>
+        </select>
+      )}
+    </div>
+  );
+};
+
+export default CropperControls;
