@@ -3,7 +3,7 @@ import btnStyles from "../Button.module.css";
 import { BsPen } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 
-const EditIcon = ({ handleClick, className, active = false }) => {
+const EditIcon = ({ handleClick, className, active = false, children }) => {
   return (
     <div
       className={`${className} ${styles.editIcon} ${
@@ -11,7 +11,13 @@ const EditIcon = ({ handleClick, className, active = false }) => {
       }`}
       onClick={handleClick}
     >
-      {!active ? <BsPen size={"100%"} /> : <MdClose size={"100%"} />}
+      {children ? (
+        children
+      ) : !active ? (
+        <BsPen size={"100%"} />
+      ) : (
+        <MdClose size={"100%"} />
+      )}
     </div>
   );
 };

@@ -27,11 +27,3 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   font-weight: bold;
 }
-.editIcon {
-  display: absolute;
-  border-radius: 50%;
-  padding: clamp(6px, 1vw, 10px);
-  top: initial;
-  bottom: 24px;
-  right: -4px;
-}

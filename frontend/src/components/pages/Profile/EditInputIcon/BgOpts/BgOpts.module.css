@@ -1,0 +1,40 @@
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: gray;
+  margin-top: 5px;
+}
+.radioLabel {
+  padding: 0 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+}
+.radioLabel:hover {
+  background-color: rgba(174, 219, 255, 0.5);
+}
+.activeLabel {
+  background-color: rgb(174, 219, 255);
+}
+.activeLabel:hover {
+  background-color: rgb(151, 196, 234);
+}
+.loadingIcon {
+  background-color: rgb(0, 76, 255);
+  color: white;
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.226);
+  right: 0;
+  top: initial;
+  bottom: calc(-30px - clamp(5px, 2.5vw, 28px) / 2);
+  transition: opacity 0.5s ease-in-out, left 0.5s ease-in-out,
+    right 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.loadingIcon:hover {
+  background-color: rgb(0, 76, 197);
+}
+.hideIcon {
+  transform: translateX(15px);
+  opacity: 0;
+}

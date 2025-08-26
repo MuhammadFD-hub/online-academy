@@ -2,13 +2,39 @@
   pointer-events: inherit;
   background: #11111168;
   z-index: 5;
-  transition: opacity 0.5s;
+  transition: opacity 0.5s ease;
   height: 90vh;
   width: 100vw;
 }
 .hideItem {
   pointer-events: none;
   opacity: 0;
+}
+.cropArea {
+  position: relative;
+  border: 2px solid white !important;
+}
+.cropAreaBg::after {
+  content: "focused" !important;
+  padding-top: 6.3vw;
+  text-align: center;
+  position: absolute;
+  aspect-ratio: 4.8/1;
+  color: rgba(255, 255, 255, 0.564);
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: rgba(79, 188, 255, 0.312);
+  transition: top 0.5s ease-in-out;
+  top: 28.5% !important;
+}
+.cropAreaBg::before {
+  display: none;
+}
+.focusBot::after {
+  top: 56.5% !important;
+}
+.focusTop::after {
+  top: 0% !important;
 }
 .btnContainer {
   display: flex;
@@ -22,17 +48,20 @@
   right: 0;
   width: 100%;
   height: 10vh;
+  min-height: 39px;
   background-color: white;
 }
 .adjustBtn {
-  height: 80%;
+  height: 70%;
 }
-.adjustCropper {
-  background-color: blue;
-}
-
-.cropArea {
-  border: 2px solid white !important;
+.select {
+  background-color: rgb(227, 227, 227);
+  border-radius: 7px;
+  /* position: absolute; */
+  height: 70%;
+  right: 7%;
+  border: none;
+  cursor: pointer;
 }
 
 .cropImage {

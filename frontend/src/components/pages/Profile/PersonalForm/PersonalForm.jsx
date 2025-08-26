@@ -12,22 +12,35 @@ const PersonalForm = () => {
   const [editPersonal, setEditPersonal] = useState(false);
   const personalForm = UseProfileStore((state) => state.personalForm);
   const setPersonalForm = UseProfileStore((state) => state.setPersonalForm);
-  console.log(personalForm);
-  const [personalFormLocal, setPersonalFormLocal] = useState({});
+  const [personalFormLocal, setPersonalFormLocal] = useState({
+    username: "",
+    dateOfBirth: "",
+    gender: "",
+  });
 
   function handleNull(globalForm) {
     return {
       username: globalForm.username ?? "",
       dateOfBirth: globalForm.dateOfBirth ?? "",
-      gender: globalForm.gender ?? "",
+      gender: convertToString(globalForm.gender),
     };
   }
   function handleEmptyStr(localForm) {
     return {
       username: localForm.username === "" ? null : localForm.username,
       dateOfBirth: localForm.dateOfBirth === "" ? null : localForm.dateOfBirth,
-      gender: localForm.gender === "" ? null : localForm.gender,
+      gender: convertString(localForm.gender),
     };
+  }
+  function convertString(value) {
+    if (value === "") return null;
+    else if (value === "true") return true;
+    else return false;
+  }
+  function convertToString(value) {
+    if (value === null) return "";
+    else if (value) return "true";
+    else return "false";
   }
   async function handleFormSubmit() {
     if (
@@ -53,7 +66,6 @@ const PersonalForm = () => {
           setPersonalForm(form);
         } else {
           const data = await res.json();
-          console.log(data.error);
         }
       } catch (error) {
         console.error(error.error);
@@ -61,8 +73,12 @@ const PersonalForm = () => {
     }
   }
   function cancelEdit() {
-    setEditPersonal(false);
     setPersonalFormLocal(handleNull(personalForm));
+    setEditPersonal(false);
+  }
+  function handleEdit() {
+    setPersonalFormLocal(handleNull(personalForm));
+    setEditPersonal(true);
   }
   function handleFormChange(e) {
     const { name, value } = e.target;
@@ -79,14 +95,7 @@ const PersonalForm = () => {
         {personalForm ? (
           <>
             <EditIcon
-              handleClick={
-                editPersonal
-                  ? cancelEdit
-                  : () => {
-                      setPersonalFormLocal(personalForm);
-                      setEditPersonal(true);
-                    }
-              }
+              handleClick={editPersonal ? cancelEdit : handleEdit}
               active={editPersonal}
             />
 
@@ -100,6 +109,7 @@ const PersonalForm = () => {
                   : personalForm.username || "none"
               }
               toggle={editPersonal}
+              placeholder={"enter username"}
             />
 
             <label
@@ -118,7 +128,7 @@ const PersonalForm = () => {
               value={
                 editPersonal
                   ? personalFormLocal.gender
-                  : personalForm.gender || "none"
+                  : convertToString(personalForm.gender) || "none"
               }
             >
               <option value={""}>none</option>

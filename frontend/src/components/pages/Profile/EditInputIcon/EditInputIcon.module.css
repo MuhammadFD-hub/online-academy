@@ -1,0 +1,62 @@
+.editIcon {
+  display: absolute;
+  border-radius: 50%;
+  padding: clamp(6px, 1vw, 10px);
+}
+.editIconPfp {
+  top: initial;
+  bottom: 24px;
+  right: -4px;
+}
+.editIconBg {
+  top: initial;
+  bottom: 10px;
+  right: 10px;
+}
+.menu {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  border: solid 1px rgb(196, 196, 196);
+  border-radius: 10px;
+  padding: 10px;
+  gap: 5px;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.226);
+  z-index: 1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.menuHide {
+  opacity: 0;
+  transform: translateY(-50px);
+  pointer-events: none;
+}
+.bgMenu {
+  top: initial;
+  bottom: -170px;
+  right: 10px;
+}
+.PfpMenu {
+  width: 110px;
+  right: 0;
+}
+.newImageBtn {
+  width: 100%;
+  background-color: white;
+  color: rgb(0, 76, 197);
+}
+.newImageBtn:hover {
+  background-color: rgb(0, 76, 197);
+  color: white;
+}
+.deleteBtn {
+  width: 100%;
+  background-color: white;
+  color: red;
+  border: none;
+}
+.deleteBtn:hover {
+  background-color: red;
+  color: white;
+}

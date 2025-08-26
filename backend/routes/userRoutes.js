@@ -207,5 +207,46 @@ router.post("/uploadUserInfo", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Failed to update user" });
   }
 });
+router.get("/getBgFocus", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId)
+      return res.status(400).json({ error: "User ID missing from token" });
+
+    const user = await User.findById(userId).select("settings.bgFocus");
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    return res.status(200).json({ focus: user.settings.bgFocus });
+  } catch (error) {
+    console.error("Error fetching bgFocus:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/updateBgFocus", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user?.userId;
+    const { bgFocus } = req.body;
+
+    if (!userId)
+      return res.status(400).json({ error: "User ID missing from token" });
+    if (![1, 2, 3].includes(bgFocus))
+      return res.status(400).json({ error: "Invalid bgFocus value" });
+
+    const result = await User.updateOne(
+      { _id: userId },
+      { $set: { "settings.bgFocus": bgFocus } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json({ message: "bgFocus updated successfully" });
+  } catch (error) {
+    console.error("Error updating bgFocus:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 module.exports = router;

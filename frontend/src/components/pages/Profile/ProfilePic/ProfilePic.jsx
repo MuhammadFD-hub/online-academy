@@ -24,11 +24,7 @@ const ProfilePic = () => {
         className={`${styles.profilePic}`}
       />
       <h3 className={`${styles.username}`}>Username</h3>
-      <EditInputIcon
-        name={"profilePic"}
-        className={styles.editIcon}
-        isPfpChanging={true}
-      />
+      <EditInputIcon isPfpChanging={true} />
     </div>
   );
 };

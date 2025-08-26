@@ -6,7 +6,8 @@
   padding: 5px;
   border-radius: 20%;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  transition: right 0.2s ease-in-out, left 0.2s ease-in-out,
+    background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   pointer-events: initial;
   width: clamp(30px, 4vw, 40px);
   height: clamp(30px, 4vw, 40px);
