@@ -21,9 +21,20 @@
   transition: 0.3s ease;
   cursor: pointer;
 }
+.pfpLink {
+  transition: border-color 0.4s ease;
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+.pfpLink:hover {
+  border-color: rgb(29, 247, 255);
+}
+.menuButton {
+  padding: 3px 5px;
+}
 .menuButton:hover {
   background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
+  border-radius: 50%;
   transition: 0.3s ease;
 }
 .dropdownTitle:hover {

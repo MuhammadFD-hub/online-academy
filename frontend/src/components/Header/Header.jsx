@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Navbar, Container, Image, Dropdown } from "react-bootstrap";
+import { Navbar, Container, Image, Dropdown, Nav } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FiMoreVertical } from "react-icons/fi";
 import styles from "./Header.module.css";
@@ -32,23 +32,29 @@ export default function Header() {
             show={showMenu}
             onToggle={setShowMenu}
           >
-            <button
-              className={`btn btn-link px-1 py-1 border-0 ${styles.menuButton}`}
-              onClick={() => setShowMenu(!showMenu)}
-            >
+            <div className="d-flex gap-1 align-items-center justify-content-center">
               {user && (
-                <Image
-                  src={user.profilePic || "/default-avatar.png"}
-                  roundedCircle
-                  width={32}
-                  height={32}
-                  className="me-2 border border-secondary-subtle shadow-sm"
-                  alt="Profile"
-                />
+                <Nav.Link
+                  className={`${styles.pfpLink}`}
+                  as={Link}
+                  to="/profile"
+                >
+                  <Image
+                    src={user.profilePic || "/default-avatar.png"}
+                    roundedCircle
+                    width={32}
+                    height={32}
+                    alt="Profile"
+                  />
+                </Nav.Link>
               )}
-              <FiMoreVertical size={24} />
-            </button>
-
+              <button
+                className={`btn btn-link border-0 ${styles.menuButton}`}
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                <FiMoreVertical size={24} />
+              </button>
+            </div>
             {showMenu && (
               <Dropdown.Menu className={`border-0 p-2 ${styles.dropdownMenu}`}>
                 <motion.div
