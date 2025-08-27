@@ -1,0 +1,32 @@
+.imgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.433);
+  transition: opacity 0.5s ease;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+.hideOverlay {
+  opacity: 0;
+  pointer-events: none;
+}
+.closeIcon {
+  z-index: 4;
+  top: 30px;
+  right: 30px;
+}
+.image {
+  width: 90vw;
+  height: calc(auto);
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

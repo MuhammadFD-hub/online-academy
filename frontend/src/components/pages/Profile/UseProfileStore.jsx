@@ -57,6 +57,8 @@ const UseProfileStore = create((set) => ({
       console.error("postBgFocus failed:", error);
     }
   },
+  imgOverlayCloudData: null,
+  setImgOverlayCloudData: (newImage) => set({ imgOverlayCloudData: newImage }),
 }));
 
 export default UseProfileStore;

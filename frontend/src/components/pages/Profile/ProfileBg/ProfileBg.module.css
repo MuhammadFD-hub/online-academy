@@ -3,7 +3,7 @@
   background-repeat: no-repeat;
   background-position: center;
   height: 22%;
-
+  cursor: pointer;
   width: 100%;
   position: absolute;
   transition: background-position 0.5s ease-in-out;

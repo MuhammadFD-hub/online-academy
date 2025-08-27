@@ -5,6 +5,9 @@ import styles from "./ProfileBg.module.css";
 const ProfileBg = () => {
   const bgCloudData = UseProfileStore((state) => state.bgCloudData);
   const selectFocus = UseProfileStore((state) => state.selectFocus);
+  const setImgOverlayCloudData = UseProfileStore(
+    (state) => state.setImgOverlayCloudData
+  );
   const defaultPic =
     !bgCloudData?.public_id || !bgCloudData?.format ? true : false;
   const focus = selectFocus.focus;
@@ -14,13 +17,25 @@ const ProfileBg = () => {
   else alignBg = styles.centerBg;
   const bg = defaultPic
     ? "/default-bg.jpg"
-    : getProfileUrl(bgCloudData?.public_id, bgCloudData?.format, "dzsxpy7qy");
+    : getProfileUrl(bgCloudData?.public_id, bgCloudData?.format);
+
+  function lockScroll() {
+    document.body.style.position = "fixed";
+    document.body.style.top = `0px`;
+    document.body.style.width = "100%";
+  }
+  function handleClick() {
+    lockScroll();
+    setImgOverlayCloudData(bgCloudData);
+  }
+
   return (
     <>
       <div
         className={`${styles.profileBgContainer} ${alignBg}`}
         style={{ backgroundImage: `url(${bg})` }}
         alt="background image"
+        onClick={handleClick}
       >
         <EditInputIcon isPfpChanging={false} />
       </div>
