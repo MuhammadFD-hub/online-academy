@@ -8,6 +8,7 @@ import ImageCropper from "./ImageCropper/ImageCropper.jsx";
 import { useEffect } from "react";
 import UseProfileStore from "./UseProfileStore.jsx";
 import CropperControls from "./ImageCropper/CropperControls.jsx";
+import ImageOverlay from "./ImageOverlay/ImageOverlay.jsx";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
@@ -55,8 +56,8 @@ const Profile = () => {
 
   return (
     <>
+      <ImageOverlay />
       <ImageCropper />
-
       <CropperControls />
       <Container className={`mt-4 `}>
         <div className={`${styles.profile}`}>

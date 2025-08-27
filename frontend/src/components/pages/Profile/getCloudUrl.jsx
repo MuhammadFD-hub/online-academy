@@ -1,5 +1,6 @@
-const getCloudUrl = (publicId, format, cloudname) => {
-  return `https://res.cloudinary.com/${cloudname}/image/upload/${publicId}.${format}`;
+const getCloudUrl = (publicId, format) => {
+  if (!publicId || !format) return null;
+  return `https://res.cloudinary.com/dzsxpy7qy/image/upload/${publicId}.${format}`;
 };
 
 export default getCloudUrl;
