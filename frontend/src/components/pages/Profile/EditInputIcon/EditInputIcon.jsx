@@ -63,6 +63,7 @@ const EditInputIcon = ({ isPfpChanging }) => {
         name={name}
         id={name}
         style={{ display: "none" }}
+        onClick={(e) => e.stopPropagation()}
         onChange={handleFileChange}
       />
       <div ref={menuRef} onClick={(e) => e.stopPropagation()}>
