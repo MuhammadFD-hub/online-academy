@@ -16,7 +16,7 @@ export default function Header() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, type: "spring" }}
     >
-      <Navbar className={`shadow-sm px-3 py-2   ${styles.header}`}>
+      <Navbar className={`shadow-sm px-3 py-2 ${styles.header}`}>
         <Container>
           <Navbar.Brand
             as={Link}
@@ -26,12 +26,7 @@ export default function Header() {
             Online Academy
           </Navbar.Brand>
 
-          <Dropdown
-            align="end"
-            className="ms-auto"
-            show={showMenu}
-            onToggle={setShowMenu}
-          >
+          <Dropdown align="end" className="ms-auto" show={true}>
             <div className="d-flex gap-1 align-items-center justify-content-center">
               {user && (
                 <Nav.Link
@@ -55,66 +50,62 @@ export default function Header() {
                 <FiMoreVertical size={24} />
               </button>
             </div>
-            {showMenu && (
-              <Dropdown.Menu className={`border-0 p-2 ${styles.dropdownMenu}`}>
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {user ? (
-                    <>
-                      <div
-                        className={`px-3 py-1 fw-semibold ${styles.dropdownTitle}`}
-                      >
-                        {user.name || "User"}
-                      </div>
-                      <Dropdown.Divider />
-                      <Dropdown.Item
-                        as={Link}
-                        to="/profile"
-                        className={`${styles.dropdownItem}`}
-                      >
-                        Profile
-                      </Dropdown.Item>
-                      {/* <Dropdown.Item
+            <Dropdown.Menu
+              className={`${showMenu && styles.showMenu} ${
+                styles.dropdownMenu
+              } border-0 py-2`}
+            >
+              {user ? (
+                <>
+                  <div
+                    className={`px-3 py-1 fw-semibold ${styles.dropdownTitle}`}
+                  >
+                    {user.name || "User"}
+                  </div>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    as={Link}
+                    to="/profile"
+                    className={`${styles.dropdownItem}`}
+                  >
+                    Profile
+                  </Dropdown.Item>
+                  {/* <Dropdown.Item
                           as={Link}
                           to="/settings"
                           className={`${styles.dropdownItem}`}
                         >
                           Settings
                         </Dropdown.Item> */}
-                      <Dropdown.Divider />
-                      <Dropdown.Item
-                        as={Link}
-                        to="/login"
-                        onClick={logout}
-                        className={`${styles.dropdownItem}`}
-                      >
-                        Logout
-                      </Dropdown.Item>
-                    </>
-                  ) : (
-                    <>
-                      <Dropdown.Item
-                        as={Link}
-                        to="/login"
-                        className={`${styles.dropdownItem}`}
-                      >
-                        Login
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as={Link}
-                        to="/signup"
-                        className={`${styles.dropdownItem}`}
-                      >
-                        Signup
-                      </Dropdown.Item>
-                    </>
-                  )}
-                </motion.div>
-              </Dropdown.Menu>
-            )}
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    as={Link}
+                    to="/login"
+                    onClick={logout}
+                    className={`${styles.dropdownItem}`}
+                  >
+                    Logout
+                  </Dropdown.Item>
+                </>
+              ) : (
+                <>
+                  <Dropdown.Item
+                    as={Link}
+                    to="/login"
+                    className={`${styles.dropdownItem}`}
+                  >
+                    Login
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    as={Link}
+                    to="/signup"
+                    className={`${styles.dropdownItem}`}
+                  >
+                    Signup
+                  </Dropdown.Item>
+                </>
+              )}
+            </Dropdown.Menu>
           </Dropdown>
         </Container>
       </Navbar>
