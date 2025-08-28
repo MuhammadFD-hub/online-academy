@@ -1,6 +1,4 @@
 .header {
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.2);
   z-index: 3;
   position: fixed;
   top: 0;
@@ -9,11 +7,23 @@
   transition: ease 0.3s;
   height: 56px;
 }
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
 .fluid {
   transition: ease 0.3s;
 }
 .Brand {
   letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.482);
+}
+.dropdownItem {
+  color: black;
 }
 .dropdownItem:hover {
   background-color: rgba(0, 0, 0, 0.1);
@@ -42,8 +52,17 @@
   cursor: auto;
 }
 .dropdownMenu {
+  background-color: rgba(255, 255, 255, 0.514);
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 0.25rem;
   overflow: hidden;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  transform: translateY(-20px);
+  opacity: 0;
+  pointer-events: none;
+}
+.showMenu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: initial;
 }
