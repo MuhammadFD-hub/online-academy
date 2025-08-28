@@ -8,9 +8,9 @@ import useCloudUpload from "../../../../hooks/useCloudUpload";
 const CropperControls = () => {
   const croppedAreaPixels = UseProfileStore((state) => state.croppedAreaPixels);
   const setCropperImage = UseProfileStore((state) => state.setCropperImage);
+  const postBgFocus = UseProfileStore((state) => state.postBgFocus);
   const cropperImage = UseProfileStore((state) => state.cropperImage);
   const isPfpChanging = UseProfileStore((state) => state.isPfpChanging);
-  const setSelectFocus = UseProfileStore((state) => state.setSelectFocus);
   const setCropBgFocus = UseProfileStore((state) => state.setCropBgFocus);
   const cropBgFocus = UseProfileStore((state) => state.cropBgFocus);
   let setCloudData = null,
@@ -40,6 +40,7 @@ const CropperControls = () => {
   }
   async function handleUpload() {
     try {
+      postBgFocus();
       const croppedBlob = await getCroppedImg(cropperImage, croppedAreaPixels);
       const cloudData = await uploadImg(croppedBlob, folder);
       await fetch(link, {
@@ -55,7 +56,6 @@ const CropperControls = () => {
       console.error("Upload failed:", err);
     } finally {
       unlockScroll();
-      setSelectFocus(cropBgFocus);
       cancelCropper();
     }
   }

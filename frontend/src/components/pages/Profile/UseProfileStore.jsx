@@ -53,6 +53,8 @@ const UseProfileStore = create((set) => ({
         body: JSON.stringify({ bgFocus: bgFocus }),
       });
       const data = await res.json();
+
+      set({ selectFocus: { focus: focus } });
     } catch (error) {
       console.error("postBgFocus failed:", error);
     }
