@@ -33,6 +33,9 @@
   transform: translateY(-50px);
   pointer-events: none;
 }
+.defaultBgMenuAdj {
+  bottom: -75px !important;
+}
 .bgMenu {
   top: initial;
   bottom: -170px;
