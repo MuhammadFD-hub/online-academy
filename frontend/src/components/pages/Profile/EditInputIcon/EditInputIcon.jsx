@@ -15,7 +15,9 @@ const EditInputIcon = ({ isPfpChanging }) => {
   const setIsPfpChanging = UseProfileStore((state) => state.setIsPfpChanging);
   const name = isPfpChanging ? "profilePic" : "profileBg";
   const editIconStyles = isPfpChanging ? styles.editIconPfp : styles.editIconBg;
-  const menuStyles = isPfpChanging ? styles.PfpMenu : styles.bgMenu;
+  const menuStyles = isPfpChanging
+    ? styles.PfpMenu
+    : `${!bgCloudData?.public_id && styles.defaultBgMenuAdj} ${styles.bgMenu}`;
 
   useEffect(() => {
     if (hideMenu) return;
@@ -73,9 +75,8 @@ const EditInputIcon = ({ isPfpChanging }) => {
           handleClick={handleEditIconClick}
         />
         <div
-          className={`${hideMenu && styles.menuHide} ${
-            styles.menu
-          } ${menuStyles}`}
+          className={`${hideMenu && styles.menuHide} 
+          ${styles.menu} ${menuStyles}`}
         >
           <button
             onClick={handleNewImg}

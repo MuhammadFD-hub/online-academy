@@ -35,7 +35,7 @@ export default function Header() {
                   to="/profile"
                 >
                   <Image
-                    src={user.profilePic || "/default-avatar.png"}
+                    src={user.profilePic || "/default-pfp.svg"}
                     roundedCircle
                     width={32}
                     height={32}

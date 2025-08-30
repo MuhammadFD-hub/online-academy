@@ -16,8 +16,10 @@ const ProfilePic = () => {
     document.body.style.width = "100%";
   }
   function handleClick() {
-    lockScroll();
-    setImgOverlayCloudData(pfpCloudData);
+    if (pfpCloudData.public_id) {
+      lockScroll();
+      setImgOverlayCloudData(pfpCloudData);
+    }
   }
   return (
     <div className={`${styles.userPicInfoAlign}`}>
@@ -25,10 +27,13 @@ const ProfilePic = () => {
         onClick={handleClick}
         src={
           defaultPic
-            ? "/default-avatar.png"
+            ? "/default-pfp.svg"
             : getProfileUrl(pfpCloudData?.public_id, pfpCloudData?.format)
         }
         alt="Profile"
+        style={{
+          cursor: pfpCloudData?.public_id ? "pointer" : "initial",
+        }}
         className={`${styles.profilePic}`}
       />
       <h3 className={`${styles.username}`}>Username</h3>

@@ -16,7 +16,7 @@ const ProfileBg = () => {
   else if (focus === "focusBot") alignBg = styles.botBg;
   else alignBg = styles.centerBg;
   const bg = defaultPic
-    ? "/default-bg.jpg"
+    ? "/default-bg.svg"
     : getProfileUrl(bgCloudData?.public_id, bgCloudData?.format);
 
   function lockScroll() {
@@ -25,15 +25,20 @@ const ProfileBg = () => {
     document.body.style.width = "100%";
   }
   function handleClick() {
-    lockScroll();
-    setImgOverlayCloudData(bgCloudData);
+    if (bgCloudData?.public_id) {
+      lockScroll();
+      setImgOverlayCloudData(bgCloudData);
+    }
   }
 
   return (
     <>
       <div
         className={`${styles.profileBgContainer} ${alignBg}`}
-        style={{ backgroundImage: `url(${bg})` }}
+        style={{
+          cursor: bgCloudData?.public_id ? "pointer" : "initial",
+          backgroundImage: `url(${bg})`,
+        }}
         alt="background image"
         onClick={handleClick}
       >
