@@ -1,6 +1,4 @@
-import { create } from "zustand";
-
-const UseProfileStore = create((set) => ({
+const creatProfileStore = (set, get) => ({
   cropperImage: null,
   setCropperImage: (newImage) => set({ cropperImage: newImage }),
   pfpCloudData: null,
@@ -61,6 +59,6 @@ const UseProfileStore = create((set) => ({
   },
   imgOverlayCloudData: null,
   setImgOverlayCloudData: (newImage) => set({ imgOverlayCloudData: newImage }),
-}));
+});
 
-export default UseProfileStore;
+export default creatProfileStore;

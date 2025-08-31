@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
-import LoadingBtn from "../../LoadingBtn/LoadingBtn";
-import UseProfileStore from "../../UseProfileStore";
 import styles from "./BgOpts.module.css";
 import LoadingIcon from "./LoadingIcon/LoadingIcon";
+import UseStore from "../../../../../stores/UseStore";
+
 const BgOpts = () => {
   const token = localStorage.getItem("token");
-  const setSelectFocus = UseProfileStore((state) => state.setSelectFocus);
-  const selectFocus = UseProfileStore((state) => state.selectFocus);
-  const postBgFocus = UseProfileStore((state) => state.postBgFocus);
+  const setSelectFocus = UseStore((state) => state.setSelectFocus);
+  const selectFocus = UseStore((state) => state.selectFocus);
+  const postBgFocus = UseStore((state) => state.postBgFocus);
   const [showBtn, setShowBtn] = useState(false);
   const radioOpt = useRef({ focus: null });
   if (selectFocus.focus !== null && radioOpt?.current.focus === null)

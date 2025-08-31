@@ -1,15 +1,14 @@
 import { useCallback, useState } from "react";
 import styles from "./ImageCropper.module.css";
 import Cropper from "react-easy-crop";
-import UseProfileStore from "../UseProfileStore";
+import UseStore from "../../../../stores/UseStore";
+
 //to make it completely reusable, use global states for all isPfpChanging
 const ImageCropper = () => {
-  const cropperImage = UseProfileStore((state) => state.cropperImage);
-  const cropBgFocus = UseProfileStore((state) => state.cropBgFocus);
-  const isPfpChanging = UseProfileStore((state) => state.isPfpChanging);
-  const setCroppedAreaPixels = UseProfileStore(
-    (state) => state.setCroppedAreaPixels
-  );
+  const cropperImage = UseStore((state) => state.cropperImage);
+  const cropBgFocus = UseStore((state) => state.cropBgFocus);
+  const isPfpChanging = UseStore((state) => state.isPfpChanging);
+  const setCroppedAreaPixels = UseStore((state) => state.setCroppedAreaPixels);
   const ratio = isPfpChanging ? 1 : 2.1 / 1;
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });

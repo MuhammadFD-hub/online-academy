@@ -1,11 +1,11 @@
 import styles from "./ProfilePic.module.css";
 import EditInputIcon from "../EditInputIcon/EditInputIcon";
-import UseProfileStore from "../UseProfileStore";
 import getProfileUrl from "../getCloudUrl";
+import UseStore from "../../../../stores/UseStore";
 
 const ProfilePic = () => {
-  const pfpCloudData = UseProfileStore((state) => state.pfpCloudData);
-  const setImgOverlayCloudData = UseProfileStore(
+  const pfpCloudData = UseStore((state) => state.pfpCloudData);
+  const setImgOverlayCloudData = UseStore(
     (state) => state.setImgOverlayCloudData
   );
   const defaultPic =

@@ -1,27 +1,27 @@
-import UseProfileStore from "../UseProfileStore";
 import styles from "./ImageCropper.module.css";
 import btnStyles from "../Button.module.css";
 import LoadingBtn from "../LoadingBtn/LoadingBtn";
 import getCroppedImg from "./getCroppedImg";
 import useCloudUpload from "../../../../hooks/useCloudUpload";
+import UseStore from "../../../../stores/UseStore";
 
 const CropperControls = () => {
-  const croppedAreaPixels = UseProfileStore((state) => state.croppedAreaPixels);
-  const setCropperImage = UseProfileStore((state) => state.setCropperImage);
-  const postBgFocus = UseProfileStore((state) => state.postBgFocus);
-  const cropperImage = UseProfileStore((state) => state.cropperImage);
-  const isPfpChanging = UseProfileStore((state) => state.isPfpChanging);
-  const setCropBgFocus = UseProfileStore((state) => state.setCropBgFocus);
-  const cropBgFocus = UseProfileStore((state) => state.cropBgFocus);
+  const croppedAreaPixels = UseStore((state) => state.croppedAreaPixels);
+  const setCropperImage = UseStore((state) => state.setCropperImage);
+  const postBgFocus = UseStore((state) => state.postBgFocus);
+  const cropperImage = UseStore((state) => state.cropperImage);
+  const isPfpChanging = UseStore((state) => state.isPfpChanging);
+  const setCropBgFocus = UseStore((state) => state.setCropBgFocus);
+  const cropBgFocus = UseStore((state) => state.cropBgFocus);
   let setCloudData = null,
     folder = null,
     link = null;
   if (isPfpChanging) {
-    setCloudData = UseProfileStore((state) => state.setPfpCloudData);
+    setCloudData = UseStore((state) => state.setPfpCloudData);
     folder = "profilePic";
     link = "http://localhost:5000/api/user/uploadPfp";
   } else {
-    setCloudData = UseProfileStore((state) => state.setBgCloudData);
+    setCloudData = UseStore((state) => state.setBgCloudData);
     folder = "backgroundPic";
     link = "http://localhost:5000/api/user/uploadBg";
   }

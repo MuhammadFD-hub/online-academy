@@ -6,16 +6,18 @@ import ProfileBg from "./ProfileBg/ProfileBg.jsx";
 import ProfilePic from "./ProfilePic/ProfilePic.jsx";
 import ImageCropper from "./ImageCropper/ImageCropper.jsx";
 import { useEffect } from "react";
-import UseProfileStore from "./UseProfileStore.jsx";
 import CropperControls from "./ImageCropper/CropperControls.jsx";
 import ImageOverlay from "./ImageOverlay/ImageOverlay.jsx";
+import UseStore from "../../../stores/UseStore.jsx";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
-  const setPfpCloudData = UseProfileStore((state) => state.setPfpCloudData);
-  const setBgCloudData = UseProfileStore((state) => state.setBgCloudData);
-  const setPersonalForm = UseProfileStore((state) => state.setPersonalForm);
-  const getBgFocus = UseProfileStore((state) => state.getBgFocus);
+  const setPfpCloudData = UseStore((s) => {
+    s.setPfpCloudData;
+  });
+  const setBgCloudData = UseStore((s) => s.setBgCloudData);
+  const setPersonalForm = UseStore((s) => s.setPersonalForm);
+  const getBgFocus = UseStore((s) => s.getBgFocus);
 
   useEffect(() => {
     async function fetchCloudDataPfp() {
