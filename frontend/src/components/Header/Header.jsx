@@ -4,12 +4,30 @@ import { motion } from "framer-motion";
 import { FiMoreVertical } from "react-icons/fi";
 import styles from "./Header.module.css";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
+  const dropdownRef = useRef(null);
+  const menuBtnRef = useRef(null);
+  useEffect(() => {
+    if (!showMenu) return;
 
+    function handleClickOutside(event) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        !menuBtnRef.current.contains(event.target)
+      )
+        setShowMenu(false);
+    }
+
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => {
+      document.removeEventListener("pointerdown", handleClickOutside);
+    };
+  }, [showMenu]);
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -46,6 +64,7 @@ export default function Header() {
               <button
                 className={`btn btn-link border-0 ${styles.menuButton}`}
                 onClick={() => setShowMenu(!showMenu)}
+                ref={menuBtnRef}
               >
                 <FiMoreVertical size={24} />
               </button>
@@ -54,6 +73,7 @@ export default function Header() {
               className={`${showMenu && styles.showMenu} ${
                 styles.dropdownMenu
               } border-0 py-2`}
+              ref={dropdownRef}
             >
               {user ? (
                 <>
@@ -67,6 +87,7 @@ export default function Header() {
                     as={Link}
                     to="/profile"
                     className={`${styles.dropdownItem}`}
+                    onClick={() => setShowMenu(false)}
                   >
                     Profile
                   </Dropdown.Item>
@@ -81,7 +102,10 @@ export default function Header() {
                   <Dropdown.Item
                     as={Link}
                     to="/login"
-                    onClick={logout}
+                    onClick={() => {
+                      setShowMenu(false);
+                      logout();
+                    }}
                     className={`${styles.dropdownItem}`}
                   >
                     Logout
@@ -93,6 +117,7 @@ export default function Header() {
                     as={Link}
                     to="/login"
                     className={`${styles.dropdownItem}`}
+                    onClick={() => setShowMenu(false)}
                   >
                     Login
                   </Dropdown.Item>
@@ -100,6 +125,7 @@ export default function Header() {
                     as={Link}
                     to="/signup"
                     className={`${styles.dropdownItem}`}
+                    onClick={() => setShowMenu(false)}
                   >
                     Signup
                   </Dropdown.Item>
