@@ -1,14 +1,12 @@
+import UseStore from "../../../../stores/UseStore";
 import EditIcon from "../EditIcon/EditIcon";
 import getCloudUrl from "../getCloudUrl";
-import UseProfileStore from "../UseProfileStore";
 import styles from "./ImageOverlay.module.css";
 import { useRef, useState } from "react";
 
 const ImageOverlay = () => {
-  const imgOverlayCloudData = UseProfileStore(
-    (state) => state.imgOverlayCloudData
-  );
-  const setImgOverlayCloudData = UseProfileStore(
+  const imgOverlayCloudData = UseStore((state) => state.imgOverlayCloudData);
+  const setImgOverlayCloudData = UseStore(
     (state) => state.setImgOverlayCloudData
   );
   const [scale, setScale] = useState(1);

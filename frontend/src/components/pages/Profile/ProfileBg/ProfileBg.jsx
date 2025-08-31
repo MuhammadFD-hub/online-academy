@@ -1,11 +1,11 @@
+import UseStore from "../../../../stores/UseStore";
 import EditInputIcon from "../EditInputIcon/EditInputIcon";
 import getProfileUrl from "../getCloudUrl";
-import UseProfileStore from "../UseProfileStore";
 import styles from "./ProfileBg.module.css";
 const ProfileBg = () => {
-  const bgCloudData = UseProfileStore((state) => state.bgCloudData);
-  const selectFocus = UseProfileStore((state) => state.selectFocus);
-  const setImgOverlayCloudData = UseProfileStore(
+  const bgCloudData = UseStore((state) => state.bgCloudData);
+  const selectFocus = UseStore((state) => state.selectFocus);
+  const setImgOverlayCloudData = UseStore(
     (state) => state.setImgOverlayCloudData
   );
   const defaultPic =

@@ -1,18 +1,19 @@
 import { useEffect, useRef } from "react";
 import EditIcon from "../EditIcon/EditIcon";
-import UseProfileStore from "../UseProfileStore";
+
 import { useState } from "react";
 import styles from "./EditInputIcon.module.css";
 import btnStyles from "../Button.module.css";
 import BgOpts from "./BgOpts/BgOpts";
+import UseStore from "../../../../stores/UseStore";
 
 const EditInputIcon = ({ isPfpChanging }) => {
   const menuRef = useRef(null);
   const inputRef = useRef(null);
   const [hideMenu, setHideMenu] = useState(true);
-  const bgCloudData = UseProfileStore((state) => state.bgCloudData);
-  const setCropperImage = UseProfileStore((state) => state.setCropperImage);
-  const setIsPfpChanging = UseProfileStore((state) => state.setIsPfpChanging);
+  const bgCloudData = UseStore((state) => state.bgCloudData);
+  const setCropperImage = UseStore((state) => state.setCropperImage);
+  const setIsPfpChanging = UseStore((state) => state.setIsPfpChanging);
   const name = isPfpChanging ? "profilePic" : "profileBg";
   const editIconStyles = isPfpChanging ? styles.editIconPfp : styles.editIconBg;
   const menuStyles = isPfpChanging

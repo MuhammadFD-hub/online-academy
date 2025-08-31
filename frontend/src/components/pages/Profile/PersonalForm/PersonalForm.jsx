@@ -4,14 +4,15 @@ import btnStyles from "../Button.module.css";
 import inputStyles from "../ParaInput/ParaInput.module.css";
 import EditIcon from "../EditIcon/EditIcon";
 import InputEntry from "../InputEntry/InputEntry";
-import UseProfileStore from "../UseProfileStore";
 import { Spinner } from "react-bootstrap";
 import LoadingBtn from "../LoadingBtn/LoadingBtn";
+import UseStore from "../../../../stores/UseStore";
+
 const PersonalForm = () => {
   const token = localStorage.getItem("token");
   const [editPersonal, setEditPersonal] = useState(false);
-  const personalForm = UseProfileStore((state) => state.personalForm);
-  const setPersonalForm = UseProfileStore((state) => state.setPersonalForm);
+  const personalForm = UseStore((state) => state.personalForm);
+  const setPersonalForm = UseStore((state) => state.setPersonalForm);
   const [personalFormLocal, setPersonalFormLocal] = useState({
     username: "",
     dateOfBirth: "",
