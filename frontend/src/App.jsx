@@ -10,8 +10,16 @@ import Home from "./components/pages/Home/Home";
 import Layout from "./components/Layout/Layout";
 import Dashboard from "./components/pages/Dashboard/Dashboard";
 import Profile from "./components/pages/Profile/Profile";
+import { useEffect } from "react";
+import UseStore from "./stores/UseStore";
 export default function App() {
   const { user } = useAuth();
+  const token = localStorage.getItem("token");
+  const getUsername = UseStore((s) => s.getUsername);
+  useEffect(() => {
+    getUsername(token);
+  }, []);
+
   return (
     <Routes>
       <Route element={<Layout user={user} />}>

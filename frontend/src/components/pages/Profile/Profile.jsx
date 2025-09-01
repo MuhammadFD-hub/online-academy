@@ -12,12 +12,11 @@ import UseStore from "../../../stores/UseStore.jsx";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
-  const setPfpCloudData = UseStore((s) => {
-    s.setPfpCloudData;
-  });
+  const setPfpCloudData = UseStore((s) => s.setPfpCloudData);
   const setBgCloudData = UseStore((s) => s.setBgCloudData);
   const setPersonalForm = UseStore((s) => s.setPersonalForm);
   const getBgFocus = UseStore((s) => s.getBgFocus);
+  const getUsername = UseStore((s) => s.getUsername);
 
   useEffect(() => {
     async function fetchCloudDataPfp() {
@@ -28,7 +27,7 @@ const Profile = () => {
         },
       });
       const data = await res.json();
-      setPfpCloudData(data.pfpCloudData);
+      if (data.pfpCloudData) setPfpCloudData(data.pfpCloudData);
     }
     async function fetchCloudDataBg() {
       const res = await fetch("http://localhost:5000/api/user/getBg", {
@@ -54,6 +53,7 @@ const Profile = () => {
     fetchCloudDataPfp();
     fetchPersonalData();
     getBgFocus(token);
+    getUsername(token);
   }, []);
 
   return (

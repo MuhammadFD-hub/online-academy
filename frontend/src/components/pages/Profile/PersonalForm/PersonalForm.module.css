@@ -3,13 +3,12 @@
 }
 .personalInfoGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.3fr;
   align-items: center;
   padding: 5%;
   border: 1px solid rgba(172, 172, 255, 1);
   box-shadow: 0 0 10px rgba(172, 172, 255, 0.5);
   border-radius: 10px;
-  margin-bottom: 5px;
   position: relative;
   font-size: clamp(14px, 1vw + 0.5rem, 1.25rem);
   pointer-events: none;
@@ -17,4 +16,13 @@
 .personalInfoGrid label {
   color: rgb(69, 69, 251);
   transition: margin 0.3s ease;
+}
+.errorSpacer {
+  transition: margin 0.3s ease;
+}
+.scrollUp {
+  margin: -20px 0;
+}
+.errorLog {
+  margin-bottom: 0 !important;
 }
