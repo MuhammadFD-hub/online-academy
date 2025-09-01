@@ -175,6 +175,35 @@ router.post("/updatePassword", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/getUsername", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!userId) return res.status(404).json({ error: "user id not found" });
+    const user = await User.findById(userId).select("username");
+    return res.json({ username: user.username });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
+router.post("/uploadUsername", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { username } = req.body;
+    if (!userId) return res.status(404).json({ error: "user id not found" });
+    await User.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          username: username,
+        },
+      }
+    );
+    return res.json({ message: "personal info updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update user" });
+  }
+});
+
 router.get("/getUserInfo", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -216,7 +245,7 @@ router.get("/getBgFocus", authenticateToken, async (req, res) => {
     const user = await User.findById(userId).select("settings.bgFocus");
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    return res.status(200).json({ focus: user.settings.bgFocus });
+    return res.status(200).json({ focus: user.settings?.bgFocus });
   } catch (error) {
     console.error("Error fetching bgFocus:", error);
     res.status(500).json({ error: "Internal server error" });

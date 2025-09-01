@@ -5,6 +5,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import styles from "./Header.module.css";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
+import Username from "../Username/Username";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -77,11 +78,12 @@ export default function Header() {
             >
               {user ? (
                 <>
-                  <div
-                    className={`px-3 py-1 fw-semibold ${styles.dropdownTitle}`}
-                  >
-                    {user.name || "User"}
-                  </div>
+                  <h3 className={`${styles.dropdownTitle}`}>
+                    <Username
+                      classname={`px-3 py-1 ${styles.username}`}
+                      displayChars={15}
+                    />
+                  </h3>
                   <Dropdown.Divider />
                   <Dropdown.Item
                     as={Link}

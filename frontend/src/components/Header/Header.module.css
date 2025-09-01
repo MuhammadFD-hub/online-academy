@@ -47,9 +47,17 @@
   border-radius: 50%;
   transition: 0.3s ease;
 }
-.dropdownTitle:hover {
+.dropdownTitle {
   background-color: transparent;
-  cursor: auto;
+  width: 100%;
+}
+.username {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: 600;
 }
 .dropdownMenu {
   background-color: rgba(255, 255, 255, 0.514);

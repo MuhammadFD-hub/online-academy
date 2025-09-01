@@ -4,6 +4,7 @@ import { Row, Col, Card, ProgressBar, Button, Alert } from "react-bootstrap";
 import useAuth from "../../../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import ItemSpinner from "../../Spinner/ItemSpinner/ItemSpinner";
+import Username from "../../Username/Username";
 
 export default function Dashboard() {
   const { logout } = useAuth();
@@ -93,7 +94,7 @@ export default function Dashboard() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        Welcome, {"User"}!
+        Welcome, {<Username />}!
       </motion.h2>
 
       <Row className="g-4">

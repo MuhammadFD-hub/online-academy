@@ -1,13 +1,20 @@
-.userPicInfoAlign {
-  position: relative;
+.pfpAlignFlex {
+  display: flex;
+  flex-direction: column;
   text-align: center;
+  align-items: center;
+  width: 100%;
+  pointer-events: none;
+}
+.pfpAlignFlex > * {
+  pointer-events: auto;
+}
+.pfpContainer {
+  margin-bottom: 10px;
   min-width: 110px;
   max-width: 200px;
   width: 20%;
-  pointer-events: none;
-}
-.userPicInfoAlign > .profilePic {
-  pointer-events: auto;
+  position: relative;
 }
 .profilePic {
   width: 100%;
@@ -24,8 +31,6 @@
   border: solid 2px rgb(80, 223, 255);
 }
 .username {
-  white-space: nowrap;
-  margin: 0;
   border-radius: 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   font-weight: bold;

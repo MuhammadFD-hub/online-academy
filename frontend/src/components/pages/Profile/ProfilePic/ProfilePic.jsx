@@ -2,6 +2,7 @@ import styles from "./ProfilePic.module.css";
 import EditInputIcon from "../EditInputIcon/EditInputIcon";
 import getProfileUrl from "../getCloudUrl";
 import UseStore from "../../../../stores/UseStore";
+import Username from "../../../Username/Username";
 
 const ProfilePic = () => {
   const pfpCloudData = UseStore((state) => state.pfpCloudData);
@@ -22,22 +23,26 @@ const ProfilePic = () => {
     }
   }
   return (
-    <div className={`${styles.userPicInfoAlign}`}>
-      <img
-        onClick={handleClick}
-        src={
-          defaultPic
-            ? "/default-pfp.svg"
-            : getProfileUrl(pfpCloudData?.public_id, pfpCloudData?.format)
-        }
-        alt="Profile"
-        style={{
-          cursor: pfpCloudData?.public_id ? "pointer" : "initial",
-        }}
-        className={`${styles.profilePic}`}
-      />
-      <h3 className={`${styles.username}`}>Username</h3>
-      <EditInputIcon isPfpChanging={true} />
+    <div className={`${styles.pfpAlignFlex}`}>
+      <div className={`${styles.pfpContainer}`}>
+        <img
+          onClick={handleClick}
+          src={
+            defaultPic
+              ? "/default-pfp.svg"
+              : getProfileUrl(pfpCloudData?.public_id, pfpCloudData?.format)
+          }
+          alt="Profile"
+          style={{
+            cursor: pfpCloudData?.public_id ? "pointer" : "auto",
+          }}
+          className={`${styles.profilePic}`}
+        />
+        <EditInputIcon isPfpChanging={true} />
+      </div>
+      <h3 style={{ width: "90%" }}>
+        <Username classname={`${styles.username}`} />
+      </h3>
     </div>
   );
 };

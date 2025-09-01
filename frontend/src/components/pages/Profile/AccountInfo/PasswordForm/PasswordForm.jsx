@@ -3,7 +3,7 @@ import styles from "./PasswordForm.module.css";
 import btnStyles from "../../Button.module.css";
 import sharedStyles from "../Shared.module.css";
 import EditIcon from "../../EditIcon/EditIcon";
-import ErrorLog from "../ErrorLog/ErrorLog";
+import ErrorLog from "../../ErrorLog/ErrorLog";
 import InputEntry from "../../InputEntry/InputEntry";
 import LoadingBtn from "../../LoadingBtn/LoadingBtn";
 
