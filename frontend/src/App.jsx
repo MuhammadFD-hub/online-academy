@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import Login from "./components/pages/Login/Login";
 import CourseList from "./components/pages/CourseList/CourseList";
@@ -14,10 +14,15 @@ import { useEffect } from "react";
 import UseStore from "./stores/UseStore";
 export default function App() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const getUsername = UseStore((s) => s.getUsername);
+  const setNavigate = UseStore((s) => {
+    return s.setNavigate;
+  });
   useEffect(() => {
     getUsername(token);
+    setNavigate(navigate);
   }, []);
 
   return (
