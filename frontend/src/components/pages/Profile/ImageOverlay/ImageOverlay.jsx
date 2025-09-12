@@ -1,6 +1,6 @@
 import UseStore from "../../../../stores/UseStore";
 import EditIcon from "../EditIcon/EditIcon";
-import getCloudUrl from "../getCloudUrl";
+import getCloudUrl from "../../../getCloudUrl";
 import styles from "./ImageOverlay.module.css";
 import { useRef, useState } from "react";
 

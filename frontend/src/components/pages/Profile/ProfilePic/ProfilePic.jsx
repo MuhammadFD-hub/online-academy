@@ -1,6 +1,6 @@
 import styles from "./ProfilePic.module.css";
 import EditInputIcon from "../EditInputIcon/EditInputIcon";
-import getProfileUrl from "../getCloudUrl";
+import getProfileUrl from "../../../getCloudUrl";
 import UseStore from "../../../../stores/UseStore";
 import Username from "../../../Username/Username";
 

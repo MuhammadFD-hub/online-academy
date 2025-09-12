@@ -6,10 +6,12 @@ import styles from "./Header.module.css";
 import { useEffect, useRef, useState } from "react";
 import Username from "../Username/Username";
 import UseStore from "../../stores/UseStore";
+import getCloudUrl from "../getCloudUrl";
 
 export default function Header() {
   const logout = UseStore((s) => s.logout);
   const user = UseStore((s) => s.user);
+  const pfpCloudData = UseStore((s) => s.pfpCloudData);
   const [showMenu, setShowMenu] = useState(false);
   const dropdownRef = useRef(null);
   const menuBtnRef = useRef(null);
@@ -55,7 +57,12 @@ export default function Header() {
                   to="/profile"
                 >
                   <Image
-                    src={user.profilePic || "/default-pfp.svg"}
+                    src={
+                      getCloudUrl(
+                        pfpCloudData.public_id,
+                        pfpCloudData.format
+                      ) || "/default-pfp.svg"
+                    }
                     roundedCircle
                     width={32}
                     height={32}
