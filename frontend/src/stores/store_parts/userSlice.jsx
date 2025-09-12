@@ -8,6 +8,7 @@ const creatUserStore = (set, get) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -90,6 +91,20 @@ const creatUserStore = (set, get) => {
       localStorage.removeItem("token");
       get().navigate("/login");
       get().setUser(null);
+    },
+    refreshAccessToken: async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/refresh", {
+          method: "POST",
+          credentials: "include",
+        });
+        if (!res.ok) return false;
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        return true;
+      } catch {
+        return false;
+      }
     },
   };
 };
