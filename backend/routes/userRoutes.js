@@ -278,4 +278,15 @@ router.post("/updateBgFocus", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/getUser", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!userId) return res.status(404).json({ error: "user id not found" });
+    const user = await User.findById(userId).select("email pfpCloudData");
+    return res.json({ email: user.email, pfpCloudData: user.pfpCloudData });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
+
 module.exports = router;

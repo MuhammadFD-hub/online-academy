@@ -17,11 +17,13 @@ export default function App() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const getUsername = UseStore((s) => s.getUsername);
+  const getUser = UseStore((s) => s.getUser);
   const setNavigate = UseStore((s) => {
     return s.setNavigate;
   });
   useEffect(() => {
     getUsername(token);
+    getUser(token);
     setNavigate(navigate);
   }, []);
 

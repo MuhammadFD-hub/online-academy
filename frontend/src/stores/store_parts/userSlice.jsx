@@ -39,11 +39,9 @@ const creatUserStore = (set, get) => {
       userId: decoded.userId,
       exp: decoded.exp,
     };
-    localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", token);
     get().setPfpCloudData(decoded.pfpCloudData);
     get().setUser(user);
-    get().setUsername(decoded.username);
   }
   function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -66,9 +64,26 @@ const creatUserStore = (set, get) => {
       }
     },
     user: null,
+    setUser: (newUser) => set({ user: newUser }),
+    getUser: async (token) => {
+      if (!get().user) {
+        const res = await fetch("http://localhost:5000/api/user/getUser", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        const email = await data.email;
+        const pfpCloudData = data.pfpCloudData;
+        const decoded = jwtDecode(token);
+        const user = { userId: decoded.userId, email: email, exp: decoded.exp };
+        set({ user: user });
+        get().setPfpCloudData(pfpCloudData);
+      }
+    },
     login: async (email, password) => loginOrSignup("login", email, password),
     signup: async (email, password) => loginOrSignup("signup", email, password),
-    setUser: (newUser) => set({ user: newUser }),
     logout: () => {
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
