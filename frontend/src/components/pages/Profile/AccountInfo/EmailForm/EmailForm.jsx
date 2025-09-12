@@ -2,14 +2,16 @@ import { useState } from "react";
 import styles from "./EmailForm.module.css";
 import btnStyles from "../../Button.module.css";
 import sharedStyles from "../Shared.module.css";
-import useAuth from "../../../../../hooks/useAuth";
 import EditIcon from "../../EditIcon/EditIcon";
 import ErrorLog from "../../ErrorLog/ErrorLog";
 import InputEntry from "../../InputEntry/InputEntry";
 import LoadingBtn from "../../LoadingBtn/LoadingBtn";
+import UseStore from "../../../../../stores/UseStore";
 
 const EmailForm = () => {
-  const { user, setUser } = useAuth();
+  const setUser = UseStore((s) => s.setUser);
+  const user = UseStore((s) => s.user);
+
   const token = localStorage.getItem("token");
   const [editEmail, setEditEmail] = useState(false);
   const [otp, setOtp] = useState("");

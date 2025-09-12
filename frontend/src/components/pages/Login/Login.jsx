@@ -1,12 +1,13 @@
 import { useState } from "react";
-import useAuth from "../../../hooks/useAuth.jsx";
 import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
 import styles from "./Login.module.css";
+import UseStore from "../../../stores/UseStore.jsx";
 
 export default function Login() {
-  const { login } = useAuth();
+  const login = UseStore((s) => s.login);
+
   const [fields, setFields] = useState({ email: "", password: "" });
   const [focused, setFocused] = useState(null);
   const navigate = useNavigate();

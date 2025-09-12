@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
-import useAuth from "../../../hooks/useAuth";
 import styles from "./Signup.module.css";
+import UseStore from "../../../stores/UseStore";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [fields, setFields] = useState({ email: "", password: "" });
   const [focused, setFocused] = useState(null);
-  const { signup } = useAuth();
+  const signup = UseStore((s) => s.signup);
 
   const inputConfig = [
     { label: "Email", type: "email", name: "email", required: true },
