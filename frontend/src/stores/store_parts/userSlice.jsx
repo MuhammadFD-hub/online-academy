@@ -75,7 +75,7 @@ const creatUserStore = (set, get) => {
         });
         const data = await res.json();
         const email = await data.email;
-        const pfpCloudData = data.pfpCloudData;
+        const pfpCloudData = await data.pfpCloudData;
         const decoded = jwtDecode(token);
         const user = { userId: decoded.userId, email: email, exp: decoded.exp };
         set({ user: user });

@@ -1,6 +1,6 @@
 import UseStore from "../../../../stores/UseStore";
 import EditInputIcon from "../EditInputIcon/EditInputIcon";
-import getProfileUrl from "../getCloudUrl";
+import getProfileUrl from "../../../getCloudUrl";
 import styles from "./ProfileBg.module.css";
 const ProfileBg = () => {
   const bgCloudData = UseStore((state) => state.bgCloudData);

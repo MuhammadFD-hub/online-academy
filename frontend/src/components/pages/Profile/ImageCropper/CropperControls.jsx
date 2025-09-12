@@ -88,9 +88,7 @@ const CropperControls = () => {
           value={cropBgFocus.focus}
         >
           <option value="focusTop">focus top</option>
-          <option value="focusMid" selected>
-            focus mid
-          </option>
+          <option value="focusMid">focus mid</option>
           <option value="focusBot">focus bot</option>
         </select>
       )}
