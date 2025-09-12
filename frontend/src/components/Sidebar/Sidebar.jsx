@@ -3,9 +3,9 @@ import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import SidebarItem from "./SidebarItem/SidebarItem";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
+import UseStore from "../../stores/UseStore";
 
 export default function Sidebar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -25,7 +25,7 @@ export default function Sidebar() {
 
   const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const logout = UseStore((s) => s.logout);
   return (
     <>
       <motion.div

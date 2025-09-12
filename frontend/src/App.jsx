@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import useAuth from "./hooks/useAuth";
 import Login from "./components/pages/Login/Login";
 import CourseList from "./components/pages/CourseList/CourseList";
 import CoursePage from "./components/pages/CoursePage/CoursePage";
@@ -13,9 +12,9 @@ import Profile from "./components/pages/Profile/Profile";
 import { useEffect } from "react";
 import UseStore from "./stores/UseStore";
 export default function App() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const user = UseStore((s) => s.user);
   const getUsername = UseStore((s) => s.getUsername);
   const getUser = UseStore((s) => s.getUser);
   const setNavigate = UseStore((s) => {

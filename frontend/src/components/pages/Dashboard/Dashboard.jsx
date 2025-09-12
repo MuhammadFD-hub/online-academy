@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, ProgressBar, Button, Alert } from "react-bootstrap";
-import useAuth from "../../../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 import ItemSpinner from "../../Spinner/ItemSpinner/ItemSpinner";
 import Username from "../../Username/Username";
+import UseStore from "../../../stores/UseStore";
 
 export default function Dashboard() {
-  const { logout } = useAuth();
-  const user = getUserFromLocalStorage();
-
-  function getUserFromLocalStorage() {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  }
+  const logout = UseStore((s) => s.logout);
+  const user = UseStore((s) => s.user);
 
   const [enrollments, setEnrollments] = useState(null);
   const [error, setError] = useState(null);

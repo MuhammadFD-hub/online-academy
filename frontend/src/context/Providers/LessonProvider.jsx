@@ -1,9 +1,10 @@
 import { LessonContext } from "../allContext";
-import useAuth from "../../hooks/useAuth";
 import useCache from "../../hooks/useCache";
+import UseStore from "../../stores/UseStore";
 
 const LessonProvider = ({ children }) => {
-  const { user, logout } = useAuth();
+  const logout = UseStore((s) => s.logout);
+  const user = UseStore((s) => s.user);
   const { cacheLessonContent, markCacheLessonRead } = useCache();
   const token = localStorage.getItem("token");
   const fetchLesson = async (lessonId, setLesson) => {

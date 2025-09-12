@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { CoursesContext } from "../allContext";
-import useAuth from "../../hooks/useAuth";
+import UseStore from "../../stores/UseStore";
 
 const CoursesProvider = ({ children }) => {
-  const { logout, user } = useAuth();
+  const logout = UseStore((s) => s.logout);
+  const user = UseStore((s) => s.user);
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
   const token = localStorage.getItem("token");
@@ -36,7 +37,7 @@ const CoursesProvider = ({ children }) => {
         }
       }
     };
-    if (user) {
+    if (token && user) {
       fetchData();
     }
     return () => {

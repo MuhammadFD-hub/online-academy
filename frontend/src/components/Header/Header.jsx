@@ -3,12 +3,13 @@ import { Navbar, Container, Image, Dropdown, Nav } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FiMoreVertical } from "react-icons/fi";
 import styles from "./Header.module.css";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
 import Username from "../Username/Username";
+import UseStore from "../../stores/UseStore";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const logout = UseStore((s) => s.logout);
+  const user = UseStore((s) => s.user);
   const [showMenu, setShowMenu] = useState(false);
   const dropdownRef = useRef(null);
   const menuBtnRef = useRef(null);
