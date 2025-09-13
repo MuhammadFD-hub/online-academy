@@ -59,8 +59,8 @@ export default function Header() {
                   <Image
                     src={
                       getCloudUrl(
-                        pfpCloudData.public_id,
-                        pfpCloudData.format
+                        pfpCloudData?.public_id,
+                        pfpCloudData?.format
                       ) || "/default-pfp.svg"
                     }
                     roundedCircle

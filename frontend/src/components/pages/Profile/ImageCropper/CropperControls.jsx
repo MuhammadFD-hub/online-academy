@@ -40,7 +40,7 @@ const CropperControls = () => {
   }
   async function handleUpload() {
     try {
-      postBgFocus();
+      postBgFocus(token, cropBgFocus);
       const croppedBlob = await getCroppedImg(cropperImage, croppedAreaPixels);
       const cloudData = await uploadImg(croppedBlob, folder);
       await fetch(link, {
