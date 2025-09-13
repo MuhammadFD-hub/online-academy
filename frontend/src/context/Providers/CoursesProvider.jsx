@@ -8,9 +8,7 @@ const CoursesProvider = ({ children }) => {
   const [courses, setCourses] = useState([]);
   const fetchCourses = async () => {
     try {
-      let res = await fetchWithAuth(`http://localhost:5000/api/courses/`, {
-        "Content-Type": "application/json",
-      });
+      let res = await fetchWithAuth(`http://localhost:5000/api/courses/`);
       const result = await res.json();
       if (!res.ok)
         throw new Error(

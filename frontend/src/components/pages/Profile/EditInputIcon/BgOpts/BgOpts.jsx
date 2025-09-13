@@ -4,7 +4,6 @@ import LoadingIcon from "./LoadingIcon/LoadingIcon";
 import UseStore from "../../../../../stores/UseStore";
 
 const BgOpts = () => {
-  const token = localStorage.getItem("token");
   const setSelectFocus = UseStore((state) => state.setSelectFocus);
   const selectFocus = UseStore((state) => state.selectFocus);
   const postBgFocus = UseStore((state) => state.postBgFocus);
@@ -14,7 +13,7 @@ const BgOpts = () => {
     radioOpt.current = selectFocus;
 
   async function handleSubmit() {
-    await postBgFocus(token, selectFocus);
+    await postBgFocus(selectFocus);
     setShowBtn(false);
 
     radioOpt.current = selectFocus;

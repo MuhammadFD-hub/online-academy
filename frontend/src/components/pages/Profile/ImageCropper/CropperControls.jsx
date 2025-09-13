@@ -13,6 +13,7 @@ const CropperControls = () => {
   const isPfpChanging = UseStore((state) => state.isPfpChanging);
   const setCropBgFocus = UseStore((state) => state.setCropBgFocus);
   const cropBgFocus = UseStore((state) => state.cropBgFocus);
+  const fetchWithAuth = UseStore((state) => state.fetchWithAuth);
   let setCloudData = null,
     folder = null,
     link = null;
@@ -26,7 +27,6 @@ const CropperControls = () => {
     link = "http://localhost:5000/api/user/uploadBg";
   }
 
-  const token = localStorage.getItem("token");
   const { uploadImg } = useCloudUpload();
 
   function unlockScroll() {
@@ -43,11 +43,10 @@ const CropperControls = () => {
       postBgFocus();
       const croppedBlob = await getCroppedImg(cropperImage, croppedAreaPixels);
       const cloudData = await uploadImg(croppedBlob, folder);
-      await fetch(link, {
+      await fetchWithAuth(link, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(cloudData),
       });

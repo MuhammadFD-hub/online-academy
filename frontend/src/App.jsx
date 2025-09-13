@@ -12,7 +12,6 @@ import Profile from "./components/pages/Profile/Profile";
 import { useEffect } from "react";
 import UseStore from "./stores/UseStore";
 export default function App() {
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const user = UseStore((s) => s.user);
   const getUsername = UseStore((s) => s.getUsername);
@@ -20,8 +19,9 @@ export default function App() {
   const setNavigate = UseStore((s) => {
     return s.setNavigate;
   });
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    getUsername(token);
+    getUsername();
     getUser(token);
     setNavigate(navigate);
   }, []);

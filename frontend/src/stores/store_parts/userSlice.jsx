@@ -51,15 +51,10 @@ const creatUserStore = (set, get) => {
   return {
     username: null,
     setUsername: (newName) => set({ username: newName }),
-    getUsername: async (token) => {
+    getUsername: async () => {
       if (!get().username) {
         const res = await get().fetchWithAuth(
-          "http://localhost:5000/api/user/getUsername",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          "http://localhost:5000/api/user/getUsername"
         );
         const data = await res.json();
         const username = await data.username;
@@ -71,12 +66,7 @@ const creatUserStore = (set, get) => {
     getUser: async (token) => {
       if (!get().user) {
         const res = await get().fetchWithAuth(
-          "http://localhost:5000/api/user/getUser",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          "http://localhost:5000/api/user/getUser"
         );
         const data = await res.json();
         const email = await data.email;
