@@ -53,12 +53,14 @@ const creatUserStore = (set, get) => {
     setUsername: (newName) => set({ username: newName }),
     getUsername: async (token) => {
       if (!get().username) {
-        const res = await fetch("http://localhost:5000/api/user/getUsername", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await get().fetchWithAuth(
+          "http://localhost:5000/api/user/getUsername",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await res.json();
         const username = await data.username;
         set({ username: username });
@@ -68,12 +70,14 @@ const creatUserStore = (set, get) => {
     setUser: (newUser) => set({ user: newUser }),
     getUser: async (token) => {
       if (!get().user) {
-        const res = await fetch("http://localhost:5000/api/user/getUser", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await get().fetchWithAuth(
+          "http://localhost:5000/api/user/getUser",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await res.json();
         const email = await data.email;
         const pfpCloudData = await data.pfpCloudData;
@@ -91,20 +95,6 @@ const creatUserStore = (set, get) => {
       localStorage.removeItem("token");
       get().navigate("/login");
       get().setUser(null);
-    },
-    refreshAccessToken: async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/auth/refresh", {
-          method: "POST",
-          credentials: "include",
-        });
-        if (!res.ok) return false;
-        const data = await res.json();
-        localStorage.setItem("token", data.token);
-        return true;
-      } catch {
-        return false;
-      }
     },
   };
 };
