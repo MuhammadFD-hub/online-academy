@@ -7,6 +7,7 @@ import Username from "../../Username/Username";
 import UseStore from "../../../stores/UseStore";
 
 export default function Dashboard() {
+  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
   const logout = UseStore((s) => s.logout);
   const user = UseStore((s) => s.user);
 
@@ -21,18 +22,24 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await fetch(
+        let response = await fetch(
           `http://localhost:5000/api/user/dashboard/`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response.ok) {
-          if (response.status === 401) {
-            const errorData = await response.json();
-            alert("session expired. Please log in again.", errorData.message);
-            logout();
-            return;
+          if (response.status === 403) {
+            const refreshed = await refreshAccessToken();
+            if (!refreshed) throw new Error("Unauthorized");
+            const accessToken = localStorage.getItem("accessToken");
+            response = await fetch(`http://localhost:5000/api/courses/`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              credentials: "include",
+            });
           }
-          throw new Error("Failed to fetch user progress");
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
