@@ -3,26 +3,33 @@ import { CoursesContext } from "../allContext";
 import UseStore from "../../stores/UseStore";
 
 const CoursesProvider = ({ children }) => {
+  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
   const logout = UseStore((s) => s.logout);
   const user = UseStore((s) => s.user);
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
   useEffect(() => {
     let isCancelled = false;
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/courses/`, {
+        let res = await fetch(`http://localhost:5000/api/courses/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         if (!res.ok) {
-          if (res.status === 401) {
-            const errorData = await res.json();
-            alert("session expired. Please log in again.", errorData.message);
-            logout();
-            return;
+          if (res.status === 403) {
+            const refreshed = await refreshAccessToken();
+            if (!refreshed) throw new Error("Unauthorized");
+            const accessToken = localStorage.getItem("accessToken");
+            res = await fetch(`http://localhost:5000/api/courses/`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              credentials: "include",
+            });
           }
           throw new Error(`Error ${res.status}: ${res.statusText}`);
         }

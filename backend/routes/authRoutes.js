@@ -5,11 +5,11 @@ const express = require("express");
 const router = express.Router();
 
 function generateToken(userId) {
-  return jwt.sign({ userId }, "secretKey", { expiresIn: "15m" });
+  return jwt.sign({ userId }, "secretKey", { expiresIn: "10s" });
 }
 
 function generateRefreshToken(userId) {
-  return jwt.sign({ userId }, "secretKey", { expiresIn: "7d" });
+  return jwt.sign({ userId }, "secretKeyRefresh", { expiresIn: "7d" });
 }
 
 router.post("/signup", async (req, res) => {
@@ -27,7 +27,7 @@ router.post("/signup", async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
     });
 
@@ -50,7 +50,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
     });
 
@@ -61,13 +61,16 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", (req, res) => {
-  const token = req.cookies.refreshToken;
-  if (!token) return res.status(401).json({ error: "No token" });
+  const refreshToken = req.cookies.refreshToken;
 
-  jwt.verify(token, "secretKey", (err, user) => {
+  if (!refreshToken) return res.status(401).json({ error: "No token" });
+  console.log("Cookies:", req.cookies.refreshToken);
+
+  jwt.verify(refreshToken, "secretKeyRefresh", (err, user) => {
     if (err) return res.status(403).json({ error: "Invalid refresh token" });
-    const token = generateToken(user.userId);
-    res.json({ token });
+
+    const accessToken = generateToken(user.userId);
+    res.json({ token: accessToken });
   });
 });
 
