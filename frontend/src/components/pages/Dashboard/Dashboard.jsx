@@ -7,8 +7,7 @@ import Username from "../../Username/Username";
 import UseStore from "../../../stores/UseStore";
 
 export default function Dashboard() {
-  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
-  const logout = UseStore((s) => s.logout);
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const user = UseStore((s) => s.user);
 
   const [enrollments, setEnrollments] = useState(null);
@@ -16,44 +15,33 @@ export default function Dashboard() {
   const [showProgressDetails, setShowProgressDetails] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
   let currLesson = localStorage.getItem("currLesson");
   if (currLesson) currLesson = JSON.parse(currLesson);
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        let response = await fetch(
-          `http://localhost:5000/api/user/dashboard/`,
-          { headers: { Authorization: `Bearer ${token}` } }
+        const response = await fetchWithAuth(
+          `http://localhost:5000/api/user/dashboard/`
         );
-        if (!response.ok) {
-          if (response.status === 403) {
-            const refreshed = await refreshAccessToken();
-            if (!refreshed) throw new Error("Unauthorized");
-            const accessToken = localStorage.getItem("accessToken");
-            response = await fetch(`http://localhost:5000/api/courses/`, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-              credentials: "include",
-            });
-          }
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-
         const data = await response.json();
+        if (!response.ok)
+          throw new Error(
+            `Error ${response.status}: ${response.statusText} ${
+              data.error || ""
+            }`
+          );
+
         setEnrollments(data.enrollments);
       } catch (err) {
         console.error(err);
-        setError(err.message);
+        setError(err.message || "Something went wrong");
       }
     };
     if (user) fetchProgress();
     else {
       setError("Please log in to view your dashboard.");
     }
-  }, [token, logout]);
+  }, []);
   const totalProgress = Math.round(
     enrollments?.reduce((sum, e) => sum + e.progress, 0) / enrollments?.length
   );

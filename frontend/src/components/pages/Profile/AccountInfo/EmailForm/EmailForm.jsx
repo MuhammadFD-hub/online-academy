@@ -11,8 +11,8 @@ import UseStore from "../../../../../stores/UseStore";
 const EmailForm = () => {
   const setUser = UseStore((s) => s.setUser);
   const user = UseStore((s) => s.user);
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
 
-  const token = localStorage.getItem("token");
   const [editEmail, setEditEmail] = useState(false);
   const [otp, setOtp] = useState("");
   const [verify, setVerify] = useState(false);
@@ -71,29 +71,32 @@ const EmailForm = () => {
 
     if (otp === "111111") {
       try {
-        const res = await fetch("http://localhost:5000/api/user/updateEmail", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ oldEmail: user.email, newEmail: email }),
-        });
+        const res = await fetchWithAuth(
+          "http://localhost:5000/api/user/updateEmail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ oldEmail: user.email, newEmail: email }),
+          }
+        );
         const data = await res.json();
-        if (res.ok) {
-          setUser((prevUser) => ({ ...prevUser, email: email }));
-          const { userId, exp } = JSON.parse(localStorage.getItem("user"));
-          localStorage.setItem("user", JSON.stringify({ email, userId, exp }));
-          cancelOtpVerify();
-        } else {
+        if (!res.ok) {
           setVerify(false);
           setOtp("");
           setEmail("");
           setError(data.error || "Something went wrong");
           setShowError(true);
+          throw new Error(data.error || "Something went wrong");
         }
+
+        setUser((prevUser) => ({ ...prevUser, email: email }));
+        const { userId, exp } = JSON.parse(localStorage.getItem("user"));
+        localStorage.setItem("user", JSON.stringify({ email, userId, exp }));
+        cancelOtpVerify();
       } catch (error) {
-        console.error(error.error);
+        console.error(error.message);
       }
     } else {
       setError("Invalid OTP");

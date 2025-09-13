@@ -15,6 +15,7 @@ const PersonalForm = () => {
   const username = UseStore((state) => state.username);
   const setPersonalForm = UseStore((state) => state.setPersonalForm);
   const setUsername = UseStore((state) => state.setUsername);
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const [editPersonal, setEditPersonal] = useState(false);
   const [personalFormLocal, setPersonalFormLocal] = useState({
     username: "",
@@ -61,13 +62,12 @@ const PersonalForm = () => {
       }
       if (!isValidWordLen(localName)) return;
 
-      const usernamePromise = fetch(
+      const usernamePromise = fetchWithAuth(
         "http://localhost:5000/api/user/uploadUsername",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             username: localName,
@@ -79,7 +79,7 @@ const PersonalForm = () => {
             setUsername(localName);
           } else {
             const data = await res.json();
-            console.error("Username error:", data);
+            console.error("Username error:", data.error);
           }
         })
         .catch((error) => console.error("Username fetch error:", error));
@@ -93,13 +93,12 @@ const PersonalForm = () => {
     ) {
       const form = handleEmptyStr(personalFormLocal);
 
-      const infoPromise = fetch(
+      const infoPromise = fetchWithAuth(
         "http://localhost:5000/api/user/uploadUserInfo",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(form),
         }
