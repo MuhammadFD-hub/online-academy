@@ -1,77 +1,46 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CoursesContext } from "../allContext";
 import UseStore from "../../stores/UseStore";
 
 const CoursesProvider = ({ children }) => {
-  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
-  const logout = UseStore((s) => s.logout);
-  const user = UseStore((s) => s.user);
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const [error, setError] = useState(null);
   const [courses, setCourses] = useState([]);
-  let token = localStorage.getItem("token");
-  useEffect(() => {
-    let isCancelled = false;
-    const fetchData = async () => {
-      try {
-        let res = await fetch(`http://localhost:5000/api/courses/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          if (res.status === 403) {
-            const refreshed = await refreshAccessToken();
-            if (!refreshed) throw new Error("Unauthorized");
-            const accessToken = localStorage.getItem("accessToken");
-            res = await fetch(`http://localhost:5000/api/courses/`, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-              credentials: "include",
-            });
-          }
-          throw new Error(`Error ${res.status}: ${res.statusText}`);
-        }
-        const result = await res.json();
-        if (!isCancelled) {
-          setCourses(result);
-          setError(null);
-        }
-      } catch (err) {
-        if (!isCancelled) {
-          setError(err.message || "Something went wrong");
-        }
-      }
-    };
-    if (token && user) {
-      fetchData();
-    }
-    return () => {
-      isCancelled = true;
-    };
-  }, [token, user]);
+  const fetchCourses = async () => {
+    try {
+      let res = await fetchWithAuth(`http://localhost:5000/api/courses/`, {
+        "Content-Type": "application/json",
+      });
+      const result = await res.json();
+      if (!res.ok)
+        throw new Error(
+          `Error ${res.status}: ${res.statusText} ${result.error || ""}`
+        );
 
+      setCourses(result);
+      setError(null);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    }
+  };
   async function enroll(courseId) {
     try {
-      const response = await fetch("http://localhost:5000/api/courses/enroll", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ courseId }),
-      });
+      const response = await fetchWithAuth(
+        "http://localhost:5000/api/courses/enroll",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ courseId }),
+        }
+      );
 
       if (!response.ok) {
-        if (response.status === 401) {
-          const errorData = await response.json();
-          alert("session expired. Please log in again.", errorData.message);
-          logout();
-          return;
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Enrollment failed");
+        const data = await response.json();
+        throw new Error(
+          `Error ${response.status}: ${response.statusText} ${data.error || ""}`
+        );
       }
       setCourses((prevCourses) =>
         prevCourses.map((c) =>
@@ -86,7 +55,9 @@ const CoursesProvider = ({ children }) => {
     return courses.find((course) => course.id === id) || null;
   }
   return (
-    <CoursesContext.Provider value={{ findCourse, error, courses, enroll }}>
+    <CoursesContext.Provider
+      value={{ fetchCourses, setCourses, findCourse, error, courses, enroll }}
+    >
       {children}
     </CoursesContext.Provider>
   );

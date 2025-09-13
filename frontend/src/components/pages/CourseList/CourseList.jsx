@@ -2,9 +2,15 @@ import { Alert, Container, Spinner } from "react-bootstrap";
 import CoursePreview from "./CoursePreview";
 import useCourses from "../../../hooks/useCourses";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import UseStore from "../../../stores/UseStore";
 
 export default function CourseList() {
-  const { courses, error } = useCourses();
+  const user = UseStore((s) => s.user);
+  const { error, courses, fetchCourses } = useCourses();
+  useEffect(() => {
+    if (user) fetchCourses();
+  }, []);
 
   if (error) {
     return (
