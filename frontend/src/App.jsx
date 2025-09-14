@@ -14,18 +14,19 @@ import UseStore from "./stores/UseStore";
 export default function App() {
   const navigate = useNavigate();
   const user = UseStore((s) => s.user);
+  const loadingUser = UseStore((s) => s.loadingUser);
   const getUsername = UseStore((s) => s.getUsername);
   const getUser = UseStore((s) => s.getUser);
-  const setNavigate = UseStore((s) => {
-    return s.setNavigate;
-  });
+  const setNavigate = UseStore((s) => s.setNavigate);
   const token = localStorage.getItem("token");
   useEffect(() => {
     getUsername();
     getUser(token);
     setNavigate(navigate);
   }, []);
-
+  if (!user && loadingUser) {
+    return <div>Loading</div>;
+  }
   return (
     <Routes>
       <Route element={<Layout user={user} />}>
