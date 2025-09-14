@@ -63,8 +63,10 @@ const creatUserStore = (set, get) => {
     },
     user: null,
     setUser: (newUser) => set({ user: newUser }),
+    loadingUser: true,
     getUser: async (token) => {
       if (!get().user) {
+        set({ loadingUser: true });
         const res = await get().fetchWithAuth(
           "http://localhost:5000/api/user/getUser"
         );
@@ -75,6 +77,7 @@ const creatUserStore = (set, get) => {
         const user = { userId: decoded.userId, email: email, exp: decoded.exp };
         set({ user: user });
         get().setPfpCloudData(pfpCloudData);
+        set({ loadingUser: false });
       }
     },
     login: async (email, password) => loginOrSignup("login", email, password),
@@ -83,8 +86,8 @@ const creatUserStore = (set, get) => {
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
       localStorage.removeItem("token");
-      get().navigate("/login");
       get().setUser(null);
+      get().navigate("/login");
     },
   };
 };
