@@ -4,7 +4,7 @@ import { Button, Spinner } from "react-bootstrap";
 import styles from "./EnrollButton.module.css";
 import sharedStyles from "../SharedBtn.module.css";
 
-const EnrollButton = ({ courseId }) => {
+const EnrollButton = ({ courseId, setCourse }) => {
   const { enroll } = useCourses();
   const [enrollLoading, setEnrollLoading] = useState(false);
   return (
@@ -14,6 +14,7 @@ const EnrollButton = ({ courseId }) => {
       onClick={async () => {
         setEnrollLoading(true);
         await enroll(courseId);
+        setCourse((course) => ({ ...course, enrolled: true }));
         setEnrollLoading(false);
       }}
     >

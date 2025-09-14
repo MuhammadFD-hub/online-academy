@@ -16,7 +16,7 @@ export default function CoursePage() {
   const { cacheLessons, getLessons } = useCache();
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
-  let course = findCourse(id);
+  const [course, setCourse] = useState(findCourse(id));
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -36,10 +36,25 @@ export default function CoursePage() {
         setError(err.message || "Something went wrong");
       }
     };
-    if (!getLessons(id)) fetchLessons();
-    else {
-      setLessons(getLessons(id));
+    async function fetchCourse() {
+      try {
+        const res = await fetchWithAuth(
+          `http://localhost:5000/api/courses/${id}`
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(
+            `Error ${res.status}: ${res.statusText} ${data.error || ""}`
+          );
+        }
+        setCourse(data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      }
     }
+    if (!getLessons(id)) fetchLessons();
+    else setLessons(getLessons(id));
+    if (!course) fetchCourse();
   }, []);
 
   if (error) {
@@ -52,7 +67,6 @@ export default function CoursePage() {
       </Container>
     );
   }
-
   if (!course || (!lessons && course.enrolled)) {
     return (
       <Container
@@ -74,7 +88,7 @@ export default function CoursePage() {
         >
           <h2 className="text-primary mb-3">{course.title}</h2>
           <p className="text-muted">{course.description}</p>
-          <EnrollButton courseId={course.id} />
+          <EnrollButton courseId={course.id} setCourse={setCourse} />
         </motion.div>
       </Container>
     );
