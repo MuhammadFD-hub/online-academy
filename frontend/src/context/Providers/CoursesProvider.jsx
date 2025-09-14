@@ -5,7 +5,7 @@ import UseStore from "../../stores/UseStore";
 const CoursesProvider = ({ children }) => {
   const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const [error, setError] = useState(null);
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState(null);
   const fetchCourses = async () => {
     try {
       let res = await fetchWithAuth(`http://localhost:5000/api/courses/`);
@@ -40,17 +40,18 @@ const CoursesProvider = ({ children }) => {
           `Error ${response.status}: ${response.statusText} ${data.error || ""}`
         );
       }
-      setCourses((prevCourses) =>
-        prevCourses.map((c) =>
+      setCourses((prevCourses) => {
+        if (!courses) return;
+        return prevCourses.map((c) =>
           c.id === courseId ? { ...c, enrolled: true } : c
-        )
-      );
+        );
+      });
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
   }
   function findCourse(id) {
-    return courses.find((course) => course.id === id) || null;
+    return courses?.find((course) => course.id === id) || null;
   }
   return (
     <CoursesContext.Provider

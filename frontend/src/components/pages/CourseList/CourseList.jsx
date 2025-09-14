@@ -6,10 +6,9 @@ import { useEffect } from "react";
 import UseStore from "../../../stores/UseStore";
 
 export default function CourseList() {
-  const user = UseStore((s) => s.user);
   const { error, courses, fetchCourses } = useCourses();
   useEffect(() => {
-    if (user) fetchCourses();
+    if (!courses) fetchCourses();
   }, []);
 
   if (error) {
@@ -23,7 +22,7 @@ export default function CourseList() {
     );
   }
 
-  if (courses.length === 0) {
+  if (!courses) {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"
