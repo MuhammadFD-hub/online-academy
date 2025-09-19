@@ -16,15 +16,19 @@ export default function App() {
   const user = UseStore((s) => s.user);
   const loadingUser = UseStore((s) => s.loadingUser);
   const getUsername = UseStore((s) => s.getUsername);
+  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
   const getUser = UseStore((s) => s.getUser);
   const setNavigate = UseStore((s) => s.setNavigate);
-  const token = localStorage.getItem("token");
   useEffect(() => {
-    getUsername();
-    getUser(token);
-    setNavigate(navigate);
+    async function initializeApp() {
+      setNavigate(navigate);
+      await refreshAccessToken();
+      getUsername();
+      getUser();
+    }
+    initializeApp();
   }, []);
-  if (!user && loadingUser) {
+  if (loadingUser) {
     return <div>Loading</div>;
   }
   return (
