@@ -9,9 +9,21 @@ const creatTokenStore = (set, get) => {
         method: "POST",
         credentials: "include",
       });
-      if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
 
       const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          console.error(`${res.status} ${res.statusText} ${data.error}`);
+          alert("Session Expired");
+          get().logout();
+          return;
+        }
+        throw new Error(
+          `${res.status}: ${res.statusText}. ${data.error || ""}`
+        );
+      }
+
       localStorage.setItem("token", data.token);
       return true;
     },

@@ -27,8 +27,9 @@ router.post("/signup", async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: "strict",
+      maxAge: 604800,
     });
 
     res.json({ token });
@@ -50,8 +51,9 @@ router.post("/login", async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ token });
@@ -64,7 +66,6 @@ router.post("/refresh", (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) return res.status(401).json({ error: "No token" });
-  console.log("Cookies:", req.cookies.refreshToken);
 
   jwt.verify(refreshToken, "secretKeyRefresh", (err, user) => {
     if (err) return res.status(403).json({ error: "Invalid refresh token" });
