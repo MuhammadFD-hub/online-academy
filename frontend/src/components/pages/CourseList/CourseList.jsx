@@ -2,9 +2,14 @@ import { Alert, Container, Spinner } from "react-bootstrap";
 import CoursePreview from "./CoursePreview";
 import useCourses from "../../../hooks/useCourses";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import UseStore from "../../../stores/UseStore";
 
 export default function CourseList() {
-  const { courses, error } = useCourses();
+  const { error, courses, fetchCourses } = useCourses();
+  useEffect(() => {
+    if (!courses) fetchCourses();
+  }, []);
 
   if (error) {
     return (
@@ -17,7 +22,7 @@ export default function CourseList() {
     );
   }
 
-  if (courses.length === 0) {
+  if (!courses) {
     return (
       <Container
         className="d-flex justify-content-center align-items-center"

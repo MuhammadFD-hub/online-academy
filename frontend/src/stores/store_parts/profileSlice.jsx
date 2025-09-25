@@ -15,13 +15,10 @@ const creatProfileStore = (set, get) => ({
   setCropBgFocus: (newPosition) => set({ cropBgFocus: newPosition }),
   selectFocus: { focus: null },
   setSelectFocus: (newPosition) => set({ selectFocus: newPosition }),
-  getBgFocus: async (token) => {
-    const res = await fetch("http://localhost:5000/api/user/getBgFocus", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  getBgFocus: async () => {
+    const res = await get().fetchWithAuth(
+      "http://localhost:5000/api/user/getBgFocus"
+    );
     const data = await res.json();
     const fetchedFocus = await data.focus;
     let bgFocus = "focusMid";
@@ -32,7 +29,7 @@ const creatProfileStore = (set, get) => ({
     }
     set({ selectFocus: { focus: bgFocus } });
   },
-  postBgFocus: async (token, selectFocus) => {
+  postBgFocus: async (selectFocus) => {
     try {
       let bgFocus = 2;
       const focus = selectFocus.focus;
@@ -41,20 +38,21 @@ const creatProfileStore = (set, get) => ({
       } else if (focus === "focusBot") {
         bgFocus = 3;
       }
-      const res = await fetch("http://localhost:5000/api/user/updateBgFocus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-
-        body: JSON.stringify({ bgFocus: bgFocus }),
-      });
-      const data = await res.json();
+      const res = await get().fetchWithAuth(
+        "http://localhost:5000/api/user/updateBgFocus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ bgFocus: bgFocus }),
+        }
+      );
+      if (!res.ok) throw new Error("Somthing went wrong");
 
       set({ selectFocus: { focus: focus } });
     } catch (error) {
-      console.error("postBgFocus failed:", error);
+      console.error("postBgFocus failed:", error.message);
     }
   },
   imgOverlayCloudData: null,

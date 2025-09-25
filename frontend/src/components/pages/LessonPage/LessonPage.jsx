@@ -50,7 +50,7 @@ const LessonPage = () => {
     } else {
       setLesson(cached);
     }
-  }, [lessonId]);
+  }, []);
 
   if (!lesson) return <PageSpinner />;
 

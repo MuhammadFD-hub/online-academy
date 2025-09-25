@@ -8,6 +8,7 @@ const creatUserStore = (set, get) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -50,14 +51,11 @@ const creatUserStore = (set, get) => {
   return {
     username: null,
     setUsername: (newName) => set({ username: newName }),
-    getUsername: async (token) => {
+    getUsername: async () => {
       if (!get().username) {
-        const res = await fetch("http://localhost:5000/api/user/getUsername", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await get().fetchWithAuth(
+          "http://localhost:5000/api/user/getUsername"
+        );
         const data = await res.json();
         const username = await data.username;
         set({ username: username });
@@ -65,21 +63,38 @@ const creatUserStore = (set, get) => {
     },
     user: null,
     setUser: (newUser) => set({ user: newUser }),
-    getUser: async (token) => {
+    loadingUser: true,
+    getUser: async () => {
       if (!get().user) {
-        const res = await fetch("http://localhost:5000/api/user/getUser", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await res.json();
-        const email = await data.email;
-        const pfpCloudData = await data.pfpCloudData;
-        const decoded = jwtDecode(token);
-        const user = { userId: decoded.userId, email: email, exp: decoded.exp };
-        set({ user: user });
-        get().setPfpCloudData(pfpCloudData);
+        set({ loadingUser: true });
+        let token = localStorage.getItem("token");
+        try {
+          const decoded = jwtDecode(token);
+          const res = await get().fetchWithAuth(
+            "http://localhost:5000/api/user/getUser"
+          );
+          const data = await res.json();
+          if (!res.ok)
+            throw new Error(
+              `${res.status}: ${res.statusText}. ${data.error || ""}`
+            );
+
+          const email = await data.email;
+          const pfpCloudData = await data.pfpCloudData;
+
+          const user = {
+            userId: decoded.userId,
+            email: email,
+            exp: decoded.exp,
+          };
+          set({ pfpCloudData: pfpCloudData });
+          set({ user: user });
+        } catch (error) {
+          console.error("Error during user data retrieval:", error);
+          get().logout();
+        } finally {
+          set({ loadingUser: false });
+        }
       }
     },
     login: async (email, password) => loginOrSignup("login", email, password),
@@ -88,8 +103,8 @@ const creatUserStore = (set, get) => {
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
       localStorage.removeItem("token");
-      get().navigate("/login");
       get().setUser(null);
+      get().navigate("/login");
     },
   };
 };

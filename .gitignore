@@ -6,5 +6,6 @@ build/
 Thumbs.db
 .vscode/
 Test*.jsx
+Test*.js
 todo.txt
 todo.md
