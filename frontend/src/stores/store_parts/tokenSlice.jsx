@@ -1,9 +1,17 @@
+import { jwtDecode } from "jwt-decode";
 const creatTokenStore = (set, get) => {
+  function validToken(token) {
+    if (!token) return false;
+    try {
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
+      return decoded.exp > now;
+    } catch (err) {
+      console.error("Invalid token:", err);
+      return false;
+    }
+  }
   return {
-    loadingToken: null,
-    setLoadingToken: (boolVal) => {
-      set({ loadingToken: boolVal });
-    },
     refreshAccessToken: async () => {
       const res = await fetch("http://localhost:5000/api/auth/refresh", {
         method: "POST",
@@ -29,6 +37,10 @@ const creatTokenStore = (set, get) => {
     },
     fetchWithAuth: async (url, options = {}) => {
       let token = localStorage.getItem("token");
+      if (!validToken(token)) {
+        await get().refreshAccessToken();
+        token = localStorage.getItem("token");
+      }
 
       let res = await fetch(url, {
         ...options,
@@ -38,12 +50,9 @@ const creatTokenStore = (set, get) => {
         },
       });
 
-      if (res.status === 403) {
-        const refreshed = await get().refreshAccessToken();
-        if (!refreshed) {
-          throw new Error("403: Unauthorized - please log in again");
-        }
-
+      // Fallback
+      if (res.status === 401 || res.status === 403) {
+        await get().refreshAccessToken();
         token = localStorage.getItem("token");
         res = await fetch(url, {
           ...options,
