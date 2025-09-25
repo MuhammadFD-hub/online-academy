@@ -3,68 +3,52 @@ import useCache from "../../hooks/useCache";
 import UseStore from "../../stores/UseStore";
 
 const LessonProvider = ({ children }) => {
-  const logout = UseStore((s) => s.logout);
   const user = UseStore((s) => s.user);
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const { cacheLessonContent, markCacheLessonRead } = useCache();
-  const token = localStorage.getItem("token");
   const fetchLesson = async (lessonId, setLesson) => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/lesson/${lessonId}?userId=${user.userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await fetchWithAuth(
+        `http://localhost:5000/api/lesson/${lessonId}?userId=${user.userId}`
       );
+      const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401) {
-          const errorData = await response.json();
-          alert("session expired. Please log in again.", errorData.message);
-          logout();
-          return;
-        }
-        throw new Error("Failed to fetch lesson");
+        throw new Error(
+          `Error ${response.status}: ${response.statusText} ${data.error || ""}`
+        );
       }
 
-      const data = await response.json();
       cacheLessonContent(lessonId, data);
       setLesson(data);
-    } catch (error) {
-      throw new Error("Failed loading lesson", error);
+    } catch (err) {
+      console.error(err.message || "Something went wrong");
     }
   };
   const markRead = async (courseId, lessonId) => {
     try {
       const userId = user.userId;
-      const response = await fetch(
+      const response = await fetchWithAuth(
         "http://localhost:5000/api/lesson/mark-read",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ userId, courseId, lessonId }),
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        if (response.status === 401) {
-          const errorData = await response.json();
-          alert("session expired. Please log in again.", errorData.message);
-          logout();
-          return;
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.message || "mark as read failed");
+        throw new Error(
+          `Error ${response.status}: ${response.statusText} ${data.error || ""}`
+        );
       }
       markCacheLessonRead(courseId, lessonId);
-    } catch (error) {
-      console.error(`markRead error: ${error.message}`);
+    } catch (err) {
+      console.error(err.message || "Something went wrong");
     }
   };
 

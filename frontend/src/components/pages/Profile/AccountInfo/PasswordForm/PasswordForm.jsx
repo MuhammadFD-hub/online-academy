@@ -6,9 +6,10 @@ import EditIcon from "../../EditIcon/EditIcon";
 import ErrorLog from "../../ErrorLog/ErrorLog";
 import InputEntry from "../../InputEntry/InputEntry";
 import LoadingBtn from "../../LoadingBtn/LoadingBtn";
+import UseStore from "../../../../../stores/UseStore";
 
 const PasswordForm = () => {
-  const token = localStorage.getItem("token");
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const [editPassword, setEditPassword] = useState(false);
   const [form, setForm] = useState({});
   const [showOldPassErr, setShowOldPassErr] = useState(false);
@@ -86,17 +87,19 @@ const PasswordForm = () => {
   }
   async function handleFormSubmit() {
     try {
-      const res = await fetch("http://localhost:5000/api/user/updatePassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          oldPassword: form.oldPassword,
-          newPassword: form.newPassword,
-        }),
-      });
+      const res = await fetchWithAuth(
+        "http://localhost:5000/api/user/updatePassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            oldPassword: form.oldPassword,
+            newPassword: form.newPassword,
+          }),
+        }
+      );
       const data = await res.json();
       if (res.ok) cancelEdit();
       else {
@@ -105,7 +108,7 @@ const PasswordForm = () => {
         setShowOldPassErr(true);
       }
     } catch (error) {
-      console.error(error.error);
+      console.error(error.message);
     }
   }
   return (

@@ -12,20 +12,25 @@ import Profile from "./components/pages/Profile/Profile";
 import { useEffect } from "react";
 import UseStore from "./stores/UseStore";
 export default function App() {
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const user = UseStore((s) => s.user);
+  const loadingUser = UseStore((s) => s.loadingUser);
   const getUsername = UseStore((s) => s.getUsername);
+  const refreshAccessToken = UseStore((s) => s.refreshAccessToken);
   const getUser = UseStore((s) => s.getUser);
-  const setNavigate = UseStore((s) => {
-    return s.setNavigate;
-  });
+  const setNavigate = UseStore((s) => s.setNavigate);
   useEffect(() => {
-    getUsername(token);
-    getUser(token);
-    setNavigate(navigate);
+    async function initializeApp() {
+      setNavigate(navigate);
+      await refreshAccessToken();
+      getUsername();
+      getUser();
+    }
+    initializeApp();
   }, []);
-
+  if (loadingUser) {
+    return <div>Loading</div>;
+  }
   return (
     <Routes>
       <Route element={<Layout user={user} />}>

@@ -1,7 +1,6 @@
 const express = require("express");
 const Course = require("../models/Course");
 const UserProgress = require("../models/UserProgress");
-const User = require("../models/User");
 const authenticateToken = require("../middleware/authToken");
 
 const router = express.Router();
@@ -47,9 +46,7 @@ router.post("/enroll", authenticateToken, async (req, res) => {
       course: courseId,
     });
     if (existingProgress) {
-      return res
-        .status(400)
-        .json({ message: "Already enrolled in this course" });
+      return res.status(400).json({ error: "Already enrolled in this course" });
     }
 
     await UserProgress.create({
@@ -94,6 +91,34 @@ router.get("/:courseId/lessons", authenticateToken, async (req, res) => {
     }));
 
     res.json(lessons);
+  } catch (err) {
+    console.error("Error fetching lessons:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+router.get("/:courseId", authenticateToken, async (req, res) => {
+  const { courseId } = req.params;
+  const userId = req.user?.userId;
+  try {
+    const userProgressList = await UserProgress.find({ user: userId }).select(
+      "course"
+    );
+
+    const enrolledCourseIds = new Set(
+      userProgressList.map((entry) => entry.course.toString())
+    );
+    const enrolled = enrolledCourseIds.has(courseId);
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    const result = {
+      id: courseId,
+      title: course.title,
+      description: course.description,
+      enrolled: enrolled,
+    };
+    return res.json(result);
   } catch (err) {
     console.error("Error fetching lessons:", err);
     res.status(500).json({ error: "Server error" });

@@ -8,44 +8,54 @@ import EnrollButton from "../../buttons/EnrollButton/EnrollButton";
 import UseStore from "../../../stores/UseStore";
 
 export default function CoursePage() {
+  const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
+
   const { id } = useParams();
   const navigate = useNavigate();
-  const logout = UseStore((s) => s.logout);
-  const token = localStorage.getItem("token");
   const { findCourse } = useCourses();
   const { cacheLessons, getLessons } = useCache();
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
-  let course = findCourse(id);
+  const [course, setCourse] = useState(findCourse(id));
 
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/courses/${id}/lessons`,
-          { headers: { Authorization: `Bearer ${token}` } }
+        const res = await fetchWithAuth(
+          `http://localhost:5000/api/courses/${id}/lessons`
         );
-        if (!res.ok) {
-          if (res.status === 401) {
-            const errorData = await res.json();
-            alert("session expired. Please log in again.", errorData.message);
-            logout();
-            return;
-          }
-          throw new Error("Failed to fetch course");
-        }
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(
+            `Error ${res.status}: ${res.statusText} ${data.error || ""}`
+          );
+        }
         cacheLessons(id, data);
         setLessons(data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "Something went wrong");
       }
     };
-    if (!getLessons(id)) fetchLessons();
-    else {
-      setLessons(getLessons(id));
+    async function fetchCourse() {
+      try {
+        const res = await fetchWithAuth(
+          `http://localhost:5000/api/courses/${id}`
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(
+            `Error ${res.status}: ${res.statusText} ${data.error || ""}`
+          );
+        }
+        setCourse(data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      }
     }
-  }, [id, course, getLessons, cacheLessons, token, logout]);
+    if (!getLessons(id)) fetchLessons();
+    else setLessons(getLessons(id));
+    if (!course) fetchCourse();
+  }, []);
 
   if (error) {
     return (
@@ -57,7 +67,6 @@ export default function CoursePage() {
       </Container>
     );
   }
-
   if (!course || (!lessons && course.enrolled)) {
     return (
       <Container
@@ -79,7 +88,7 @@ export default function CoursePage() {
         >
           <h2 className="text-primary mb-3">{course.title}</h2>
           <p className="text-muted">{course.description}</p>
-          <EnrollButton courseId={course.id} />
+          <EnrollButton courseId={course.id} setCourse={setCourse} />
         </motion.div>
       </Container>
     );
