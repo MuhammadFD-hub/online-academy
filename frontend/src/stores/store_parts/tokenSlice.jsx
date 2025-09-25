@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 const creatTokenStore = (set, get) => {
+  let refreshPromise = null;
   function validToken(token) {
     if (!token) return false;
     try {
@@ -13,32 +14,43 @@ const creatTokenStore = (set, get) => {
   }
   return {
     refreshAccessToken: async () => {
-      const res = await fetch("http://localhost:5000/api/auth/refresh", {
-        method: "POST",
-        credentials: "include",
-      });
+      if (refreshPromise) return refreshPromise;
+      refreshPromise = (async () => {
+        try {
+          const res = await fetch("http://localhost:5000/api/auth/refresh", {
+            method: "POST",
+            credentials: "include",
+          });
 
-      const data = await res.json();
+          const data = await res.json();
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error(`${res.status} ${res.statusText} ${data.error}`);
-          alert("Session Expired");
-          get().logout();
-          return;
+          if (!res.ok) {
+            if (res.status === 401) {
+              console.error(`${res.status} ${res.statusText} ${data.error}`);
+              alert("Session Expired");
+              get().logout();
+              return false;
+            }
+            throw new Error(
+              `${res.status}: ${res.statusText}. ${data.error || ""}`
+            );
+          }
+          localStorage.setItem("token", data.token);
+          return true;
+        } finally {
+          refreshPromise = null;
         }
-        throw new Error(
-          `${res.status}: ${res.statusText}. ${data.error || ""}`
-        );
-      }
+      })();
 
-      localStorage.setItem("token", data.token);
-      return true;
+      return refreshPromise;
     },
     fetchWithAuth: async (url, options = {}) => {
       let token = localStorage.getItem("token");
       if (!validToken(token)) {
-        await get().refreshAccessToken();
+        const refreshed = await get().refreshAccessToken();
+        if (!refreshed) {
+          throw new Error("Unauthorized: session expired");
+        }
         token = localStorage.getItem("token");
       }
 
