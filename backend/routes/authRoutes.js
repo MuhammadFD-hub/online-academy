@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 
 function generateToken(userId) {
-  return jwt.sign({ userId }, "secretKey", { expiresIn: "10s" });
+  return jwt.sign({ userId }, "secretKey", { expiresIn: "20s" });
 }
 
 function generateRefreshToken(userId) {
@@ -29,7 +29,7 @@ router.post("/signup", async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: 604800,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ token });
