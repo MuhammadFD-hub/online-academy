@@ -25,15 +25,8 @@ const creatTokenStore = (set, get) => {
           const data = await res.json();
 
           if (!res.ok) {
-            if (res.status === 401) {
-              console.error(`${res.status} ${res.statusText} ${data.error}`);
-              alert("Session Expired");
-              get().logout();
-              return false;
-            }
-            throw new Error(
-              `${res.status}: ${res.statusText}. ${data.error || ""}`
-            );
+            console.error(`${res.status} ${res.statusText} ${data.error}`);
+            return false;
           }
           localStorage.setItem("token", data.token);
           return true;
@@ -49,6 +42,7 @@ const creatTokenStore = (set, get) => {
       if (!validToken(token)) {
         const refreshed = await get().refreshAccessToken();
         if (!refreshed) {
+          get().logout();
           throw new Error("Unauthorized: session expired");
         }
         token = localStorage.getItem("token");

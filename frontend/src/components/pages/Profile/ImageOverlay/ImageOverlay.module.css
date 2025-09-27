@@ -24,8 +24,10 @@
   right: 30px;
 }
 .image {
-  width: 90vw;
-  height: calc(auto);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
   user-select: none;
   -webkit-user-drag: none;
   -moz-user-select: none;

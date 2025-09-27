@@ -56,7 +56,11 @@ router.post("/login", async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.json({ token });
+    res.json({
+      token,
+      pfpCloudData: user.pfpCloudData,
+      username: user.username,
+    });
   } catch (err) {
     res.status(500).json({ error: "Login failed" });
   }
