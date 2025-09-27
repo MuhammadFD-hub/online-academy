@@ -13,13 +13,6 @@ const creatUserStore = (set, get) => {
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          const errorData = await response.json();
-          alert("session expired. Please log in again.", errorData.message);
-          get().logout();
-          return;
-        }
-
         const Method = capitalizeFirst(method);
         const errorData = await response.json();
         throw new Error(
@@ -28,6 +21,8 @@ const creatUserStore = (set, get) => {
       }
       const data = await response.json();
       setLocal(data.token, email);
+      set({ pfpCloudData: data.pfpCloudData });
+      set({ username: data.username });
       get().navigate("/courses");
     } catch (error) {
       alert(error.message);
@@ -41,7 +36,6 @@ const creatUserStore = (set, get) => {
       exp: decoded.exp,
     };
     localStorage.setItem("token", token);
-    get().setPfpCloudData(decoded.pfpCloudData);
     get().setUser(user);
   }
   function capitalizeFirst(string) {
@@ -67,9 +61,7 @@ const creatUserStore = (set, get) => {
     getUser: async () => {
       if (!get().user) {
         set({ loadingUser: true });
-        let token = localStorage.getItem("token");
         try {
-          const decoded = jwtDecode(token);
           const res = await get().fetchWithAuth(
             "http://localhost:5000/api/user/getUser"
           );
@@ -79,6 +71,8 @@ const creatUserStore = (set, get) => {
               `${res.status}: ${res.statusText}. ${data.error || ""}`
             );
 
+          let token = localStorage.getItem("token");
+          const decoded = jwtDecode(token);
           const email = await data.email;
           const pfpCloudData = await data.pfpCloudData;
 
@@ -103,8 +97,8 @@ const creatUserStore = (set, get) => {
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
       localStorage.removeItem("token");
-      get().setUser(null);
       get().navigate("/login");
+      get().setUser(null);
     },
   };
 };
