@@ -1,13 +1,14 @@
 .dummyHeader {
-  min-height: 56px;
+  min-height: 70px;
   max-width: 90vw;
 }
 .adjustSidebar {
   margin-left: 60px;
+  transition: margin-left 0.3s;
 }
 
 @media screen and (max-width: 562px) {
   .adjustSidebar {
-    margin-left: 40px;
+    margin-left: 0;
   }
 }
