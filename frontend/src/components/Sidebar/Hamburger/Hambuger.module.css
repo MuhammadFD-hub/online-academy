@@ -1,0 +1,14 @@
+.hamburger {
+  opacity: 1;
+  pointer-events: auto;
+  border: 1px solid #d5d5d5;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  border-bottom-right-radius: var(--bs-btn-border-radius);
+  background-color: #ffffff9d;
+  backdrop-filter: blur(10px);
+}

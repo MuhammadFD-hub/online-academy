@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
 import UseStore from "../../stores/UseStore";
+import Hamburger from "./Hamburger/Hamburger";
 
 export default function Sidebar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -32,37 +33,37 @@ export default function Sidebar() {
         transition={{ duration: 0.5, type: "spring" }}
         animate={{ x: 0, width: collapsed ? (smallSidebar ? 40 : 60) : 220 }}
         initial={{ x: -300 }}
-        className={`${styles.sidebar}`}
+        className={`
+          ${collapsed && smallSidebar && styles.hideSidebar} 
+          ${styles.sidebar}`}
       >
-        <Button
-          variant="light"
-          className={` ${styles.hamburgers}`}
-          onClick={() => setCollapsed(!collapsed)}
+        <Hamburger collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Nav
+          className={`py-3 flex-column ${
+            collapsed && smallSidebar && styles.overlayHidden
+          }`}
         >
-          <FaBars />
-        </Button>
-        <Nav className="py-3 flex-column">
           <SidebarItem
-            icon={
-              <FaBook className={`${smallSidebar ? styles.smallIcon : ""}`} />
-            }
+            icon={<FaBook />}
             label="Courses"
             collapsed={collapsed}
             onClick={() => navigate("/courses")}
           />
           <SidebarItem
-            icon={
-              <FaUser className={`${smallSidebar ? styles.smallIcon : ""}`} />
-            }
+            icon={<FaUser />}
             label="Dashboard"
             collapsed={collapsed}
             onClick={() => navigate("/dashboard")}
           />
         </Nav>
-        <div className="mt-auto mb-3  text-center">
+        <div
+          className={`mt-auto mb-3  text-center ${
+            collapsed && smallSidebar && styles.overlayHidden
+          }`}
+        >
           <Button
-            variant="outline-danger"
             className={`${styles.logoutBtn}`}
+            variant="outline-danger"
             onClick={logout}
           >
             <FaSignOutAlt
