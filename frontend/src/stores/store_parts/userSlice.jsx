@@ -43,6 +43,18 @@ const creatUserStore = (set, get) => {
   }
 
   return {
+    email: null,
+    setEmail: (newEmail) => set({ email: newEmail }),
+    getEmail: async () => {
+      if (!get().email) {
+        const res = await get().fetchWithAuth(
+          "http://localhost:5000/api/user/getEmail"
+        );
+        const data = await res.json();
+        const email = await data.email;
+        set({ email: email });
+      }
+    },
     username: null,
     setUsername: (newName) => set({ username: newName }),
     getUsername: async () => {
@@ -78,11 +90,11 @@ const creatUserStore = (set, get) => {
 
           const user = {
             userId: decoded.userId,
-            email: email,
             exp: decoded.exp,
           };
           set({ pfpCloudData: pfpCloudData });
           set({ user: user });
+          set({ email: email });
         } catch (error) {
           console.error("Error during user data retrieval:", error);
           await get().logout();

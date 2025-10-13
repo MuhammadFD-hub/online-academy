@@ -10,7 +10,8 @@ import UseStore from "../../../../../stores/UseStore";
 
 const EmailForm = () => {
   const setUser = UseStore((s) => s.setUser);
-  const user = UseStore((s) => s.user);
+  const globalEmail = UseStore((s) => s.email);
+  const setGlobalEmail = UseStore((s) => s.setEmail);
   const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
 
   const [editEmail, setEditEmail] = useState(false);
@@ -47,12 +48,11 @@ const EmailForm = () => {
       setShowError(true);
       return;
     }
-    if (email === user.email) {
+    if (email === globalEmail) {
       setError("Already using this email");
       setShowError(true);
       return;
     }
-    console.log("Valid email:", email);
     setVerify(true);
   }
   async function handleOtpSubmit() {
@@ -78,7 +78,7 @@ const EmailForm = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ oldEmail: user.email, newEmail: email }),
+            body: JSON.stringify({ oldEmail: globalEmail, newEmail: email }),
           }
         );
         const data = await res.json();
@@ -92,8 +92,7 @@ const EmailForm = () => {
         }
 
         setUser((prevUser) => ({ ...prevUser, email: email }));
-        const { userId, exp } = JSON.parse(localStorage.getItem("user"));
-        localStorage.setItem("user", JSON.stringify({ email, userId, exp }));
+        setGlobalEmail(email);
         cancelOtpVerify();
       } catch (error) {
         console.error(error.message);
@@ -142,7 +141,7 @@ const EmailForm = () => {
               type="email"
               name="email"
               className={` ${sharedStyles.adjustInput}`}
-              value={editEmail ? email : user.email}
+              value={editEmail ? email : globalEmail}
             />
           )}
 
