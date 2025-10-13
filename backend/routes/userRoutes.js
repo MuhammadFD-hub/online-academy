@@ -109,6 +109,16 @@ router.get("/getBg", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/getEmail", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    if (!userId) return res.status(404).json({ error: "user id not found" });
+    const user = await User.findById(userId).select("email");
+    return res.json({ email: user.email });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
 router.post("/updateEmail", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -288,5 +298,4 @@ router.get("/getUser", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user" });
   }
 });
-
 module.exports = router;
