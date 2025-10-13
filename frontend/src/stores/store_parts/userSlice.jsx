@@ -85,15 +85,26 @@ const creatUserStore = (set, get) => {
           set({ user: user });
         } catch (error) {
           console.error("Error during user data retrieval:", error);
-          get().logout();
+          await get().logout();
         } finally {
           set({ loadingUser: false });
         }
       }
     },
-    login: async (email, password) => loginOrSignup("login", email, password),
+    login: async (email, password) => {
+      loginOrSignup("login", email, password);
+    },
     signup: async (email, password) => loginOrSignup("signup", email, password),
-    logout: () => {
+    logout: async () => {
+      try {
+        await fetch("http://localhost:5000/api/auth/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (err) {
+        console.error("Logout request failed", err);
+      }
+
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
       localStorage.removeItem("token");
