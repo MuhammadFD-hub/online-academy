@@ -1,12 +1,12 @@
 import { useState } from "react";
-import useLesson from "../../../hooks/useLesson";
 import { Button, Spinner } from "react-bootstrap";
 import sharedStyles from "../SharedBtn.module.css";
 import styles from "./MarkButton.module.css";
+import UseStore from "../../../stores/UseStore";
 
 const MarkButton = ({ courseId, lessonId, setLesson }) => {
   const [markLoading, setMarkLoading] = useState(false);
-  const { markRead } = useLesson();
+  const markRead = UseStore((s) => s.markRead);
   return (
     <Button
       className="mt-3"

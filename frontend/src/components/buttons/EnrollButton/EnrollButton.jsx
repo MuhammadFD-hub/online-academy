@@ -1,11 +1,11 @@
 import { useState } from "react";
-import useCourses from "../../../hooks/useCourses";
 import { Button, Spinner } from "react-bootstrap";
 import styles from "./EnrollButton.module.css";
 import sharedStyles from "../SharedBtn.module.css";
+import UseStore from "../../../stores/UseStore";
 
 const EnrollButton = ({ courseId, setCourse }) => {
-  const { enroll } = useCourses();
+  const enroll = UseStore((s) => s.enroll);
   const [enrollLoading, setEnrollLoading] = useState(false);
   return (
     <Button
