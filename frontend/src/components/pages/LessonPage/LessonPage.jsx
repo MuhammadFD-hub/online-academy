@@ -14,6 +14,7 @@ import PageSpinner from "../../Spinner/PageSpinner/PageSpinner";
 import "highlight.js/styles/github.css";
 import styles from "./LessonPage.module.css";
 import UseStore from "../../../stores/UseStore";
+import { motion } from "framer-motion";
 
 const schema = {
   ...defaultSchema,
@@ -55,9 +56,17 @@ const LessonPage = () => {
 
   return (
     <div className="container mt-4">
-      <h1 className={`mb-3 ${styles.heading}`}>{lesson.title}</h1>
-
-      <div className={`${styles.contentAlignment}`}>
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+      >
+        <h1 className={`mb-3 ${styles.heading}`}>{lesson.title}</h1>
+      </motion.div>
+      <motion.div
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className={`${styles.contentAlignment}`}
+      >
         <div className={`p-3 rounded ${styles.contentWidth}`}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -71,7 +80,7 @@ const LessonPage = () => {
             {lesson.content}
           </ReactMarkdown>
         </div>
-      </div>
+      </motion.div>
 
       {!lesson.read && (
         <MarkButton
