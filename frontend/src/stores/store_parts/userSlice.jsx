@@ -119,7 +119,14 @@ const creatUserStore = (set, get) => {
 
       localStorage.removeItem("user");
       localStorage.removeItem("currLesson");
-      localStorage.removeItem("token");
+      set({ courses: null });
+      set({ lesson: null });
+      set({ cachedLessons: new Map() });
+      set({ fullLessons: new Map() });
+      set({ cropperImage: null });
+      set({ pfpCloudData: null });
+      set({ bgCloudData: null });
+      set({ personalForm: null });
       get().navigate("/login");
       get().setUser(null);
     },
