@@ -17,7 +17,7 @@ const creatLessonStore = (set, get) => {
           );
         }
 
-        // cacheLessonContent(lessonId, data);
+        get().cacheLessonContent(lessonId, data);
         setLesson(data);
       } catch (err) {
         console.error(err.message || "Something went wrong");
@@ -46,7 +46,7 @@ const creatLessonStore = (set, get) => {
             }`
           );
         }
-        // markCacheLessonRead(courseId, lessonId);
+        get().markCacheLessonRead(courseId, lessonId);
       } catch (err) {
         console.error(err.message || "Something went wrong");
       }

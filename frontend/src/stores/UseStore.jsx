@@ -5,6 +5,7 @@ import creatNavStore from "./store_parts/navSlice";
 import creatTokenStore from "./store_parts/tokenSlice";
 import creatCoursesStore from "./store_parts/coursesSlice";
 import creatLessonStore from "./store_parts/lessonSlice";
+import creatCacheStore from "./store_parts/cacheSlice";
 
 const UseStore = create((set, get) => ({
   ...creatTokenStore(set, get),
@@ -13,6 +14,7 @@ const UseStore = create((set, get) => ({
   ...creatUserStore(set, get),
   ...creatCoursesStore(set, get),
   ...creatLessonStore(set, get),
+  ...creatCacheStore(set, get),
 }));
 
 export default UseStore;

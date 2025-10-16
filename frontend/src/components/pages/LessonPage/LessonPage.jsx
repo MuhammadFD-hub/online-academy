@@ -8,7 +8,6 @@ import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
 
-import useCache from "../../../hooks/useCache";
 import MarkButton from "../../buttons/MarkButton/MarkButton";
 import PageSpinner from "../../Spinner/PageSpinner/PageSpinner";
 
@@ -40,8 +39,7 @@ const schema = {
 const LessonPage = () => {
   const { id: courseId, lessonId } = useParams();
   const fetchLesson = UseStore((s) => s.fetchLesson);
-  // const { fetchLesson } = useLesson();
-  const { getLessonContent } = useCache();
+  const getLessonContent = UseStore((s) => s.getLessonContent);
   const [lesson, setLesson] = useState(null);
 
   useEffect(() => {

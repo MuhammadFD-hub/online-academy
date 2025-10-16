@@ -2,17 +2,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Container, Alert, Card, ProgressBar, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import useCache from "../../../hooks/useCache";
 import EnrollButton from "../../buttons/EnrollButton/EnrollButton";
 import UseStore from "../../../stores/UseStore";
 
 export default function CoursePage() {
   const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
   const findCourse = UseStore((s) => s.findCourse);
+  const cacheLessons = UseStore((s) => s.cacheLessons);
+  const getLessons = UseStore((s) => s.getLessons);
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const { cacheLessons, getLessons } = useCache();
 
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
