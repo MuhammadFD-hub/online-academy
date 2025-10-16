@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Alert, Card, ProgressBar, Spinner } from "react-bootstrap";
-import useCourses from "../../../hooks/useCourses";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useCache from "../../../hooks/useCache";
@@ -9,11 +8,12 @@ import UseStore from "../../../stores/UseStore";
 
 export default function CoursePage() {
   const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
+  const findCourse = UseStore((s) => s.findCourse);
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const { findCourse } = useCourses();
   const { cacheLessons, getLessons } = useCache();
+
   const [lessons, setLessons] = useState(null);
   const [error, setError] = useState(null);
   const [course, setCourse] = useState(findCourse(id));
