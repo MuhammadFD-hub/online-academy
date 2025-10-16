@@ -1,5 +1,5 @@
 import { Button, Nav } from "react-bootstrap";
-import { FaBars, FaBook, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaBook, FaSignOutAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import SidebarItem from "./SidebarItem/SidebarItem";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
 import UseStore from "../../stores/UseStore";
 import Hamburger from "./Hamburger/Hamburger";
-
+import { GiProgression } from "react-icons/gi";
 export default function Sidebar() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
@@ -50,8 +50,8 @@ export default function Sidebar() {
             onClick={() => navigate("/courses")}
           />
           <SidebarItem
-            icon={<FaUser />}
-            label="Dashboard"
+            icon={<GiProgression />}
+            label="Progress"
             collapsed={collapsed}
             onClick={() => navigate("/dashboard")}
           />
