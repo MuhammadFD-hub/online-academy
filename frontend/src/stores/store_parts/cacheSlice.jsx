@@ -1,7 +1,6 @@
 const creatCacheStore = (set, get) => {
   return {
     cachedLessons: new Map(),
-
     fullLessons: new Map(),
     getLessons: (courseId) => {
       return get().cachedLessons.get(courseId);
