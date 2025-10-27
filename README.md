@@ -14,15 +14,27 @@ This is a learning project I built to explore and practice React.js. It’s an o
   - [Intro](#intro)
   - [How to use](#how-to-use)
   - [Learning Process](#learning-process)
-  - [Backend](#backend)
-    - [Mongodb](#mongodb)
+  - [Backend Overview](#backend-overview)
+    - [Database (MongoDB)](#database-mongodb)
+      - [User](#user)
+      - [Course](#course)
+      - [Lesson](#lesson)
+      - [UserProgress](#userprogress)
     - [Express.js](#expressjs)
+      - [Routes Overview](#routes-overview)
+      - [Auth Routes](#auth-routes)
+      - [Course Routes](#course-routes)
+      - [Lesson Routes](#lesson-routes)
+      - [User Routes](#user-routes)
   - [Frontend](#frontend)
-    - [React.js](#reactjs)
-      - [Data handling and functionality behind scenes](#data-handling-and-functionality-behind-scenes)
-      - [Components](#components)
-      - [React Router DOM](#react-router-dom)
-  - [📄 License](#-license)
+    - [Main Libraries](#main-libraries)
+    - [Architecture \& Data Flow](#architecture--data-flow)
+      - [`/components/`](#components)
+      - [`/stores/`](#stores)
+        - [Store Slices](#store-slices)
+    - [Authentication \& Fetch Handling](#authentication--fetch-handling)
+    - [Styling](#styling)
+  - [License](#license)
 
 ## Intro
 
@@ -33,12 +45,25 @@ The project is built using the **MERN stack** (MongoDB, Express, React, Node.js)
 - Manage user authentication and course data
 - Work with MongoDB and Mongoose
 
+**Tech Stack:** React, Express.js, Node.js, MongoDB, Mongoose, Zustand, Bootstrap, Vite
+
 ## How to use
 
 - Download provided files
-- backend and frontend dont have node modules, just type 'npm i' in cmd in both folders (backend and frontend)
-- type 'node server.js' to run backend
-- use 'npm run dev' to run frontend (vite)
+- The backend and frontend folders don’t include node_modules.
+- Run npm install in each folder to install dependencies.
+- Run the backend:
+
+```bash
+node server.js
+```
+
+- Run the frontend (Vite):
+
+```bash
+npm run dev
+```
+
 - to reset backend run 'npm run seed' in backend
 
 **When using project dont add any sensitive information on it.**
@@ -47,217 +72,184 @@ The project is built using the **MERN stack** (MongoDB, Express, React, Node.js)
 
 While building this, I used **ChatGPT** for help whenever I was stuck or faced multiple implementation options. Although the backend code and some parts of the UI (e.g., Bootstrap styling) were generated with AI help, I fully understand how the app works and can explain each part of it.
 
-## Backend
+## Backend Overview
 
-MongoDB, Mongoose Models, Express.js
+Built with **Express.js**, **MongoDB**, and **Mongoose**, this backend handles user authentication, course management, lessons, and progress tracking for the web app.
 
-### Mongodb
+---
 
-The database stores:
+### Database (MongoDB)
 
-1. User
-2. Courses
-3. Lesson
-4. User Progress
+The database uses Mongoose models for the following collections:
 
-- <u>**User**</u>
+1. **User**
+2. **Course**
+3. **Lesson**
+4. **UserProgress**
 
-  Each user have:
+#### User
 
-  - email
-  - passwordHash
-  - timestamps
+Stores user credentials and profile data.
 
-  password is not plainly stored, instead passwordHash is created in server using bycrypt and then it is stored in DB.
-  timestamp automatically adds and manages two fields: createdAt, updatedAt.
+- `email`, `password`
+- `profilePic`, `backgroundPic`
+- `settings`, `userInfo` (name, date of birth, gender)
+- `timestamps`
 
-- <u>**Courses**</u>
+#### Course
 
-  Each course have:
+Represents a single course and its related lessons.
 
-  - Title
-  - Description
-  - lessons (reference)
+- `title`, `description`
+- `lessons` _(array of Lesson IDs)_
 
-Course have reference of all lesson that are included in the course.
+Each course references all its lessons by ID.
 
-- <u>**Lesson**</u>
+#### Lesson
 
-  Each lesson have:
+Stores individual lesson content.
 
-  - title
-  - content
-  - course (reference)
-  - order (will used in future)
+- `title`, `content` _(Markdown text)_
+- `course` _(Course ID)_
+- `order` _(Lesson position in course)_
 
-  Lesson content have markdown lesson saved init. Lesson also have course reference to which it belongs to. Lesson order refers to the position or index of the lesson within the course.
+#### UserProgress
 
-- <u>**User Progress**</u>
+Tracks a user’s progress in enrolled courses.
 
-  This contains:
+- `user` _(User ID)_
+- `course` _(Course ID)_
+- `readLessons` _(array of Lesson IDs)_
 
-  - user (id reference)
-  - course (reference)
-  - readLessons (array of reference)
+Each record corresponds to one user-course enrollment.
 
-  When a user enrolls in a course, a record is created like:
-
-  ```js
-  [
-    { userId, courseId, [] }
-  ]
-  ```
-
-  If the user enrolls in more courses:
-
-  ```js
-  [
-    { userId: 1, courseId: 1, lessons: [] },
-    { userId: 1, courseId: 2, lessons: [] },
-  ];
-  ```
-
-  If the user starts reading lessons, it looks like:
-
-  ```js
-  [
-    { userId: 1, courseId: 1, lessons: [lessonId1] },
-    { userId: 1, courseId: 2, lessons: [lessonId1, lessonId2] },
-  ];
-  ```
-
-  Each record tracks the user’s enrollment and progress for a specific course.
-  The lessons array holds the IDs of lessons the user has read.
+---
 
 ### Express.js
 
-Express.js has four main routes:
+All routes (except authentication) use **JWT-based authentication**, verified by a middleware (`authToken.js`).  
+A long-term token is stored in cookies; if verification fails, the user is logged out automatically.
 
-1. authRoutes
-2. coursesRoutes
-3. lessonRoutes
-4. userRoutes
+#### Routes Overview
 
-Side note: All routes (except authRoutes) receives Json Web Token (jwt) with request. Every request is verified by a middleware (authToken.js), if something wrong it logs user out. Token have encrypted userId init, and this id is used for processes.
+1. **Auth Routes**
+2. **Course Routes**
+3. **Lesson Routes**
+4. **User Routes**
 
-- <u>authRoutes</u>
+---
 
-  it has `/signup`, `/login` init.
+#### Auth Routes
 
-  - `/signup`: checks credentials, encrypt password, makes account if not exist, and returns jwt which has userId, session expiry.
-  - `/login`: checks credentials, returns jwt, which has userId, session expiry
+- `POST /signup` – Validates credentials, hashes password, creates user, returns JWT
+- `POST /login` – Authenticates user and returns JWT
+- `POST /refresh` – Refreshes long-term cookie token
+- `POST /logout` – Clears stored token
 
-- <u>coursesRoutes</u>
+---
 
-  it has `/userId`, `/enroll`, `/`_courseId_`/lessons`
+#### Course Routes
 
-  - `/userId` returns courses with enrolled status
-  - `/enroll` enrolls user in given courseId
-  - `/`_courseId_`/lessons` returns lesson in order (without content) for that course id
+- `GET /` – Returns all courses with user’s enrollment status
+- `POST /enroll` – Enrolls user in a course by ID
+- `GET /:courseId/lessons` – Returns ordered lessons (titles only) for a course
+- `GET /:courseId` – Returns course details with enrollment status
 
-- <u>lessonRoutes</u>
+---
 
-  It has `/`_lessonId_, `/mark-read`
+#### Lesson Routes
 
-  - `/`_lessonId_ returns lesson for given id
-  - `/mark-read` add provided _lessonId_ in readLessons which is in userProgress
+- `GET /:lessonId` – Returns lesson content by ID
+- `POST /mark-read` – Adds lesson ID to user’s read lessons in progress tracking
 
-- <u>userRoutes</u>
+---
 
-  it has `/dashboard`
+#### User Routes
 
-  - `/dashboard` returns total enrolled count and each course title with course progress (readLessons/totalLessons)
+Provide access to user profile, preferences, and progress data.
+
+- `/dashboard` – Returns enrolled courses count and progress percentages
+- `/uploadPfp`, `/getPfp` – Manage profile picture
+- `/uploadBg`, `/getBg` – Manage background picture
+- `/updateEmail`, `/updatePassword` – Account management
+- `/getUserInfo`, `/uploadUserInfo` – Manage name, DoB, gender
+- `/getBgFocus`, `/updateBgFocus` – Background focus position (top/mid/bottom)
+- `/getUser` – Returns basic profile data (email, profile picture)
+
+---
 
 ## Frontend
 
-**framework:** React.js
+Built with **React**, styled using **Bootstrap**, **CSS Modules**, and inline CSS.
+Includes smooth animations, markdown rendering, and efficient state management via **Zustand**.
 
-**libraries:**
+---
 
-- bootstrap
-- react-router-dom
-- jsonwebtoken
-- react-markdown
-- react-syntax-highlighter
+### Main Libraries
 
-**plugins:**
+- **bootstrap**, **react-bootstrap** – UI components & styling
+- **framer-motion** – Animations
+- **highlight.js** – Code syntax highlighting
+- **jwt-decode** – Token decoding
+- **react**, **react-dom**, **react-router-dom** – Core React libraries and routing
+- **react-easy-crop** – Profile image cropping
+- **react-icons** – Icons
+- **react-markdown** – Markdown rendering with:
 
-- remark-gfm
-- rehype-raw
-- rehype-sanitize
-- rehype-slug
+  - `remark-gfm` (GitHub Flavored Markdown)
+  - `rehype-raw`, `rehype-sanitize` (HTML parsing & safety)
+  - `rehype-slug`, `rehype-highlight` (IDs for headings, syntax highlighting)
 
-### React.js
+- **zustand** – Lightweight global state management
 
-#### Data handling and functionality behind scenes
+---
 
-- AuthProvider
+### Architecture & Data Flow
 
-  On mount schedules logout according to received expiry, if logged in. It provides `login`, `logout`, `signup`, `setLocal` to other components.
+The frontend follows a modular folder structure:
 
-  - **`login`**
+#### `/components/`
 
-    Sends post request with email, and password. Receives jwt in response, decode and extract user from it. Saves token and user locally. Then it navigates to courses page
+- Contains reusable UI elements (e.g., buttons, header, spinner).
+- Also includes a `pages/` subfolder for top-level views.
+- Components follow a clear hierarchy — if Component A is used only inside B, it resides within B’s folder.
 
-  - **`signup`**
+#### `/stores/`
 
-    same as login just creates account at server.
+- Contains all **Zustand store slices**, later merged in `UserStore.jsx`.
+- Each slice manages a separate domain of app state.
 
-  - **`logout`**
+##### Store Slices
 
-    Removes user, jwt and other data locally, and navigates to '/', which automatically redirects to login page.
+- `userSlice` – Handles user data (email, login, signup)
+- `tokenSlice` – Provides `fetchWithAuth()` for auto token refresh and queued fetches during refresh
+- `coursesSlice` – Manages courses and related logic
+- `lessonSlice` – Stores current lesson data and functions
+- `cacheSlice` – Caches lessons for faster navigation
+- `profileSlice` – Handles global states for profile picture, background, and cropping
+- `navSlice` – Provides navigation hooks
 
-  - **`setLocal`**
+---
 
-    receives token and email. Decodes token into user. Sets user in a state with email. Store user and token in local storage
+### Authentication & Fetch Handling
 
-- CourseProvider
+- Every data fetch validates the JWT.
+- If expired, the app attempts a **token refresh**.
+- Multiple concurrent fetches share a single refresh request via a shared **refresh promise**, preventing duplicate network calls.
+- Short-term tokens are stored in **localStorage**.
 
-  On mount, fetches courses and store it in a context state. It provides `courses` array, `enroll` function, `findCourse` function.
+---
 
-  - **`enroll`**
+### Styling
 
-    Send post request along with courseId to enroll, and also changes courses local state accordingly.
+- Combination of **Bootstrap**, **CSS Modules**, and **inline styles** for flexibility.
+- Ensures responsive layout and component-level styling isolation.
 
-- LessonProvider
+---
 
-  provides `fetchLesson`, `markRead` function. It doesn't store lesson in the context state
+## License
 
-  - **`fetchLesson`**
+**Proprietary License**
 
-    This fetch the lesson with full content, only if it is not cached
-
-- CacheProvider
-
-  The `CacheProvider` caches lesson data using two `Map` objects, **lesson** with `courseId` and **lessonContent** with `lessonId` as the key:
-
-  - **`Lessons` Map:** Used in `CoursePage.jsx` to show a preview list of lessons (if cached).
-  - **`Lesson Content` Map:** Used in `LessonPage.jsx` to display the full content of a lesson (if it’s already cached).
-
-- Summary of Context Providers
-
-  - All providers are implemented using **React Context**.
-  - Each context is exported and accessed via custom hooks.
-  - These custom hooks are used to fetch shared state and functions across components.
-  - The UI is built using **React**, **Bootstrap**, and custom **CSS**, which render data provided by these contexts.
-
-#### Components
-
-- LessonPage
-
-  Receives markdown from `fetchLessons` (defined in `LessonProvider.jsx`), and convert it into markup using **react-markdown**. The code block in markdown is styled using **react-syntax-highlighter**. Other plugins like **remark-gfm**, **rehype-raw**, **rehype-sanitize**, **rehype-slug** is used to allow tables, check boxes, safe HTML, link to headings, and more secure markdown handling.
-
-#### React Router DOM
-
-- The **sidebar** appears only when the user is logged in, using `<Outlet />`.
-- For routes like `/`, `/login`, and `/signup`, the sidebar is hidden. For all other routes, the sidebar and header are displayed using `Outlet`.
-- A shared **`Header`** is shown on all pages.
-- All components that are not context providers are grouped in `RouteWrapper.jsx`.
-- In `App.jsx`, some context providers (like `CourseProvider`, `LessonsProvider`, `CacheProvider`) are wrapped conditionally based on whether the `user` exists.
-- The entry file `main.jsx` wraps the entire app with `AuthProvider` and `Router`.
-
-## 📄 License
-
-This project is licensed under a **proprietary license**.  
-It is available for **educational and demonstration purposes only**.  
+This project is for **educational and demonstration purposes only**.  
 Use, redistribution, or modification is **not permitted without written consent**.
