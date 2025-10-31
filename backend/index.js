@@ -9,11 +9,7 @@ const coursesRoutes = require("./routes/coursesRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
-let DB_URL = "",
-  FRTEND_URL = "";
-
-if (!process.env.CLIENT_URL) FRTEND_URL = "http://localhost:5173";
-else FRTEND_URL = process.env.CLIENT_URL;
+let DB_URL = "";
 
 if (!process.env.MONGO_URI) DB_URL = "mongodb://127.0.0.1:27017/online-academy";
 else DB_URL = process.env.MONGO_URI;
@@ -22,7 +18,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: FRTEND_URL,
+    origin: ["http://localhost:5173", "https://0nline-academy.netlify.app/"],
     credentials: true,
   })
 );
