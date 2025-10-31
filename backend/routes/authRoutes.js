@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 
 function generateToken(userId) {
-  return jwt.sign({ userId }, "secretKey", { expiresIn: "20s" });
+  return jwt.sign({ userId }, "secretKey", { expiresIn: "20m" });
 }
 
 function generateRefreshToken(userId) {
