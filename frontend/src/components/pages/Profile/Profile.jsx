@@ -21,19 +21,17 @@ const Profile = () => {
 
   useEffect(() => {
     async function fetchCloudDataPfp() {
-      const res = await fetchWithAuth("http://localhost:5000/api/user/getPfp");
+      const res = await fetchWithAuth("api/user/getPfp");
       const data = await res.json();
       if (data.pfpCloudData) setPfpCloudData(data.pfpCloudData);
     }
     async function fetchCloudDataBg() {
-      const res = await fetchWithAuth("http://localhost:5000/api/user/getBg");
+      const res = await fetchWithAuth("api/user/getBg");
       const data = await res.json();
       setBgCloudData(data.bgCloudData);
     }
     async function fetchPersonalData() {
-      const res = await fetchWithAuth(
-        "http://localhost:5000/api/user/getUserInfo"
-      );
+      const res = await fetchWithAuth("api/user/getUserInfo");
       const data = await res.json();
       setPersonalForm(data.personalForm);
     }

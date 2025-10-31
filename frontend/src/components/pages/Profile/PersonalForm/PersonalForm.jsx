@@ -62,18 +62,15 @@ const PersonalForm = () => {
       }
       if (!isValidWordLen(localName)) return;
 
-      const usernamePromise = fetchWithAuth(
-        "http://localhost:5000/api/user/uploadUsername",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: localName,
-          }),
-        }
-      )
+      const usernamePromise = fetchWithAuth("api/user/uploadUsername", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: localName,
+        }),
+      })
         .then(async (res) => {
           if (res.ok) {
             setUsername(localName);
@@ -93,16 +90,13 @@ const PersonalForm = () => {
     ) {
       const form = handleEmptyStr(personalFormLocal);
 
-      const infoPromise = fetchWithAuth(
-        "http://localhost:5000/api/user/uploadUserInfo",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      )
+      const infoPromise = fetchWithAuth("api/user/uploadUserInfo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      })
         .then(async (res) => {
           if (res.ok) {
             setPersonalForm({
