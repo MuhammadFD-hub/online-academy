@@ -1,9 +1,9 @@
 import { jwtDecode } from "jwt-decode";
-
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const creatUserStore = (set, get) => {
   async function loginOrSignup(method, email, password) {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/" + method, {
+      const response = await fetch(`${API_URL}/api/auth/` + method, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,9 +47,7 @@ const creatUserStore = (set, get) => {
     setEmail: (newEmail) => set({ email: newEmail }),
     getEmail: async () => {
       if (!get().email) {
-        const res = await get().fetchWithAuth(
-          "http://localhost:5000/api/user/getEmail"
-        );
+        const res = await get().fetchWithAuth(`${API_URL}/api/user/getEmail`);
         const data = await res.json();
         const email = await data.email;
         set({ email: email });
@@ -60,7 +58,7 @@ const creatUserStore = (set, get) => {
     getUsername: async () => {
       if (!get().username) {
         const res = await get().fetchWithAuth(
-          "http://localhost:5000/api/user/getUsername"
+          `${API_URL}/api/user/getUsername`
         );
         const data = await res.json();
         const username = await data.username;
@@ -74,9 +72,7 @@ const creatUserStore = (set, get) => {
       if (!get().user) {
         set({ loadingUser: true });
         try {
-          const res = await get().fetchWithAuth(
-            "http://localhost:5000/api/user/getUser"
-          );
+          const res = await get().fetchWithAuth(`${API_URL}/api/user/getUser`);
           const data = await res.json();
           if (!res.ok)
             throw new Error(
@@ -109,7 +105,7 @@ const creatUserStore = (set, get) => {
     signup: async (email, password) => loginOrSignup("signup", email, password),
     logout: async () => {
       try {
-        await fetch("http://localhost:5000/api/auth/logout", {
+        await fetch(`${API_URL}/api/auth/logout`, {
           method: "POST",
           credentials: "include",
         });

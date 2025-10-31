@@ -71,16 +71,13 @@ const EmailForm = () => {
 
     if (otp === "111111") {
       try {
-        const res = await fetchWithAuth(
-          "http://localhost:5000/api/user/updateEmail",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ oldEmail: globalEmail, newEmail: email }),
-          }
-        );
+        const res = await fetchWithAuth("api/user/updateEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ oldEmail: globalEmail, newEmail: email }),
+        });
         const data = await res.json();
         if (!res.ok) {
           setVerify(false);

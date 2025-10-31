@@ -21,9 +21,7 @@ export default function CoursePage() {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const res = await fetchWithAuth(
-          `http://localhost:5000/api/courses/${id}/lessons`
-        );
+        const res = await fetchWithAuth(`api/courses/${id}/lessons`);
         const data = await res.json();
         if (!res.ok) {
           throw new Error(
@@ -38,9 +36,7 @@ export default function CoursePage() {
     };
     async function fetchCourse() {
       try {
-        const res = await fetchWithAuth(
-          `http://localhost:5000/api/courses/${id}`
-        );
+        const res = await fetchWithAuth(`api/courses/${id}`);
         const data = await res.json();
         if (!res.ok) {
           throw new Error(
