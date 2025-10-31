@@ -87,19 +87,16 @@ const PasswordForm = () => {
   }
   async function handleFormSubmit() {
     try {
-      const res = await fetchWithAuth(
-        "http://localhost:5000/api/user/updatePassword",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            oldPassword: form.oldPassword,
-            newPassword: form.newPassword,
-          }),
-        }
-      );
+      const res = await fetchWithAuth("api/user/updatePassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oldPassword: form.oldPassword,
+          newPassword: form.newPassword,
+        }),
+      });
       const data = await res.json();
       if (res.ok) cancelEdit();
       else {

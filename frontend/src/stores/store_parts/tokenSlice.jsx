@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const creatTokenStore = (set, get) => {
   let refreshPromise = null;
   function validToken(token) {
@@ -17,7 +18,7 @@ const creatTokenStore = (set, get) => {
       if (refreshPromise) return refreshPromise;
       refreshPromise = (async () => {
         try {
-          const res = await fetch("http://localhost:5000/api/auth/refresh", {
+          const res = await fetch(`${API_URL}/api/auth/refresh`, {
             method: "POST",
             credentials: "include",
           });
@@ -48,7 +49,7 @@ const creatTokenStore = (set, get) => {
         token = localStorage.getItem("token");
       }
 
-      let res = await fetch(url, {
+      let res = await fetch(`${API_URL}/${url}`, {
         ...options,
         headers: {
           ...(options.headers || {}),
@@ -60,7 +61,7 @@ const creatTokenStore = (set, get) => {
       if (res.status === 401 || res.status === 403) {
         await get().refreshAccessToken();
         token = localStorage.getItem("token");
-        res = await fetch(url, {
+        res = await fetch(`${API_URL}/${url}`, {
           ...options,
           headers: {
             ...(options.headers || {}),

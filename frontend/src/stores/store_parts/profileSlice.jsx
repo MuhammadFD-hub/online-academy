@@ -16,9 +16,7 @@ const creatProfileStore = (set, get) => ({
   selectFocus: { focus: null },
   setSelectFocus: (newPosition) => set({ selectFocus: newPosition }),
   getBgFocus: async () => {
-    const res = await get().fetchWithAuth(
-      "http://localhost:5000/api/user/getBgFocus"
-    );
+    const res = await get().fetchWithAuth("api/user/getBgFocus");
     const data = await res.json();
     const fetchedFocus = await data.focus;
     let bgFocus = "focusMid";
@@ -38,16 +36,13 @@ const creatProfileStore = (set, get) => ({
       } else if (focus === "focusBot") {
         bgFocus = 3;
       }
-      const res = await get().fetchWithAuth(
-        "http://localhost:5000/api/user/updateBgFocus",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ bgFocus: bgFocus }),
-        }
-      );
+      const res = await get().fetchWithAuth("api/user/updateBgFocus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ bgFocus: bgFocus }),
+      });
       if (!res.ok) throw new Error("Somthing went wrong");
 
       set({ selectFocus: { focus: focus } });

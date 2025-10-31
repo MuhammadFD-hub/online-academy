@@ -9,18 +9,25 @@ const coursesRoutes = require("./routes/coursesRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
-let URL = "mongodb://127.0.0.1:27017/online-academy";
+let DB_URL = "",
+  CLIENT_URL = "";
+
+if (!process.env.CLIENT_URL) CLIENT_URL = "http://localhost:5173";
+else CLIENT_URL = process.env.CLIENT_URL;
+
+if (!process.env.MONGO_URI) DB_URL = "mongodb://127.0.0.1:27017/online-academy";
+else DB_URL = process.env.MONGO_URI;
+
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
 app.use(express.json());
 app.use(cookieParser());
-
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.path}`);
   next();
@@ -36,16 +43,16 @@ app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
-console.log("Connecting to MongoDB URI:", URL);
+console.log("Connecting to MongoDB URI:", DB_URL);
 
 async function startServer() {
   try {
-    await mongoose.connect(URL, { autoIndex: true });
+    await mongoose.connect(DB_URL, { autoIndex: true });
     console.log("MongoDB connected");
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on port: ${PORT}`);
     });
   } catch (err) {
     console.error("MongoDB connection error:", err.message);
