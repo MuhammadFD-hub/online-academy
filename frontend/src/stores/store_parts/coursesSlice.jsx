@@ -6,9 +6,7 @@ const createCoursesStore = (set, get) => {
     },
     fetchCourses: async () => {
       try {
-        let res = await get().fetchWithAuth(
-          `http://localhost:5000/api/courses/`
-        );
+        let res = await get().fetchWithAuth(`api/courses/`);
         const result = await res.json();
         if (!res.ok)
           throw new Error(
@@ -31,16 +29,13 @@ const createCoursesStore = (set, get) => {
 
     enroll: async (courseId) => {
       try {
-        const response = await get().fetchWithAuth(
-          "http://localhost:5000/api/courses/enroll",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ courseId }),
-          }
-        );
+        const response = await get().fetchWithAuth("api/courses/enroll", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ courseId }),
+        });
 
         if (!response.ok) {
           const data = await response.json();

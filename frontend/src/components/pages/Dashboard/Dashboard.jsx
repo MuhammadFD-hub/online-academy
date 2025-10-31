@@ -20,9 +20,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await fetchWithAuth(
-          `http://localhost:5000/api/user/dashboard/`
-        );
+        const response = await fetchWithAuth(`api/user/dashboard/`);
         const data = await response.json();
         if (!response.ok)
           throw new Error(

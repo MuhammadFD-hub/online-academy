@@ -9,3 +9,4 @@ Test*.jsx
 Test*.js
 todo.txt
 todo.md
+.env*

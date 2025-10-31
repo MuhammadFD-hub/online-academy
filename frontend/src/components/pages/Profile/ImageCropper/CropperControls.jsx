@@ -20,11 +20,11 @@ const CropperControls = () => {
   if (isPfpChanging) {
     setCloudData = UseStore((state) => state.setPfpCloudData);
     folder = "profilePic";
-    link = "http://localhost:5000/api/user/uploadPfp";
+    link = "api/user/uploadPfp";
   } else {
     setCloudData = UseStore((state) => state.setBgCloudData);
     folder = "backgroundPic";
-    link = "http://localhost:5000/api/user/uploadBg";
+    link = "api/user/uploadBg";
   }
 
   const { uploadImg } = useCloudUpload();
