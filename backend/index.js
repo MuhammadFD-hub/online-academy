@@ -10,17 +10,10 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
 let DB_URL = "",
-<<<<<<< HEAD
   FRTEND_URL = "";
 
 if (!process.env.CLIENT_URL) FRTEND_URL = "http://localhost:5173";
 else FRTEND_URL = process.env.CLIENT_URL;
-=======
-  CLIENT_URL = "";
-
-if (!process.env.CLIENT_URL) CLIENT_URL = "http://localhost:5173";
-else CLIENT_URL = process.env.CLIENT_URL;
->>>>>>> b33d2b50790dc83d6374994552063834cf22dd69
 
 if (!process.env.MONGO_URI) DB_URL = "mongodb://127.0.0.1:27017/online-academy";
 else DB_URL = process.env.MONGO_URI;
@@ -29,11 +22,7 @@ const app = express();
 
 app.use(
   cors({
-<<<<<<< HEAD
     origin: FRTEND_URL,
-=======
-    origin: process.env.CLIENT_URL,
->>>>>>> b33d2b50790dc83d6374994552063834cf22dd69
     credentials: true,
   })
 );
