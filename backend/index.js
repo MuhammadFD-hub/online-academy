@@ -18,7 +18,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://0nline-academy.netlify.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://0nline-academy.netlify.app",
+      "https://online-academy-theta.vercel.app/",
+    ],
     credentials: true,
   })
 );
