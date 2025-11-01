@@ -21,8 +21,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://0nline-academy.netlify.app",
-      "https://online-academy-theta.vercel.app/",
-      "https://online-academy-kiaka451h-fardeens-projects-786615b6.vercel.app/",
+      "https://online-academy-theta.vercel.app",
     ],
     credentials: true,
   })
