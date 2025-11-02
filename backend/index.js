@@ -10,7 +10,11 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
 
-let DB_URL = "";
+let DB_URL = "",
+  allowedOrigins = "";
+
+if (!process.env.CLIENT_URLS) allowedOrigins = "http://localhost:5173";
+else allowedOrigins = process.env.CLIENT_URLS.split(",").map((u) => u.trim());
 
 if (!process.env.MONGO_URI) DB_URL = "mongodb://127.0.0.1:27017/online-academy";
 else DB_URL = process.env.MONGO_URI;
@@ -19,11 +23,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://0nline-academy.netlify.app",
-      "https://online-academy-theta.vercel.app",
-    ],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
