@@ -6,12 +6,12 @@ const Lesson = require("./models/Lesson");
 const User = require("./models/User");
 const UserProgress = require("./models/UserProgress");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
-let uri = "";
-if (!process.env.MONGO_URI) uri = "mongodb://127.0.0.1:27017/online-academy";
-else uri = process.env.MONGO_URI;
+let DB_URL = "";
+if (!process.env.MONGO_URI) DB_URL = "mongodb://127.0.0.1:27017/online-academy";
+else DB_URL = process.env.MONGO_URI;
 
 async function seed() {
-  await mongoose.connect(uri);
+  await mongoose.connect(DB_URL);
   console.log("Connected to MongoDB");
 
   await Course.deleteMany({});
