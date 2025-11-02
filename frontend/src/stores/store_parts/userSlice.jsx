@@ -47,7 +47,7 @@ const creatUserStore = (set, get) => {
     setEmail: (newEmail) => set({ email: newEmail }),
     getEmail: async () => {
       if (!get().email) {
-        const res = await get().fetchWithAuth(`${API_URL}/api/user/getEmail`);
+        const res = await get().fetchWithAuth("/api/user/getEmail");
         const data = await res.json();
         const email = await data.email;
         set({ email: email });
@@ -57,9 +57,7 @@ const creatUserStore = (set, get) => {
     setUsername: (newName) => set({ username: newName }),
     getUsername: async () => {
       if (!get().username) {
-        const res = await get().fetchWithAuth(
-          `${API_URL}/api/user/getUsername`
-        );
+        const res = await get().fetchWithAuth(`api/user/getUsername`);
         const data = await res.json();
         const username = await data.username;
         set({ username: username });
@@ -72,7 +70,7 @@ const creatUserStore = (set, get) => {
       if (!get().user) {
         set({ loadingUser: true });
         try {
-          const res = await get().fetchWithAuth(`${API_URL}/api/user/getUser`);
+          const res = await get().fetchWithAuth(`api/user/getUser`);
           const data = await res.json();
           if (!res.ok)
             throw new Error(
