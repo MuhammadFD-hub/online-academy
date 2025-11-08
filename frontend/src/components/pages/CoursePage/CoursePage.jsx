@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Alert, Card, ProgressBar, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import EnrollButton from "../../buttons/EnrollButton/EnrollButton";
 import UseStore from "../../../stores/UseStore";
+import styles from "./CoursePage.module.css";
 
 export default function CoursePage() {
   const fetchWithAuth = UseStore((s) => s.fetchWithAuth);
@@ -66,7 +66,7 @@ export default function CoursePage() {
   if (!course || (!lessons && course.enrolled)) {
     return (
       <Container
-        className="d-flex justify-content-center align-items-center"
+        className={`d-flex justify-content-center align-items-center ${styles.animateInitial}`}
         style={{ height: "90vh" }}
       >
         <Spinner animation="border" variant="primary" />
@@ -77,15 +77,11 @@ export default function CoursePage() {
   if (!course.enrolled) {
     return (
       <Container className="mt-5">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
+        <div className={`${styles.animateInitial}`}>
           <h2 className="text-primary mb-3">{course.title}</h2>
           <p className="text-muted">{course.description}</p>
           <EnrollButton courseId={course.id} setCourse={setCourse} />
-        </motion.div>
+        </div>
       </Container>
     );
   }
@@ -95,11 +91,7 @@ export default function CoursePage() {
 
   return (
     <Container className="mt-5">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
+      <div className={`${styles.animateInitial}`}>
         <h2 className="text-primary">{course.title}</h2>
         <ProgressBar
           className="mt-3 mb-4"
@@ -109,39 +101,34 @@ export default function CoursePage() {
           animated
           variant={progress === 100 ? "success" : "info"}
         />
-      </motion.div>
+      </div>
 
       <div className="d-grid gap-4">
-        {lessons.map((lesson) => (
-          <motion.div
+        {lessons.map((lesson, i) => (
+          <Card
             key={lesson.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 * lesson.id }}
+            className={`p-3 shadow-sm border-0 rounded-4 ${
+              styles.animateInitial
+            } ${lesson.read && "bg-light"}`}
+            style={{ animationDelay: `${i * 0.1}s` }}
+            role="button"
+            onClick={() => {
+              navigate(`lesson/${lesson.id}`);
+              localStorage.setItem(
+                "currLesson",
+                JSON.stringify({
+                  lessonId: lesson.id,
+                  title: lesson.title,
+                  courseId: course.id,
+                })
+              );
+            }}
           >
-            <Card
-              className={`p-3 shadow-sm border-0 rounded-4 ${
-                lesson.read ? "bg-light" : ""
-              }`}
-              role="button"
-              onClick={() => {
-                navigate(`lesson/${lesson.id}`);
-                localStorage.setItem(
-                  "currLesson",
-                  JSON.stringify({
-                    lessonId: lesson.id,
-                    title: lesson.title,
-                    courseId: course.id,
-                  })
-                );
-              }}
-            >
-              <h5 className={`text-${lesson.read ? "success" : "secondary"}`}>
-                {lesson.title}
-              </h5>
-              {lesson.read && <small className="text-muted">✓ Completed</small>}
-            </Card>
-          </motion.div>
+            <h5 className={`text-${lesson.read ? "success" : "secondary"}`}>
+              {lesson.title}
+            </h5>
+            {lesson.read && <small className="text-muted">✓ Completed</small>}
+          </Card>
         ))}
       </div>
     </Container>
