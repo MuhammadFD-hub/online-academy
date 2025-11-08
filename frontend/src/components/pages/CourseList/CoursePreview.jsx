@@ -1,16 +1,14 @@
-import React from "react";
 import { Card, Button, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import styles from "./CoursePreview.module.css";
 
-const CoursePreview = ({ course }) => {
+const CoursePreview = ({ course, i }) => {
   const navigate = useNavigate();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <div
+      className={`${styles.animateInitial}`}
+      style={{ animationDelay: `${i * 0.1}s` }}
     >
       <Card className="shadow-sm border-0 rounded-4 p-4 hover-shadow transition">
         <div className="d-flex justify-content-between align-items-start mb-2">
@@ -25,7 +23,7 @@ const CoursePreview = ({ course }) => {
           {course.enrolled ? "Continue Course" : "View Course"}
         </Button>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
