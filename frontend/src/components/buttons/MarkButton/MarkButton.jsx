@@ -10,7 +10,7 @@ const MarkButton = ({ courseId, lessonId, setLesson }) => {
   return (
     <Button
       className="mt-3"
-      variant="outline-success"
+      variant="outline-success mb-3"
       onClick={async () => {
         setMarkLoading(true);
         await markRead(courseId, lessonId);
