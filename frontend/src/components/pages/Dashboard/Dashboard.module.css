@@ -1,0 +1,32 @@
+.animateInitial {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.4s ease-out forwards;
+}
+.appearInitial {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+.progress {
+  opacity: 1;
+  transform: translateY(0);
+  overflow-y: hidden;
+  transition: transform 0.3s ease, opacity 0.3s ease-in-out;
+}
+.hideProgress {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.largeOnHover {
+  transition: transform 0.3s;
+}
+.largeOnHover:hover {
+  transform: scale(1.03);
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
