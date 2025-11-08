@@ -1,48 +1,24 @@
 import { Button, Nav } from "react-bootstrap";
 import { FaBook, FaSignOutAlt } from "react-icons/fa";
-import { motion } from "framer-motion";
 import SidebarItem from "./SidebarItem/SidebarItem";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./Sidebar.module.css";
 import UseStore from "../../stores/UseStore";
 import Hamburger from "./Hamburger/Hamburger";
 import { GiProgression } from "react-icons/gi";
 export default function Sidebar() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-  let smallSidebar;
-  if (windowWidth < 562) {
-    smallSidebar = true;
-  } else smallSidebar = false;
-
   const [collapsed, setCollapsed] = useState(true);
   const navigate = useNavigate();
   const logout = UseStore((s) => s.logout);
   return (
     <>
-      <motion.div
-        transition={{ duration: 0.5, type: "spring" }}
-        animate={{ x: 0, width: collapsed ? (smallSidebar ? 40 : 60) : 220 }}
-        initial={{ x: -300 }}
-        className={`
-          ${collapsed && smallSidebar && styles.hideSidebar} 
+      <div
+        className={`${collapsed || styles.expand} 
           ${styles.sidebar}`}
       >
         <Hamburger collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Nav
-          className={`py-3 flex-column ${
-            collapsed && smallSidebar && styles.overlayHidden
-          }`}
-        >
+        <Nav className={`py-3 flex-column ${collapsed && styles.hideOnSmall}`}>
           <SidebarItem
             icon={<FaBook />}
             label="Courses"
@@ -58,7 +34,7 @@ export default function Sidebar() {
         </Nav>
         <div
           className={`mt-auto mb-3  text-center ${
-            collapsed && smallSidebar && styles.overlayHidden
+            collapsed && styles.hideOnSmall
           }`}
         >
           <Button
@@ -66,12 +42,10 @@ export default function Sidebar() {
             variant="outline-danger"
             onClick={logout}
           >
-            <FaSignOutAlt
-              className={`${smallSidebar ? styles.smallIcon : ""}`}
-            />
+            <FaSignOutAlt />
             {
               <span
-                className={`ms-2 ${collapsed ? styles.logoutLabelHidden : ""} 
+                className={`ms-2 ${collapsed && styles.logoutLabelHidden} 
                 ${styles.logoutLabel}`}
               >
                 Logout
@@ -79,7 +53,7 @@ export default function Sidebar() {
             }
           </Button>
         </div>
-      </motion.div>
+      </div>
       <div
         onClick={() => setCollapsed(true)}
         className={`${styles.overlay} ${
