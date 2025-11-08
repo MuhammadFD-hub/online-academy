@@ -4,12 +4,23 @@
   bottom: 0;
   top: 56.4px;
   z-index: 3;
-  background-color: #f1f3f5;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, width 0.3s, max-width 0.3s;
+  transform: translateX(-300px);
+  animation: fadeIn 0.3s ease-out forwards;
+  max-width: 36px;
+  width: 36px;
+  pointer-events: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+.expand {
+  width: 220px !important;
+  max-width: 220px !important;
+  background-color: #f1f3f5;
+  pointer-events: auto;
 }
 .overlay {
   position: fixed;
@@ -28,33 +39,46 @@
   opacity: 0;
   pointer-events: none;
 }
-.hideSidebar {
+.hideOnSmall {
+  opacity: 0;
   pointer-events: none;
-  background-color: transparent;
-  box-shadow: none;
 }
 .logoutBtn {
   white-space: nowrap;
-  width: 80%;
+  width: 176px;
   padding-left: 9px;
-  transition: 0.3s ease;
+  transition: width 0.3s ease;
 }
 .logoutLabel {
   overflow: hidden;
-  transition: ease 0.3s;
 }
 .logoutLabelHidden {
   opacity: 0;
-  max-width: 0;
   pointer-events: none;
 }
-.smallIcon {
-  transition: 0.3s ease;
-  width: 15px;
-}
 
-@media screen and (min-width: 562px) {
+@media screen and (min-width: 562.5px) {
   .logoutBtn {
     padding-left: 0.75rem;
+  }
+  .sidebar {
+    background-color: #f1f3f5;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+    max-width: 60px;
+    width: 60px;
+  }
+  .hideOnSmall {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .logoutBtn {
+    width: 80%;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    transform: translateX(0);
   }
 }
