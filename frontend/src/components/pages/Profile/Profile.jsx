@@ -1,5 +1,4 @@
 import { Container } from "react-bootstrap";
-import { motion } from "framer-motion";
 import styles from "./Profile.module.css";
 import PersonalForm from "./PersonalForm/PersonalForm.jsx";
 import AccountInfo from "./AccountInfo/AccountInfo.jsx";
@@ -48,19 +47,14 @@ const Profile = () => {
       <ImageCropper />
       <CropperControls />
       <Container className={`mt-4 `}>
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className={`${styles.profile}`}
-        >
+        <div className={`${styles.profile}`}>
           <ProfileBg />
           <ProfilePic />
           <div className={`${styles.userInfoContainer}`}>
             <PersonalForm />
             <AccountInfo />
           </div>
-        </motion.div>
+        </div>
       </Container>
     </>
   );
