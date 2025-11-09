@@ -2,3 +2,20 @@
   width: 100%;
   max-width: 500px;
 }
+.animateInitial {
+  opacity: 0;
+  transform: translateY(-40px);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+.btns {
+  transition: transform 0.3s;
+}
+.btns:hover {
+  transform: scale(1.02);
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
