@@ -9,6 +9,7 @@ const coursesRoutes = require("./routes/coursesRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lessonRoutes = require("./routes/lessonRoutes");
+const healthRoutes = require("./routes/healthRoutes");
 
 let DB_URL = "",
   allowedOrigins = "";
@@ -38,6 +39,7 @@ app.use("/api/courses", coursesRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/lesson", lessonRoutes);
+app.use("/", healthRoutes);
 
 app.use((req, res) => {
   console.log("No matching route for:", req.method, req.path);
