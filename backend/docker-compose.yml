@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: online-academy
+
+  backend:
+    build: .
+    container_name: oa-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/online-academy
+      PORT: 5000
+      CLIENT_URLS: http://localhost:5173
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
