@@ -1,0 +1,20 @@
+# Base image
+FROM node:20-alpine
+
+# Create app directory
+WORKDIR /app
+
+# Copy package files first (takes advantage of Docker caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy all backend files 
+COPY . .
+
+# Expose container port (Ensure your Node app actually listens on 5000)
+EXPOSE 5000
+
+# Start apps
+CMD ["npm", "start"]
