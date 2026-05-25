@@ -51,7 +51,6 @@ const creatTokenStore = (set, get) => {
 
       let res = await fetch(`${API_URL}/${url}`, {
         ...options,
-        credentials: "include",
         headers: {
           ...(options.headers || {}),
           Authorization: `Bearer ${token}`,
@@ -64,7 +63,6 @@ const creatTokenStore = (set, get) => {
         token = localStorage.getItem("token");
         res = await fetch(`${API_URL}/${url}`, {
           ...options,
-          credentials: "include",
           headers: {
             ...(options.headers || {}),
             Authorization: `Bearer ${token}`,
